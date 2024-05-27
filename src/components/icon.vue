@@ -173,6 +173,7 @@ const currentColor = ref(props.color ? props.color : diaryStore.themeColor.F1.hs
 
 <style lang="scss">
 svg {
+  display: block;
   flex-shrink: 0;
 }
 </style>

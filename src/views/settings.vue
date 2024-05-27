@@ -5,13 +5,13 @@ const diaryStore = useDiaryStore()
 </script>
 
 <template>
-  <div class="lock">
-   <Button icon="unlock" @click="diaryStore.setView(VIEW.HOME)">Login</Button>
+  <div class="settings">
+    <Button icon="save" accent>Zapisz</Button>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.lock {
+.settings {
   padding: 24px;
 }
 </style>

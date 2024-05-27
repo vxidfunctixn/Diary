@@ -6,6 +6,7 @@ import { storeToRefs } from 'pinia'
 
 import Cockpit from '@/views/cockpit.vue'
 import Lock from '@/views/lock.vue'
+import Settings from '@/views/settings.vue'
 
 const diaryStore = useDiaryStore()
 const { app } = storeToRefs(diaryStore)
@@ -17,6 +18,7 @@ const { app } = storeToRefs(diaryStore)
     <div class="app-wrapper">
       <Cockpit v-if="app.view === VIEW.HOME"/>
       <Lock v-if="app.view === VIEW.LOCK"/>
+      <Settings v-if="app.view === VIEW.SETTINGS"/>
     </div>
   </AppThemeProvider>
 </template>
@@ -50,5 +52,9 @@ body {
   height: calc(100vh - 41px - 2px);
   width: 100%;
   overflow: auto;
+}
+
+input, textarea, button {
+  font-family: Saira;
 }
 </style>

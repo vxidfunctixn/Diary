@@ -11,13 +11,14 @@ const props = defineProps({
   icon: String,
   small: Boolean,
   disabled: Boolean,
+  accent: Boolean
 })
 </script>
 
 <template>
-  <button class="button" :class="{ small }" :disabled="disabled">
+  <button class="button" :class="{ small, accent }" :disabled="disabled">
     <div class="icon">
-      <Icon :name="icon" :size="small ? 16 : 24" :color="themeColor.F1.hsl"/>
+      <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.hsl : themeColor.F1.hsl"/>
     </div>
     <div v-if="slots.default" class="title">
       <slot></slot>
@@ -27,9 +28,9 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .button {
-  border: none;
   height: 44px;
   display: inline-flex;
+  align-items: center;
   padding: 9px;
   background: var(--HL3);
   border: 1px solid var(--HL2);
@@ -39,8 +40,12 @@ const props = defineProps({
   color: var(--F1);
   cursor: pointer;
   font-size: var(--FS4);
-  line-height: 24px;
   -webkit-app-region: no-drag;
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
 
   .title {
     margin-left: 8px;
@@ -65,8 +70,24 @@ const props = defineProps({
     }
   }
 
+  &.accent {
+    background-color: var(--A1);
+    border-color: var(--A4);
+    color: var(--HL3);
+    font-weight: 500;
+
+    &:hover {
+      background-color: var(--A2);
+      border-color: var(--A3);
+    }
+
+    &:active {
+      border-color: var(--A1);
+    }
+  }
+
   &:disabled {
-    .icon {
+    .icon, .title {
       opacity: 0.7;
     }
   }

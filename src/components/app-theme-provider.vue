@@ -3,22 +3,14 @@ import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
 import { ref, onMounted } from 'vue'
 const diaryStore = useDiaryStore()
-const { settings, themeColor } = storeToRefs(diaryStore)
+const { themeColor } = storeToRefs(diaryStore)
 
-const variables = {
-  "--hue":  settings.value.theme_hue,
-  "--F1":   themeColor.value.F1.hsla,
-  "--F1T":  themeColor.value.F1T.hsla,
-  "--F2":   themeColor.value.F2.hsla,
-  "--HL1":  themeColor.value.HL1.hsla,
-  "--HL2":  themeColor.value.HL2.hsla,
-  "--HL3":  themeColor.value.HL3.hsla,
-  "--BG1":  themeColor.value.BG1.hsla,
-  "--BG2":  themeColor.value.BG2.hsla,
-  "--BG2T": themeColor.value.BG2T.hsla,
-  "--BG3":  themeColor.value.BG3.hsla,
-  "--BG4":  themeColor.value.BG4.hsla,
-  "--A1":   themeColor.value.A1.hsla,
+
+
+const variables = {}
+for (const [ key, value ] of Object.entries(themeColor.value)) {
+  const color = key.slice(-1) === 'T' ? value.hsla : value.hsl
+  variables[ '--' + key ] = color
 }
 
 const classes = ref({
@@ -54,20 +46,6 @@ onMounted(() => {
 
 <style lang="scss">
 .app-theme-provider {
-  --hue:  0;
-  --F1:   hsl(var(--hue), 10%, 85%);
-  --F1T:  hsla(var(--hue), 10%, 85%, 50%);
-  --F2:   hsl(var(--hue), 8%, 30%);
-  --HL1:  hsl(var(--hue), 25%, 19%);
-  --HL2:  hsl(var(--hue), 26%, 14%);
-  --HL3:  hsl(var(--hue), 35%, 11%);
-  --BG1:  hsl(var(--hue), 36%, 11%);
-  --BG2:  hsl(var(--hue), 42%, 9%);
-  --BG2T: hsla(var(--hue), 42%, 9%, 80%);
-  --BG3:  hsl(var(--hue), 24%, 8%);
-  --BG4:  hsl(var(--hue), 42%, 5%);
-  --A1:   hsl(var(--hue), 88%, 57%);
-
   background-color: var(--BG2);
   color: var(--F1);
   width: 100%;

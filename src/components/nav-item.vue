@@ -54,7 +54,7 @@ const hasClickEventListener = computed(
       width: 100%;
       height: 100%;
       left: 0;
-      background-color: var(--A1);
+      background-color: var(--A4);
       clip-path: polygon(
         0% 0%,
         calc(100% - 20px) 0%,
@@ -82,11 +82,11 @@ const hasClickEventListener = computed(
     }
 
     &:active::before {
-      border-color: var(--F1);
+      border-color: var(--A2);
     }
 
     &:active::after {
-      background-color: var(--F1);
+      background-color: var(--A2);
     }
   }
 
@@ -137,7 +137,7 @@ const hasClickEventListener = computed(
       position: absolute;
       top: 0;
       left: 0;
-      border: 2px solid var(--A1);
+      border: 2px solid var(--A4);
       border-bottom: none;
       border-right: none;
       width: 32px;
