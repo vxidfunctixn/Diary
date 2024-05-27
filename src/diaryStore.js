@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia'
 
+export const VIEW = {
+  COCKPIT: 'cockpit',
+}
+
 export const REQUIRE_PASSWORD = {
   EVERY_LAUNCH: 'Przy każdym uruchomieniu',
   EVERY_DAY: 'Raz dziennie',
@@ -25,6 +29,9 @@ export class Color {
 
 export const useDiaryStore = defineStore('diary', {
   state: () => ({
+    app: {
+      view: VIEW.COCKPIT
+    },
     settings: {
       diary_name: 'Nazwa dziennika',
       reminder: true,
@@ -66,6 +73,7 @@ export const useDiaryStore = defineStore('diary', {
       if(mode === 'dark') {
         return {
           F1:   new Color(hue, '10%', '85%'),
+          F1T:  new Color(hue, '10%', '85%', '50%'),
           F2:   new Color(hue, '8%', '30%'),
           HL1:  new Color(hue, '25%', '19%'),
           HL2:  new Color(hue, '26%', '14%'),
@@ -95,6 +103,8 @@ export const useDiaryStore = defineStore('diary', {
     }
   },
   actions: {
-
+    setView(view) {
+      this.app.view = view
+    }
   },
 })

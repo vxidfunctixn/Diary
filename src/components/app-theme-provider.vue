@@ -8,6 +8,7 @@ const { settings, themeColor } = storeToRefs(diaryStore)
 const variables = {
   "--hue":  settings.value.theme_hue,
   "--F1":   themeColor.value.F1.hsla,
+  "--F1T":  themeColor.value.F1T.hsla,
   "--F2":   themeColor.value.F2.hsla,
   "--HL1":  themeColor.value.HL1.hsla,
   "--HL2":  themeColor.value.HL2.hsla,
@@ -23,7 +24,8 @@ const variables = {
 const classes = ref({
   "light": diaryStore.themeColorColor === 'light',
   "dark": diaryStore.themeColorColor === 'dark',
-  "maximized": false
+  "maximized": false,
+  "active": true,
 })
 
 onMounted(() => {
@@ -33,6 +35,13 @@ onMounted(() => {
 
   window.electron.receive('window-unmaximized', () => {
     classes.value.maximized = false
+  })
+  window.electron.receive('window-focus', () => {
+    classes.value.active = true
+  })
+
+  window.electron.receive('window-blur', () => {
+    classes.value.active = false
   })
 })
 </script>
@@ -47,6 +56,7 @@ onMounted(() => {
 .app-theme-provider {
   --hue:  0;
   --F1:   hsl(var(--hue), 10%, 85%);
+  --F1T:  hsla(var(--hue), 10%, 85%, 50%);
   --F2:   hsl(var(--hue), 8%, 30%);
   --HL1:  hsl(var(--hue), 25%, 19%);
   --HL2:  hsl(var(--hue), 26%, 14%);
@@ -66,6 +76,10 @@ onMounted(() => {
   &:not(.maximized) {
     border: 2px solid var(--A1);
     border-radius: 8px;
+
+    &:not(.active) {
+      border-color: var(--HL2);
+    }
   }
 
   ::selection {

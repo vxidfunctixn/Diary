@@ -9,6 +9,7 @@ import { ref, onMounted } from 'vue'
 const diaryStore = useDiaryStore()
 const { themeColor } = storeToRefs(diaryStore)
 const maximizeIcon = ref('maximize')
+const isWindowActive = ref(true)
 
 function minimize() {
   window.electron.send('app-control', 'minimize')
@@ -28,6 +29,14 @@ onMounted(() => {
   window.electron.receive('window-unmaximized', () => {
     maximizeIcon.value = 'maximize'
   })
+
+  window.electron.receive('window-focus', () => {
+    isWindowActive.value = true
+  })
+
+  window.electron.receive('window-blur', () => {
+    isWindowActive.value = false
+  })
 })
 
 </script>
@@ -36,21 +45,27 @@ onMounted(() => {
   <div class="window-title-bar">
     <Navigation/>
     <div class="app-options">
-      <Button small icon="search"/>
-      <Button small icon="add-note"/>
-      <Button small icon="settings"/>
-      <Button small icon="lock"/>
+      <Button small icon="search" :disabled="!isWindowActive"/>
+      <Button small icon="add-note" :disabled="!isWindowActive"/>
+      <Button small icon="settings" :disabled="!isWindowActive"/>
+      <Button small icon="lock" :disabled="!isWindowActive"/>
     </div>
     <div class="separator"></div>
     <div class="window-options">
       <button class="window-button" @click="minimize">
-        <Icon name="minimize" :size="24" :color="themeColor.F1.hsl" />
+        <div class="icon">
+          <Icon name="minimize" :size="16" :color="themeColor.F1.hsl" />
+        </div>
       </button>
       <button class="window-button" @click="maximize">
-        <Icon :name="maximizeIcon" :size="24" :color="themeColor.F1.hsl" />
+        <div class="icon">
+          <Icon :name="maximizeIcon" :size="16" :color="themeColor.F1.hsl" />
+        </div>
       </button>
       <button class="window-button" @click="exit">
-        <Icon name="cancel" :size="24" :color="themeColor.F1.hsl" />
+        <div class="icon">
+          <Icon name="cancel" :size="16" :color="themeColor.F1.hsl" />
+        </div>
       </button>
     </div>
   </div>
@@ -58,7 +73,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .window-title-bar {
-  height: 40px;
+  height: 41px;
   background: var(--BG3);
   display: flex;
   min-width: 0;
@@ -66,25 +81,24 @@ onMounted(() => {
   border-top-right-radius: 6px;
   overflow: hidden;
   -webkit-app-region: drag;
+  border-bottom: 1px solid var(--HL2);
 
   .app-options {
     display: flex;
     margin-left: auto;
-    min-width: 0;
     -webkit-app-region: no-drag;
   }
 
   .separator {
     width: 1px;
     height: 100%;
-    background-color: var(--BG1);
+    background-color: var(--HL2);
     margin: 0 4px;
     min-width: 0;
   }
 
   .window-options {
     display: flex;
-    min-width: 0;
     -webkit-app-region: no-drag;
 
     .window-button {
@@ -97,7 +111,6 @@ onMounted(() => {
       border: none;
       cursor: pointer;
       background-color: var(--BG3);
-      min-width: 0;
       outline: none;
 
       &:hover,
@@ -117,6 +130,17 @@ onMounted(() => {
   .window-title-bar {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+  }
+}
+
+.app-theme-provider:not(.active) {
+  .window-options .window-button .icon {
+    opacity: .7;
+  }
+
+  .window-title-bar,
+  .window-options .window-button:not(:hover) {
+    background: var(--BG2);
   }
 }
 </style>

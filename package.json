@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "build": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service electron:build",
-    "start": "SET NODE_OPTIONS= && vue-cli-service electron:serve",
-    "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "start": "SET NODE_OPTIONS= && vue-cli-service electron:serve"
   },
   "main": "background.js",
   "preload": {

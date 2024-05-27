@@ -7,13 +7,16 @@ const { themeColor } = storeToRefs(diaryStore)
 
 const props = defineProps({
   icon: String,
-  small: Boolean
+  small: Boolean,
+  disabled: Boolean,
 })
 </script>
 
 <template>
-  <button class="button" :class="{ small }">
-    <Icon :name="icon" :size="small ? 16 : 24" :color="themeColor.F1.hsl"/>
+  <button class="button" :class="{ small }" :disabled="disabled">
+    <div class="icon">
+      <Icon :name="icon" :size="small ? 16 : 24" :color="themeColor.F1.hsl"/>
+    </div>
   </button>
 </template>
 
@@ -26,7 +29,6 @@ const props = defineProps({
   background: var(--HL3);
   border: 1px solid var(--HL2);
   border-radius: 8px;
-  min-width: 0;
   overflow: hidden;
   outline: none;
   cursor: pointer;
@@ -44,6 +46,12 @@ const props = defineProps({
   &.small {
     height: 36px;
     margin: 2px;
+  }
+
+  &:disabled {
+    .icon {
+      opacity: 0.7;
+    }
   }
 }
 </style>

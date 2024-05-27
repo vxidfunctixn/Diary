@@ -9,15 +9,21 @@ const { themeColor, settings } = storeToRefs(diaryStore)
 <template>
   <div class="navigation">
     <div class="item level-1" tabindex="0">
-      <Icon name="diary" :size="16" :color="themeColor.F1.hsl"/>
+      <div class="icon">
+        <Icon  name="diary" :size="16" :color="themeColor.F1.hsl"/>
+      </div>
       <div class="title">{{ settings.diary_name }}</div>
     </div>
     <div class="item level-2" tabindex="0">
-      <Icon name="date" :size="16" :color="themeColor.F1.hsl"/>
+      <div class="icon">
+        <Icon name="date" :size="16" :color="themeColor.F1.hsl"/>
+      </div>
       <div class="title">21.06.2024</div>
     </div>
     <div class="item level-3">
-      <Icon name="note" :size="16" :color="themeColor.F1.hsl"/>
+      <div class="icon">
+        <Icon name="note" :size="16" :color="themeColor.F1.hsl"/>
+      </div>
       <div class="title">N2 21:35</div>
     </div>
   </div>
@@ -88,6 +94,16 @@ const { themeColor, settings } = storeToRefs(diaryStore)
       }
     }
 
+    .icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+    }
+
     .title {
       margin-left: 8px;
       white-space: nowrap;
@@ -150,6 +166,14 @@ const { themeColor, settings } = storeToRefs(diaryStore)
     border-top-left-radius: 0;
     &::before {
       display: none;
+    }
+  }
+}
+
+.app-theme-provider:not(.active) {
+  .navigation .item {
+    .title, .icon {
+      opacity: .7;
     }
   }
 }

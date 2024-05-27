@@ -1,11 +1,19 @@
 <script setup>
 import WindowTitleBar from '@/components/window-title-bar.vue'
 import AppThemeProvider from '@/components/app-theme-provider.vue'
+import { useDiaryStore, VIEW } from './diaryStore'
+import { storeToRefs } from 'pinia'
+import Cockpit from '@/views/cockpit.vue'
+const diaryStore = useDiaryStore()
+const { app } = storeToRefs(diaryStore)
 </script>
 
 <template>
   <AppThemeProvider>
     <WindowTitleBar/>
+    <div class="app-wrapper">
+      <Cockpit v-if="app.view === VIEW.COCKPIT"/>
+    </div>
   </AppThemeProvider>
 </template>
 
@@ -31,5 +39,11 @@ body {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.app-wrapper {
+  height: calc(100vh - 41px - 2px);
+  width: 100%;
+  overflow: auto;
 }
 </style>

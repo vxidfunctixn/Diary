@@ -20,4 +20,9 @@ module.exports = defineConfig({
       }),
     ],
   },
+  pluginOptions: {
+    electronBuilder: {
+      customFileProtocol: './'
+    }
+  }
 })

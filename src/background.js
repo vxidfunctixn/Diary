@@ -6,13 +6,21 @@ import path from 'path'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
+  {
+    scheme: 'app',
+    privileges: {
+      secure: true,
+      standard: true
+    }
+  }
 ])
 
 async function createWindow() {
   const win = new BrowserWindow({
     width: 1024,
+    minWidth: 680,
     height: 800,
+    minHeight: 320,
     titleBarStyle: 'hidden',
     webPreferences: {
       preload: path.join(app.getAppPath(), 'preload.js'),
@@ -38,6 +46,14 @@ async function createWindow() {
 
   win.on('unmaximize', () => {
     win.webContents.send('window-unmaximized')
+  })
+
+  win.on('focus', () => {
+    win.webContents.send('window-focus')
+  })
+
+  win.on('blur', () => {
+    win.webContents.send('window-blur')
   })
 
   ipcMain.on('app-control', (event, action) => {
