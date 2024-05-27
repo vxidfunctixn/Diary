@@ -72,6 +72,7 @@ onMounted(() => {
   color: var(--F1);
   width: 100%;
   height: 100vh;
+  overflow: hidden;
 
   &:not(.maximized) {
     border: 2px solid var(--A1);
@@ -85,6 +86,24 @@ onMounted(() => {
   ::selection {
     background-color: var(--A1);
     color: var(--BG2);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--BG3);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--HL2);
+    border: 2px solid var(--BG3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--HL1);
   }
 }
 

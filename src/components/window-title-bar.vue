@@ -3,11 +3,11 @@ import { storeToRefs } from 'pinia'
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
 import Navigation from '@/components/navigation.vue'
-import { useDiaryStore } from '@/diaryStore'
+import { useDiaryStore, VIEW } from '@/diaryStore'
 import { ref, onMounted } from 'vue'
 
 const diaryStore = useDiaryStore()
-const { themeColor } = storeToRefs(diaryStore)
+const { themeColor, app } = storeToRefs(diaryStore)
 const maximizeIcon = ref('maximize')
 const isWindowActive = ref(true)
 
@@ -44,11 +44,11 @@ onMounted(() => {
 <template>
   <div class="window-title-bar">
     <Navigation/>
-    <div class="app-options">
-      <Button small icon="search" :disabled="!isWindowActive"/>
-      <Button small icon="add-note" :disabled="!isWindowActive"/>
-      <Button small icon="settings" :disabled="!isWindowActive"/>
-      <Button small icon="lock" :disabled="!isWindowActive"/>
+    <div v-if="app.view !== VIEW.LOCK" class="app-options">
+      <Button small icon="search" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.SEARCH)"/>
+      <Button small icon="add-note" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.EDIT_NOTE)"/>
+      <Button small icon="settings" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.SETTINGS)"/>
+      <Button small icon="lock" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.LOCK)"/>
     </div>
     <div class="separator"></div>
     <div class="window-options">
@@ -85,8 +85,6 @@ onMounted(() => {
 
   .app-options {
     display: flex;
-    margin-left: auto;
-    -webkit-app-region: no-drag;
   }
 
   .separator {

@@ -2,8 +2,10 @@
 import Icon from '@/components/icon.vue'
 import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
+import { useSlots } from 'vue'
 const diaryStore = useDiaryStore()
 const { themeColor } = storeToRefs(diaryStore)
+const slots = useSlots()
 
 const props = defineProps({
   icon: String,
@@ -16,6 +18,9 @@ const props = defineProps({
   <button class="button" :class="{ small }" :disabled="disabled">
     <div class="icon">
       <Icon :name="icon" :size="small ? 16 : 24" :color="themeColor.F1.hsl"/>
+    </div>
+    <div v-if="slots.default" class="title">
+      <slot></slot>
     </div>
   </button>
 </template>
@@ -31,7 +36,15 @@ const props = defineProps({
   border-radius: 8px;
   overflow: hidden;
   outline: none;
+  color: var(--F1);
   cursor: pointer;
+  font-size: var(--FS4);
+  line-height: 24px;
+  -webkit-app-region: no-drag;
+
+  .title {
+    margin-left: 8px;
+  }
 
   &:hover,
   &:focus-visible {
@@ -46,6 +59,10 @@ const props = defineProps({
   &.small {
     height: 36px;
     margin: 2px;
+
+    .title {
+      line-height: 20px;
+    }
   }
 
   &:disabled {

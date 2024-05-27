@@ -3,7 +3,10 @@ import WindowTitleBar from '@/components/window-title-bar.vue'
 import AppThemeProvider from '@/components/app-theme-provider.vue'
 import { useDiaryStore, VIEW } from './diaryStore'
 import { storeToRefs } from 'pinia'
+
 import Cockpit from '@/views/cockpit.vue'
+import Lock from '@/views/lock.vue'
+
 const diaryStore = useDiaryStore()
 const { app } = storeToRefs(diaryStore)
 </script>
@@ -12,7 +15,8 @@ const { app } = storeToRefs(diaryStore)
   <AppThemeProvider>
     <WindowTitleBar/>
     <div class="app-wrapper">
-      <Cockpit v-if="app.view === VIEW.COCKPIT"/>
+      <Cockpit v-if="app.view === VIEW.HOME"/>
+      <Lock v-if="app.view === VIEW.LOCK"/>
     </div>
   </AppThemeProvider>
 </template>
@@ -34,6 +38,7 @@ const { app } = storeToRefs(diaryStore)
 
 body {
   margin: 0;
+  overflow: hidden;
 }
 
 #app {

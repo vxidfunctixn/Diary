@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia'
 
 export const VIEW = {
-  COCKPIT: 'cockpit',
+  HOME: 'home',
+  NOTE_LIST: 'note_list',
+  SEARCH: 'search',
+  MONTH: 'month',
+  YEAR: 'year',
+  SETTINGS: 'settings',
+  LOCK: 'lock',
+  EDIT_NOTE: 'edit_note'
 }
 
 export const REQUIRE_PASSWORD = {
@@ -30,7 +37,7 @@ export class Color {
 export const useDiaryStore = defineStore('diary', {
   state: () => ({
     app: {
-      view: VIEW.COCKPIT
+      view: VIEW.HOME
     },
     settings: {
       diary_name: 'Nazwa dziennika',
