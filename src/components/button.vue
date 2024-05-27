@@ -87,6 +87,8 @@ const props = defineProps({
   }
 
   &:disabled {
+    pointer-events: none;
+
     .icon, .title {
       opacity: 0.7;
     }
