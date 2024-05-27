@@ -49,6 +49,16 @@ const currentColor = ref(props.color ? props.color : diaryStore.themeColor.F1.hs
     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 13.414L17.657 19.071C17.8456 19.2532 18.0982 19.354 18.3604 19.3517C18.6226 19.3494 18.8734 19.2443 19.0588 19.0588C19.2442 18.8734 19.3494 18.6226 19.3517 18.3604C19.354 18.0982 19.2532 17.8456 19.071 17.657L13.414 12L19.071 6.34303C19.2532 6.15443 19.354 5.90182 19.3517 5.63963C19.3494 5.37743 19.2442 5.12662 19.0588 4.94121C18.8734 4.7558 18.6226 4.65063 18.3604 4.64835C18.0982 4.64607 17.8456 4.74687 17.657 4.92903L12 10.586L6.343 4.92903C6.15355 4.75137 5.90241 4.65439 5.64273 4.65861C5.38305 4.66283 5.13519 4.76791 4.95161 4.95162C4.76803 5.13533 4.66312 5.38326 4.65909 5.64295C4.65505 5.90263 4.75221 6.1537 4.93 6.34303L10.586 12L4.929 17.657C4.83349 17.7493 4.75731 17.8596 4.7049 17.9816C4.65249 18.1036 4.6249 18.2348 4.62375 18.3676C4.6226 18.5004 4.6479 18.6321 4.69818 18.755C4.74846 18.8779 4.82271 18.9895 4.91661 19.0834C5.0105 19.1773 5.12215 19.2516 5.24505 19.3018C5.36794 19.3521 5.49962 19.3774 5.6324 19.3763C5.76518 19.3751 5.8964 19.3475 6.01841 19.2951C6.14041 19.2427 6.25075 19.1665 6.343 19.071L12 13.414Z" :fill="currentColor"/>
   </svg>
 
+  <svg v-if="name === 'check'" :width="size" :height="size" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <mask id="mask0_59_2284" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="1" width="22" height="22">
+      <path d="M12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M12.004 6V12.005L16.2435 16.245" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </mask>
+    <g mask="url(#mask0_59_2284)">
+      <path d="M0 0H24V24H0V0Z" :fill="currentColor"/>
+    </g>
+  </svg>
+
   <svg v-if="name === 'clock'" :width="size" :height="size" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <mask id="mask0_59_2284" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="1" width="22" height="22">
       <path d="M12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
@@ -80,7 +90,7 @@ const currentColor = ref(props.color ? props.color : diaryStore.themeColor.F1.hs
   </svg>
 
   <svg v-if="name === 'italic'" :width="size" :height="size" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10.6 3H19M5 21H13.4M14.8 3L9.2 21" :stroke="color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M10.6 3H19M5 21H13.4M14.8 3L9.2 21" :stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 
   <svg v-if="name === 'letter-size'" :width="size" :height="size" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +99,7 @@ const currentColor = ref(props.color ? props.color : diaryStore.themeColor.F1.hs
   </svg>
 
   <svg v-if="name === 'link'" :width="size" :height="size" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8.25131 15.7522L15.7514 8.25121M10.7513 4.50071L11.3301 3.83063C12.5024 2.65838 14.0923 1.99988 15.75 2C17.4077 2.00012 18.9975 2.65884 20.1696 3.83125C21.3417 5.00366 22.0001 6.59373 22 8.25166C21.9999 9.90958 21.3412 11.4996 20.169 12.6718L19.5015 13.2519M13.2514 19.5027L12.7551 20.1703C11.5689 21.3426 9.96838 22 8.30069 22C6.63301 22 5.03253 21.3426 3.84626 20.1703C3.26139 19.5924 2.79704 18.9041 2.48012 18.1454C2.16319 17.3867 2 16.5726 2 15.7503C2 14.9281 2.16319 14.114 2.48012 13.3553C2.79704 12.5965 3.26139 11.9083 3.84626 11.3304L4.50127 10.7515" :stroke="color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M8.25131 15.7522L15.7514 8.25121M10.7513 4.50071L11.3301 3.83063C12.5024 2.65838 14.0923 1.99988 15.75 2C17.4077 2.00012 18.9975 2.65884 20.1696 3.83125C21.3417 5.00366 22.0001 6.59373 22 8.25166C21.9999 9.90958 21.3412 11.4996 20.169 12.6718L19.5015 13.2519M13.2514 19.5027L12.7551 20.1703C11.5689 21.3426 9.96838 22 8.30069 22C6.63301 22 5.03253 21.3426 3.84626 20.1703C3.26139 19.5924 2.79704 18.9041 2.48012 18.1454C2.16319 17.3867 2 16.5726 2 15.7503C2 14.9281 2.16319 14.114 2.48012 13.3553C2.79704 12.5965 3.26139 11.9083 3.84626 11.3304L4.50127 10.7515" :stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 
   <svg v-if="name === 'lock'" :width="size" :height="size" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -141,8 +151,13 @@ const currentColor = ref(props.color ? props.color : diaryStore.themeColor.F1.hs
   </svg>
 
   <svg v-if="name === 'underline'" :width="size" :height="size" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6 2V10.75C6 12.4076 6.63214 13.9973 7.75736 15.1694C8.88258 16.3415 10.4087 17 12 17C13.5913 17 15.1174 16.3415 16.2426 15.1694C17.3679 13.9973 18 12.4076 18 10.75V2M6 22H18" :stroke="color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6 2V10.75C6 12.4076 6.63214 13.9973 7.75736 15.1694C8.88258 16.3415 10.4087 17 12 17C13.5913 17 15.1174 16.3415 16.2426 15.1694C17.3679 13.9973 18 12.4076 18 10.75V2M6 22H18" :stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
+
+  <svg v-if="name === 'unlock'" :width="size" :height="size" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M18 8C18.5304 8 19.0391 8.21071 19.4142 8.58579C19.7893 8.96086 20 9.46957 20 10V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V10C4 9.46957 4.21071 8.96086 4.58579 8.58579C4.96086 8.21071 5.46957 8 6 8H15V6C15 5.20435 14.6839 4.44129 14.1213 3.87868C13.5587 3.31607 12.7956 3 12 3C11.2044 3 10.4413 3.31607 9.87868 3.87868C9.31607 4.44129 9 5.20435 9 6H7C7 4.67392 7.52678 3.40215 8.46447 2.46447C9.40215 1.52678 10.6739 1 12 1C12.6566 1 13.3068 1.12933 13.9134 1.3806C14.52 1.63188 15.0712 2.00017 15.5355 2.46447C15.9998 2.92876 16.3681 3.47995 16.6194 4.08658C16.8707 4.69321 17 5.34339 17 6V8H18ZM12 17C12.5304 17 13.0391 16.7893 13.4142 16.4142C13.7893 16.0391 14 15.5304 14 15C14 14.4696 13.7893 13.9609 13.4142 13.5858C13.0391 13.2107 12.5304 13 12 13C11.4696 13 10.9609 13.2107 10.5858 13.5858C10.2107 13.9609 10 14.4696 10 15C10 15.5304 10.2107 16.0391 10.5858 16.4142C10.9609 16.7893 11.4696 17 12 17Z" :fill="currentColor"/>
+  </svg>
+
 
   <svg v-if="name === 'unmaximize'" :width="size" :height="size" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M6.75 4.5C6.33579 4.5 6 4.16421 6 3.75C6 3.33579 6.33579 3 6.75 3H18.25C18.9793 3 19.6788 3.28973 20.1945 3.80546C20.7103 4.32118 21 5.02065 21 5.75V17.25C21 17.6642 20.6642 18 20.25 18C19.8358 18 19.5 17.6642 19.5 17.25V5.75C19.5 5.06 18.94 4.5 18.25 4.5H6.75Z" :fill="currentColor"/>
