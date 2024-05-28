@@ -9,6 +9,7 @@ const slots = useSlots()
 
 const props = defineProps({
   icon: String,
+  title: String,
   small: Boolean,
   disabled: Boolean,
   accent: Boolean
@@ -16,11 +17,11 @@ const props = defineProps({
 </script>
 
 <template>
-  <button class="button" :class="{ small, accent }" :disabled="disabled">
+  <button class="button" :class="{ small, accent }" :disabled="disabled" :title="title">
     <div class="icon">
       <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.hsl : themeColor.F1.hsl"/>
     </div>
-    <div v-if="slots.default" class="title">
+    <div v-if="slots.default" class="text">
       <slot></slot>
     </div>
   </button>
@@ -47,7 +48,7 @@ const props = defineProps({
     height: 16px;
   }
 
-  .title {
+  .text {
     margin-left: 8px;
   }
 

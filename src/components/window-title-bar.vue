@@ -45,10 +45,10 @@ onMounted(() => {
   <div class="window-title-bar">
     <Navigation/>
     <div v-if="app.view !== VIEW.LOCK" class="app-options">
-      <Button small icon="search" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.SEARCH)"/>
-      <Button small icon="add-note" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.EDIT_NOTE)"/>
-      <Button small icon="settings" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.SETTINGS)"/>
-      <Button small icon="lock" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.LOCK)"/>
+      <Button small icon="search" title="Szukaj" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.SEARCH)"/>
+      <Button small icon="add-note" title="Dodaj notatkę" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.EDIT_NOTE)"/>
+      <Button small icon="settings" title="Ustawienia" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.SETTINGS)"/>
+      <Button small icon="lock" title="Zablokuj" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.LOCK)"/>
     </div>
     <div class="separator"></div>
     <div class="window-options">
