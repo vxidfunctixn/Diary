@@ -54,17 +54,17 @@ onMounted(() => {
     <div class="window-options">
       <button class="window-button" @click="minimize">
         <div class="icon">
-          <Icon name="minimize" :size="16" :color="themeColor.F1.hsl" />
+          <Icon name="minimize" :size="16" :color="themeColor.F1.value" />
         </div>
       </button>
       <button class="window-button" @click="maximize">
         <div class="icon">
-          <Icon :name="maximizeIcon" :size="16" :color="themeColor.F1.hsl" />
+          <Icon :name="maximizeIcon" :size="16" :color="themeColor.F1.value" />
         </div>
       </button>
       <button class="window-button" @click="exit">
         <div class="icon">
-          <Icon name="cancel" :size="16" :color="themeColor.F1.hsl" />
+          <Icon name="cancel" :size="16" :color="themeColor.F1.value" />
         </div>
       </button>
     </div>
@@ -118,7 +118,7 @@ onMounted(() => {
 
       &:last-child:hover,
       &:last-child:focus-visible {
-        background-color: hsl(0, 95%, 40%);
+        background-color: var(--red);
       }
     }
   }

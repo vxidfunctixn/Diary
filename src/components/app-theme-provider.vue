@@ -8,9 +8,8 @@ const { themeColor } = storeToRefs(diaryStore)
 
 
 const variables = {}
-for (const [ key, value ] of Object.entries(themeColor.value)) {
-  const color = key.slice(-1) === 'T' ? value.hsla : value.hsl
-  variables[ '--' + key ] = color
+for (const [ key, color ] of Object.entries(themeColor.value)) {
+  variables[ '--' + key ] = color.value
 }
 
 const classes = ref({

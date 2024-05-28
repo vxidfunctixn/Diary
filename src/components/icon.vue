@@ -16,7 +16,7 @@ const props = defineProps({
   }
 })
 
-const currentColor = ref(props.color ? props.color : diaryStore.themeColor.F1.hsl)
+const currentColor = ref(props.color ? props.color : diaryStore.themeColor.F1.value)
 
 </script>
 

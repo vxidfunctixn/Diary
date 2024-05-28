@@ -19,7 +19,7 @@ const props = defineProps({
 <template>
   <button class="button" :class="{ small, accent }" :disabled="disabled" :title="title">
     <div class="icon">
-      <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.hsl : themeColor.F1.hsl"/>
+      <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.value : themeColor.F1.value"/>
     </div>
     <div v-if="slots.default" class="text">
       <slot></slot>

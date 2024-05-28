@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { Theme } from '@/theme'
 
 export const VIEW = {
   HOME: 'home',
@@ -22,16 +23,6 @@ export const THEME = {
   DARK: 'Ciemny',
   LIGHT: 'Jasny',
   SYSTEM: 'Tak jak system',
-}
-
-export class Color {
-  constructor(h, s, l, a = '100%') {
-    this.h = h
-    this.s = s
-    this.l = l
-    this.hsl = `hsl(${h}, ${s}, ${l})`
-    this.hsla = `hsla(${h}, ${s}, ${l}, ${a})`
-  }
 }
 
 export const useDiaryStore = defineStore('diary', {
@@ -75,32 +66,14 @@ export const useDiaryStore = defineStore('diary', {
       return state.settings.theme === THEME.DARK ? 'dark' : 'light'
     },
     themeColor: state => {
-      // const mode = state.themeColorColor
-      const hue = state.settings.theme_hue
+      const mode = state.themeColorColor
+      const theme = new Theme(state.settings.theme_hue)
 
-      return {
-        F1:     new Color(hue, '10%', '85%'),
-        F1T:    new Color(hue, '10%', '85%', '50%'),
-        F2:     new Color(hue, '8%', '30%'),
-        HL1:    new Color(hue, '25%', '19%'),
-        HL2:    new Color(hue, '26%', '14%'),
-        HL3:    new Color(hue, '35%', '11%'),
-        BG1:    new Color(hue, '36%', '11%'),
-        BG2:    new Color(hue, '42%', '9%'),
-        BG2T:   new Color(hue, '42%', '9%', '80%'),
-        BG3:    new Color(hue, '24%', '8%'),
-        BG4:    new Color(hue, '42%', '5%'),
-        A1:     new Color(hue, '88%', '57%'),
-        A2:     new Color(hue, '79%', '49%'),
-        A3:     new Color(hue, '73%', '36%'),
-        A4:     new Color(hue, '68%', '26%'),
-        Yellow: new Color(54, '100%', '51%'),
+      if(mode === 'dark') {
+        return theme.dark()
+      } else {
+        return theme.light()
       }
-      // if(mode === 'dark') {
-
-      // } else {
-
-      // }
     }
   },
   actions: {

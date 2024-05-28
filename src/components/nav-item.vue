@@ -24,7 +24,7 @@ const hasClickEventListener = computed(
     :tabindex="hasClickEventListener ? 0 : -1"
   >
     <div class="icon">
-      <Icon  :name="icon" :size="16" :color="themeColor.F1.hsl"/>
+      <Icon  :name="icon" :size="16" :color="themeColor.F1.value"/>
     </div>
     <div class="title">{{ title }}</div>
   </div>
