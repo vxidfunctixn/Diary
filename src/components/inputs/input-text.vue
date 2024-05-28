@@ -1,15 +1,24 @@
 <script setup>
 import InfoText from '@/components/inputs/info-text.vue'
+const emit = defineEmits(['update'])
 const props = defineProps({
   name: String,
+  value: String,
   placeholder: String,
   infoText: String,
 })
+
+function update(event) {
+  emit('update', {
+    value: event.target.value,
+    name: props.name
+  })
+}
 </script>
 
 <template>
   <div class="input-text">
-    <input type="text" class="input" :name="name" :placeholder="placeholder">
+    <input type="text" class="input" :name="name" :value="value" :placeholder="placeholder" @input="update($event)">
     <InfoText v-if="infoText">{{ infoText }}</InfoText>
   </div>
 </template>

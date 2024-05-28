@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { Theme } from '@/theme'
+import { toRaw } from 'vue'
 
 export const VIEW = {
   HOME: 'home',
@@ -20,9 +21,9 @@ export const REQUIRE_PASSWORD = {
 }
 
 export const THEME = {
-  DARK: 'Ciemny',
-  LIGHT: 'Jasny',
-  SYSTEM: 'Tak jak system',
+  DARK: 'dark',
+  LIGHT: 'light',
+  SYSTEM: 'system',
 }
 
 export const useDiaryStore = defineStore('diary', {
@@ -79,6 +80,11 @@ export const useDiaryStore = defineStore('diary', {
   actions: {
     setView(view) {
       this.app.view = view
+    },
+    saveSettings(form) {
+      for (const [key, value] of Object.entries(form)) {
+        if(this.settings[key]) this.settings[key] = value
+      }
     }
   },
 })

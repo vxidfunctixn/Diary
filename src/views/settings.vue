@@ -2,27 +2,43 @@
 import Button from '@/components/button.vue'
 import InputText from '@/components/inputs/input-text.vue'
 import InputRow from '@/components/inputs/input-row.vue'
+import { ref, toRaw } from 'vue'
 import { useDiaryStore, VIEW } from '@/diaryStore'
+import { isProxyDifferent } from '@/utils'
+
 const diaryStore = useDiaryStore()
+
+const form = ref({ ...diaryStore.settings })
+const hasChangedData = ref(false)
+
+function handleUpdate(event) {
+  form.value[event.name] = event.value
+  hasChangedData.value = isProxyDifferent(form.value, diaryStore.settings)
+}
+
+function saveForm() {
+  if(isProxyDifferent(form.value, diaryStore.settings)) {
+    diaryStore.saveSettings(toRaw(form.value))
+    hasChangedData.value = false
+  }
+}
+
+function resetForm() {
+  form.value = { ...diaryStore.settings }
+  hasChangedData.value = false
+}
 </script>
 
 <template>
   <div class="settings">
-    <InputRow title="Nazwa dziennika">
-      <InputText name="diary_name"/>
-    </InputRow>
-    <InputRow title="Nazwa dziennika">
-      <InputText name="diary_name"/>
-    </InputRow>
-    <InputRow title="Nazwa dziennika">
-      <InputText name="diary_name"/>
-    </InputRow>
-    <InputRow title="Nazwa dziennika">
-      <InputText name="diary_name"/>
-    </InputRow>
+    <form @submit.prevent="saveForm()">
+      <InputRow title="Nazwa dziennika">
+        <InputText name="diary_name" :value="form.diary_name" @update="handleUpdate($event)"/>
+      </InputRow>
+    </form>
     <div class="options">
-      <Button icon="save" accent>Zapisz</Button>
-      <Button icon="cancel">Anuluj zmiany</Button>
+      <Button icon="save" accent @click="saveForm()">Zapisz</Button>
+      <Button v-if="hasChangedData" icon="cancel" @click="resetForm()">Anuluj zmiany</Button>
     </div>
   </div>
 </template>
