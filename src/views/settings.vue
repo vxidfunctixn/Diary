@@ -1,9 +1,10 @@
 <script setup>
 import Button from '@/components/button.vue'
 import InputText from '@/components/inputs/input-text.vue'
+import InputTime from '@/components/inputs/input-time.vue'
 import InputRow from '@/components/inputs/input-row.vue'
 import { ref, toRaw } from 'vue'
-import { useDiaryStore, VIEW } from '@/diaryStore'
+import { useDiaryStore } from '@/diaryStore'
 import { isProxyDifferent } from '@/utils'
 
 const diaryStore = useDiaryStore()
@@ -35,9 +36,12 @@ function resetForm() {
       <InputRow title="Nazwa dziennika">
         <InputText name="diary_name" :value="form.diary_name" @update="handleUpdate($event)"/>
       </InputRow>
+      <InputRow title="Godzina przypomnienia">
+        <InputTime name="remind_time" :value="form.remind_time" @update="handleUpdate($event)"/>
+      </InputRow>
     </form>
     <div class="options">
-      <Button icon="save" accent @click="saveForm()">Zapisz</Button>
+      <Button icon="save" accent :disabled="!hasChangedData" @click="saveForm()">Zapisz</Button>
       <Button v-if="hasChangedData" icon="cancel" @click="resetForm()">Anuluj zmiany</Button>
     </div>
   </div>
@@ -49,7 +53,6 @@ function resetForm() {
 
   .options {
     margin-top: 12px;
-
     display: inline-grid;
     grid-auto-flow: column;
     grid-column-gap: 12px;

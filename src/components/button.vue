@@ -12,12 +12,13 @@ const props = defineProps({
   title: String,
   small: Boolean,
   disabled: Boolean,
-  accent: Boolean
+  accent: Boolean,
+  submit: Boolean
 })
 </script>
 
 <template>
-  <button class="button" :class="{ small, accent }" :disabled="disabled" :title="title">
+  <button :type="submit ? 'submit' : 'button'" class="button" :class="{ small, accent }" :disabled="disabled" :title="title">
     <div class="icon">
       <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.value : themeColor.F1.value"/>
     </div>

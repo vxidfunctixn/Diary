@@ -67,6 +67,7 @@ onMounted(() => {
 
   ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
@@ -81,6 +82,10 @@ onMounted(() => {
 
   ::-webkit-scrollbar-thumb:hover {
     background: var(--HL1);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--HL2);
   }
 }
 

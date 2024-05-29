@@ -14,3 +14,20 @@ export function isProxyDifferent(proxy1, proxy2) {
 
   return false
 }
+
+export class DateTime {
+  constructor(timestamp) {
+    this.date = new Date(timestamp)
+    this.hours = this.date.getHours()
+    this.minutes = this.date.getMinutes()
+    this.timeString = this.getTimeString()
+  }
+
+  getTimeString() {
+    const hours = this.hours.toString().padStart(2, '0')
+    const minutes = this.minutes.toString().padStart(2, '0')
+    return `${hours}:${minutes}`
+  }
+
+
+}
