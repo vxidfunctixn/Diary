@@ -24,12 +24,12 @@ const draggedObject = ref({
 })
 
 function handleWheel(event, type) {
-  if(event.deltaY > 0 || event.deltaX > 0) {
+  if(event.deltaY > 0 || -event.deltaX > 0) {
     if(type === 'hours' && time.value.hours === 0) time.value.hours= 24
     if(type === 'minutes' && time.value.minutes === 0) time.value.minutes= 60
     time.value[type] -= 1
   }
-  if(event.deltaY < 0 || event.deltaX < 0) {
+  if(event.deltaY < 0 || -event.deltaX < 0) {
     if(type === 'hours' && time.value.hours === 23) time.value.hours = -1
     if(type === 'minutes' && time.value.minutes === 59) time.value.minutes = -1
     time.value[type] += 1
@@ -167,6 +167,7 @@ function update(type, from_selected = false) {
       color: var(--F1);
       padding: 8px;
       position: relative;
+      cursor: n-resize;
 
       &:hover {
         background-color: var(--HL2);

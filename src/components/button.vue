@@ -78,7 +78,8 @@ const props = defineProps({
     color: var(--HL3);
     font-weight: 500;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       background-color: var(--A2);
       border-color: var(--A3);
     }

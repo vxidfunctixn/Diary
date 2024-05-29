@@ -47,7 +47,7 @@ function save() {
         <Clock :time="time" @update="update($event)" />
       </template>
       <template #buttons>
-        <Button icon="check" accent @click="save()">Zapisz</Button>
+        <Button icon="check" accent @click="save()">Ustaw</Button>
         <Button icon="cancel" @click="modalOpen = false">Anuluj</Button>
       </template>
     </InputModal>

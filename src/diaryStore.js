@@ -83,7 +83,7 @@ export const useDiaryStore = defineStore('diary', {
     },
     saveSettings(form) {
       for (const [key, value] of Object.entries(form)) {
-        if(this.settings[key]) this.settings[key] = value
+        if(this.settings[key] !== undefined) this.settings[key] = value
       }
     }
   },
