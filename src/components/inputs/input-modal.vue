@@ -1,5 +1,11 @@
 <script setup>
 const emit = defineEmits(['close'])
+const props = defineProps({
+  width: {
+    type: String,
+    default: 'auto'
+  },
+})
 
 function close() {
   emit('close')
@@ -10,7 +16,7 @@ function close() {
   <div class="input-modal-wrapper">
     <div class="overlay" @click="close()"></div>
     <div class="input-modal-container">
-      <div class="input-modal">
+      <div class="input-modal" :style="{ width }">
         <div class="content">
           <slot name="content"></slot>
         </div>
@@ -37,6 +43,7 @@ function close() {
   background-color: rgba(black, .25);
   padding: 24px;
   text-align: center;
+  z-index: 10;
 
   .input-modal-container {
     display: inline-flex;
@@ -63,6 +70,8 @@ function close() {
     border-radius: 8px;
     position: relative;
     z-index: 1;
+    width: auto;
+    max-width: calc(100vw - 48px);
 
     .buttons {
       margin-top: 12px;

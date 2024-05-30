@@ -4,6 +4,7 @@ import InputText from '@/components/inputs/input-text.vue'
 import InputTime from '@/components/inputs/input-time.vue'
 import InputSwitcher from '@/components/inputs/input-switcher.vue'
 import InputRow from '@/components/inputs/input-row.vue'
+import InputPassword from '@/components/inputs/input-password.vue'
 import { ref, toRaw } from 'vue'
 import { useDiaryStore } from '@/diaryStore'
 import { isProxyDifferent } from '@/utils'
@@ -41,7 +42,10 @@ function resetForm() {
         <InputSwitcher name="reminder" :value="form.reminder" @update="handleUpdate($event)"/>
       </InputRow>
       <InputRow title="Godzina przypomnienia">
-        <InputTime name="remind_time" :value="form.remind_time" @update="handleUpdate($event)"/>
+        <InputTime name="remind_time" :newValue="form.remind_time" :oldValue="diaryStore.settings.remind_time" @update="handleUpdate($event)"/>
+      </InputRow>
+      <InputRow title="Hasło do dziennika">
+        <InputPassword name="password" :newValue="form.password" :oldValue="diaryStore.settings.password" @update="handleUpdate($event)"/>
       </InputRow>
     </form>
     <div class="options">

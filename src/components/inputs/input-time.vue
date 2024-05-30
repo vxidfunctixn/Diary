@@ -4,20 +4,21 @@ import InfoText from '@/components/inputs/info-text.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
 import Clock from '@/components/inputs/clock.vue'
 import { DateTime } from '@/utils'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 const emit = defineEmits(['update'])
 const props = defineProps({
   name: String,
-  value: Number,
+  newValue: Number,
+  oldValue: Number,
   infoText: String,
 })
 
 const modalOpen = ref(false)
-const time = ref(new DateTime(props.value))
-const clockValue = ref(props.value)
+const time = ref(new DateTime(props.newValue))
+const clockValue = ref(props.newValue)
 
 watch(props, (newProps) => {
-  time.value = new DateTime(newProps.value)
+  time.value = new DateTime(newProps.newValue)
 })
 
 function update(event) {
@@ -34,12 +35,18 @@ function save() {
   })
 }
 
+const isNewTime = computed(() => {
+  return (props.newValue && props.oldValue && props.oldValue !== props.newValue)
+})
+
 </script>
 
 <template>
   <div class="input-time">
     <div class="button">
-      <Button icon="clock" @click="modalOpen = true">{{ time.timeString }}</Button>
+      <Button icon="clock" @click="modalOpen = true">
+        {{ time.timeString }} <span class="accent-span" v-if="isNewTime">*</span>
+      </Button>
     </div>
     <InfoText v-if="infoText">{{ infoText }}</InfoText>
     <InputModal v-if="modalOpen" @close="modalOpen = false">
@@ -59,6 +66,10 @@ function save() {
 
   .button {
     text-align: right;
+  }
+
+  .accent-span {
+    color: var(--A1);
   }
 }
 </style>
