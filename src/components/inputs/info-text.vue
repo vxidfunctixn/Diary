@@ -6,6 +6,7 @@
 
 <style lang="scss" scoped>
 .infoText {
+  width: 100%;
   text-align: left;
   background: var(--HL3);
   border-radius: 4px;

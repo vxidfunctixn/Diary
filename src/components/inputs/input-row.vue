@@ -23,7 +23,7 @@ const props = defineProps({
 
   .title {
     align-self: start;
-    height: 44px;
+    min-height: 44px;
     font-size: var(--FS4);;
     line-height: 22px;
     padding: 11px 0;

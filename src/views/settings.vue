@@ -2,6 +2,7 @@
 import Button from '@/components/button.vue'
 import InputText from '@/components/inputs/input-text.vue'
 import InputTime from '@/components/inputs/input-time.vue'
+import InputSwitcher from '@/components/inputs/input-switcher.vue'
 import InputRow from '@/components/inputs/input-row.vue'
 import { ref, toRaw } from 'vue'
 import { useDiaryStore } from '@/diaryStore'
@@ -35,6 +36,9 @@ function resetForm() {
     <form @submit.prevent="saveForm()">
       <InputRow title="Nazwa dziennika">
         <InputText name="diary_name" :value="form.diary_name" @update="handleUpdate($event)"/>
+      </InputRow>
+      <InputRow title="Przypominaj jeśli zapomnę o napisaniu notatki">
+        <InputSwitcher name="reminder" :value="form.reminder" @update="handleUpdate($event)"/>
       </InputRow>
       <InputRow title="Godzina przypomnienia">
         <InputTime name="remind_time" :value="form.remind_time" @update="handleUpdate($event)"/>
