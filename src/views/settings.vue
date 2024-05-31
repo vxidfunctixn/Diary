@@ -5,8 +5,9 @@ import InputTime from '@/components/inputs/input-time.vue'
 import InputSwitcher from '@/components/inputs/input-switcher.vue'
 import InputRow from '@/components/inputs/input-row.vue'
 import InputPassword from '@/components/inputs/input-password.vue'
+import InputSelect from '@/components/inputs/input-select.vue'
 import { ref, toRaw } from 'vue'
-import { useDiaryStore } from '@/diaryStore'
+import { useDiaryStore, REQUIRE_PASSWORD, THEME } from '@/diaryStore'
 import { isProxyDifferent } from '@/utils'
 
 const diaryStore = useDiaryStore()
@@ -30,6 +31,40 @@ function resetForm() {
   form.value = { ...diaryStore.settings }
   hasChangedData.value = false
 }
+
+const require_password_options = [
+  {
+    title: 'Przy każdym otwarciu',
+    value: REQUIRE_PASSWORD.EVERY_LAUNCH
+  },
+  {
+    title: 'Każdego dnia',
+    value: REQUIRE_PASSWORD.EVERY_DAY
+  },
+  {
+    title: 'Przy uruchomieniu systemu',
+    value: REQUIRE_PASSWORD.ON_STARTUP
+  },
+  {
+    title: 'Tylko po zablokowaniu',
+    value: REQUIRE_PASSWORD.AFTER_LOCK
+  }
+]
+
+const theme_options = [
+  {
+    title: 'Ciemny',
+    value: THEME.DARK,
+  },
+  {
+    title: 'Jasny',
+    value: THEME.LIGHT,
+  },
+  {
+    title: 'Jak w systemie',
+    value: THEME.SYSTEM,
+  }
+]
 </script>
 
 <template>
@@ -47,6 +82,12 @@ function resetForm() {
       <InputRow title="Hasło do dziennika">
         <InputPassword name="password" :newValue="form.password" :oldValue="diaryStore.settings.password" @update="handleUpdate($event)"/>
       </InputRow>
+      <InputRow title="Wymagaj hasła gdy">
+        <InputSelect name="require_password" :value="form.require_password" :options="require_password_options" @update="handleUpdate($event)"/>
+      </InputRow>
+      <InputRow title="Motyw">
+        <InputSelect name="theme" :value="form.theme" :options="theme_options" @update="handleUpdate($event)"/>
+      </InputRow>
     </form>
     <div class="options">
       <Button icon="save" accent :disabled="!hasChangedData" @click="saveForm()">Zapisz</Button>
@@ -58,6 +99,8 @@ function resetForm() {
 <style lang="scss" scoped>
 .settings {
   padding: 24px;
+  max-width: 830px;
+  margin: 0 auto;
 
   .options {
     margin-top: 12px;

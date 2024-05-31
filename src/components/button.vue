@@ -33,7 +33,7 @@ const props = defineProps({
   height: 44px;
   display: inline-flex;
   align-items: center;
-  padding: 9px;
+  padding: 9px 12px;
   background: var(--HL3);
   border: 1px solid var(--HL2);
   border-radius: 8px;

@@ -14,10 +14,10 @@ export const VIEW = {
 }
 
 export const REQUIRE_PASSWORD = {
-  EVERY_LAUNCH: 'Przy każdym uruchomieniu',
-  EVERY_DAY: 'Raz dziennie',
-  ON_STARTUP: 'Po starcie systemu',
-  AFTER_LOCK: 'Tylko po zablokowaniu'
+  EVERY_LAUNCH: 'every_launch',
+  EVERY_DAY: 'every_day',
+  ON_STARTUP: 'on_startup',
+  AFTER_LOCK: 'after_lock'
 }
 
 export const THEME = {
