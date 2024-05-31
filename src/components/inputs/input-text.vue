@@ -39,7 +39,13 @@ function update(event) {
       @input="update($event)"
       @keydown.enter.prevent="emit('preventEnter')"
     >
-    <button class="show-hide-button" v-if="password" @click="hideText = !hideText">
+    <button
+      v-if="password"
+      type="button"
+      class="show-hide-button"
+      @click="hideText = !hideText"
+      @keydown.enter.prevent="hideText = !hideText"
+    >
       <Icon :name="hideText ? 'show' : 'hide'" :size="16"/>
     </button>
     <InfoText v-if="infoText">{{ infoText }}</InfoText>
