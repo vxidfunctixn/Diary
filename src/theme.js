@@ -16,6 +16,7 @@ export class Theme {
 
   dark() {
     return {
+      hue:    { value: this.hue },
       F1:     new Color(this.hue, '10%', '85%'),
       F1T:    new Color(this.hue, '10%', '85%', '50%'),
       F2:     new Color(this.hue, '8%', '30%'),

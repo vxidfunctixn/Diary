@@ -66,6 +66,7 @@ const props = defineProps({
   &.small {
     height: 36px;
     margin: 2px;
+    padding: 9px;
 
     .title {
       line-height: 20px;

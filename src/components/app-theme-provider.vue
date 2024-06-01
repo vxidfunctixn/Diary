@@ -1,16 +1,17 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 const diaryStore = useDiaryStore()
 const { themeColor } = storeToRefs(diaryStore)
 
+watch(themeColor, newValue => {
+  console.log(newValue)
+  updateVariables()
+})
 
-
-const variables = {}
-for (const [ key, color ] of Object.entries(themeColor.value)) {
-  variables[ '--' + key ] = color.value
-}
+const variables = ref({})
+updateVariables()
 
 const classes = ref({
   "light": diaryStore.themeColorColor === 'light',
@@ -18,6 +19,12 @@ const classes = ref({
   "maximized": false,
   "active": true,
 })
+
+function updateVariables() {
+  for (const [ key, color ] of Object.entries(themeColor.value)) {
+    variables.value[ '--' + key ] = color.value
+  }
+}
 
 onMounted(() => {
   window.electron.receive('window-maximized', () => {
