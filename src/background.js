@@ -2,6 +2,7 @@
 
 import { app, protocol, BrowserWindow, ipcMain, nativeTheme } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import { AppControl } from '@/app-control'
 import path from 'path'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -40,55 +41,7 @@ async function createWindow() {
     win.loadURL('app://./index.html')
   }
 
-  win.on('maximize', () => {
-    win.webContents.send('window-maximized')
-  })
-
-  win.on('unmaximize', () => {
-    win.webContents.send('window-unmaximized')
-  })
-
-  win.on('focus', () => {
-    win.webContents.send('window-focus')
-  })
-
-  win.on('blur', () => {
-    win.webContents.send('window-blur')
-  })
-
-  const sendNativeTheme = () => {
-    if(nativeTheme.shouldUseDarkColors) {
-      win.webContents.send('native-theme-dark')
-    } else {
-      win.webContents.send('native-theme-light')
-    }
-  }
-
-  sendNativeTheme()
-
-  nativeTheme.on('updated', () => {
-    sendNativeTheme()
-  })
-
-  ipcMain.on('app-control', (event, action) => {
-    switch (action) {
-      case 'minimize':
-        win.minimize()
-        break
-      case 'maximize':
-        if (win.isMaximized()) {
-          win.unmaximize()
-        } else {
-          win.maximize()
-        }
-        break
-      case 'exit':
-        win.close()
-        break
-      default:
-        break
-    }
-  })
+  const appControl = new AppControl(win)
 }
 
 app.on('window-all-closed', () => {
