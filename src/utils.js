@@ -1,4 +1,5 @@
 import { toRaw } from 'vue'
+import jsSHA from 'jssha'
 
 export function isProxyDifferent(proxy1, proxy2) {
   const obj1 = toRaw(proxy1)
@@ -19,6 +20,11 @@ export class DateTime {
     const minutes = this.minutes.toString().padStart(2, '0')
     return `${hours}:${minutes}`
   }
+}
 
-
+export function hashPassword(password) {
+  const shaObj = new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" })
+  shaObj.update(password)
+  return shaObj.getHash("HEX")
+  // Change to Argon2
 }

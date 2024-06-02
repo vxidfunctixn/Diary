@@ -35,7 +35,7 @@ export const useDiaryStore = defineStore('diary', {
       diary_name: 'Nazwa dziennika',
       reminder: true,
       remind_time: new Date().setHours(8, 5, 0, 0),
-      password: 'Testowe123',
+      password: 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db',
       require_password: REQUIRE_PASSWORD.AFTER_LOCK,
       theme: THEME.DARK,
       theme_hue: 144,
