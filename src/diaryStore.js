@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { Theme } from '@/theme'
-import { toRaw } from 'vue'
 
 export const VIEW = {
   HOME: 'home',
@@ -29,7 +28,8 @@ export const THEME = {
 export const useDiaryStore = defineStore('diary', {
   state: () => ({
     app: {
-      view: VIEW.HOME
+      view: VIEW.HOME,
+      nativeTheme: 'dark',
     },
     settings: {
       diary_name: 'Nazwa dziennika',
@@ -64,14 +64,15 @@ export const useDiaryStore = defineStore('diary', {
     ]
   }),
   getters: {
-    themeColorColor: state => {
+    theme: state => {
       if(state.settings.theme === THEME.SYSTEM) {
-        return 'dark'
+        return state.app.nativeTheme
+      } else {
+        return state.settings.theme === THEME.DARK ? 'dark' : 'light'
       }
-      return state.settings.theme === THEME.DARK ? 'dark' : 'light'
     },
     themeColor: state => {
-      const mode = state.themeColorColor
+      const mode = state.theme
       const theme = new Theme(state.settings.theme_hue)
 
       if(mode === 'dark') {
@@ -89,6 +90,9 @@ export const useDiaryStore = defineStore('diary', {
       for (const [key, value] of Object.entries(form)) {
         if(this.settings[key] !== undefined) this.settings[key] = value
       }
+    },
+    async setNativeTheme(theme) {
+      this.app.nativeTheme = theme
     }
   },
 })

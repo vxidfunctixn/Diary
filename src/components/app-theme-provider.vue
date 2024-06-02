@@ -33,12 +33,20 @@ onMounted(() => {
   window.electron.receive('window-unmaximized', () => {
     classes.value.maximized = false
   })
+
   window.electron.receive('window-focus', () => {
     classes.value.active = true
   })
 
   window.electron.receive('window-blur', () => {
     classes.value.active = false
+  })
+
+  window.electron.receive('native-theme-dark', () => {
+    diaryStore.setNativeTheme('dark')
+  })
+  window.electron.receive('native-theme-light', () => {
+    diaryStore.setNativeTheme('light')
   })
 })
 </script>

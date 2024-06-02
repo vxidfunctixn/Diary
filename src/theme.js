@@ -38,6 +38,25 @@ export class Theme {
   }
 
   light() {
-    return this.dark() // To-do
+    return {
+      hue:    { value: this.hue },
+      F1:     new Color(this.hue, '10%', '15%'),
+      F1T:    new Color(this.hue, '10%', '15%', '50%'),
+      F2:     new Color(this.hue, '25%', '70%'),
+      HL1:    new Color(this.hue, '35%', '75%'),
+      HL2:    new Color(this.hue, '38%', '81%'),
+      HL3:    new Color(this.hue, '39%', '84%'),
+      BG1:    new Color(this.hue, '36%', '89%'),
+      BG2:    new Color(this.hue, '42%', '88%'),
+      BG2T:   new Color(this.hue, '42%', '88%', '80%'),
+      BG3:    new Color(this.hue, '39%', '92%'),
+      BG4:    new Color(this.hue, '53%', '95%'),
+      A1:     new Color(this.hue, '88%', '36%'),
+      A2:     new Color(this.hue, '79%', '41%'),
+      A3:     new Color(this.hue, '73%', '50%'),
+      A4:     new Color(this.hue, '68%', '61%'),
+      yellow: new Color(54, '100%', '25%'),
+      red:    new Color(0, '95%', '62%'),
+    }
   }
 }

@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
 const diaryStore = useDiaryStore()
+const { themeColor } = storeToRefs(diaryStore)
 
 const props = defineProps({
   name: String,
@@ -17,6 +19,10 @@ const props = defineProps({
 })
 
 const currentColor = ref(props.color ? props.color : diaryStore.themeColor.F1.value)
+
+watch(themeColor, () => {
+  currentColor.value = props.color ? props.color : diaryStore.themeColor.F1.value
+})
 
 </script>
 

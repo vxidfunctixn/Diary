@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, nativeTheme } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import path from 'path'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -56,6 +56,20 @@ async function createWindow() {
     win.webContents.send('window-blur')
   })
 
+  const sendNativeTheme = () => {
+    if(nativeTheme.shouldUseDarkColors) {
+      win.webContents.send('native-theme-dark')
+    } else {
+      win.webContents.send('native-theme-light')
+    }
+  }
+
+  sendNativeTheme()
+
+  nativeTheme.on('updated', () => {
+    sendNativeTheme()
+  })
+
   ipcMain.on('app-control', (event, action) => {
     switch (action) {
       case 'minimize':
@@ -70,6 +84,8 @@ async function createWindow() {
         break
       case 'exit':
         win.close()
+        break
+      default:
         break
     }
   })

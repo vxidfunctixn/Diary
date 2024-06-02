@@ -12,13 +12,15 @@ import WidgetCompleteNotes from '@/components/widget-complete-notes.vue'
 
 <style lang="scss" scoped>
 .cockpit {
-  padding: 24px;
+  padding: 12px 24px;
   column-count: 2;
   column-gap: 24px;
 
   & > div {
     break-inside: avoid;
     margin-bottom: 24px;
+    position: relative;
+    top: 12px;
   }
 
   @media (max-width: 700px) {
