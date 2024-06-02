@@ -4,7 +4,7 @@ import { ref, watch } from 'vue'
 const emit = defineEmits(['update', 'preventEnter'])
 const props = defineProps({
   name: String,
-  value: String,
+  value: Number,
   infoText: String,
 })
 
@@ -17,7 +17,7 @@ watch(props, newProps => {
 function update(event) {
   currentValue.value = event.target.value
   emit('update', {
-    value: currentValue.value,
+    value: Number(currentValue.value),
     name: props.name
   })
 }
@@ -60,7 +60,7 @@ function update(event) {
     &::before {
       content: "";
       position: absolute;
-      height: 12px;
+      height: 12.01px;
       border-radius: 6px;
       background: linear-gradient(
         90deg,
@@ -76,7 +76,7 @@ function update(event) {
         rgba(251, 7, 217, 1) 90%,
         rgba(255, 0, 0, 1) 100%
       );
-      top: 16px;
+      top: 15.5px;
       left: 16px;
       width: calc(100% - 32px);
     }

@@ -40,7 +40,11 @@ export const useDiaryStore = defineStore('diary', {
       theme: THEME.DARK,
       theme_hue: 144,
       standby: true,
-      quick_note_shortcut: 'Windows+Shift+N'
+      quick_note_shortcut: [
+        {code: 91, key: "Meta"},
+        {code: 16, key: "Shift"},
+        {code: 78, key: "N"}
+      ]
     },
     tags: [
       {

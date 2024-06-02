@@ -30,7 +30,7 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .button {
-  height: 44px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   padding: 9px 12px;
@@ -51,6 +51,8 @@ const props = defineProps({
 
   .text {
     margin-left: 8px;
+    text-align: left;
+    line-height: 21px;
   }
 
   &:hover,
@@ -64,9 +66,9 @@ const props = defineProps({
   }
 
   &.small {
-    height: 36px;
+    min-height: 36px;
     margin: 2px;
-    padding: 9px;
+    padding: 2px 9px;
 
     .title {
       line-height: 20px;

@@ -101,6 +101,8 @@ const currentTitle = computed(() => {
 
     .text {
       margin-right: 8px;
+      text-align: left;
+      line-height: 21px;
     }
 
     .icon {
@@ -112,10 +114,6 @@ const currentTitle = computed(() => {
     &:focus-visible {
       background: var(--HL2);
       box-shadow: inset 0 0 0 1px var(--HL1);
-    }
-
-    &:active {
-      box-shadow: inset 0 0 0 1px var(--F2);
     }
   }
 
@@ -134,6 +132,7 @@ const currentTitle = computed(() => {
       cursor: pointer;
       padding: 9px 12px;
       outline: none;
+      line-height: 21px;
 
       &:hover,
       &:focus-visible {
@@ -158,7 +157,7 @@ const currentTitle = computed(() => {
 
   &:focus,
   &:focus-within {
-    padding-bottom: 1px;
+    // padding-bottom: 1px;
     z-index: 2;
 
     .select-input {

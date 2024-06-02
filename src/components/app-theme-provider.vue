@@ -6,7 +6,6 @@ const diaryStore = useDiaryStore()
 const { themeColor } = storeToRefs(diaryStore)
 
 watch(themeColor, newValue => {
-  console.log(newValue)
   updateVariables()
 })
 

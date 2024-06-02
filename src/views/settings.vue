@@ -7,6 +7,7 @@ import InputRow from '@/components/inputs/input-row.vue'
 import InputPassword from '@/components/inputs/input-password.vue'
 import InputSelect from '@/components/inputs/input-select.vue'
 import InputHue from '@/components/inputs/input-hue.vue'
+import InputKeybind from '@/components/inputs/input-keybind.vue'
 import { ref, toRaw } from 'vue'
 import { useDiaryStore, REQUIRE_PASSWORD, THEME } from '@/diaryStore'
 import { isProxyDifferent } from '@/utils'
@@ -91,6 +92,12 @@ const theme_options = [
       </InputRow>
       <InputRow title="Barwa motywu">
         <InputHue name="theme_hue" :value="form.theme_hue" @update="handleUpdate($event)"/>
+      </InputRow>
+      <InputRow title="Czuwaj od startu systemu">
+        <InputSwitcher name="standby" :value="form.standby" @update="handleUpdate($event)"/>
+      </InputRow>
+      <InputRow title="Skrót szybkiej notatki">
+        <InputKeybind name="quick_note_shortcut" :value="form.quick_note_shortcut" @update="handleUpdate($event)"/>
       </InputRow>
     </form>
     <div class="options">
