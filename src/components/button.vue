@@ -79,7 +79,6 @@ const props = defineProps({
     background-color: var(--A1);
     border-color: var(--A4);
     color: var(--HL3);
-    font-weight: 500;
 
     &:hover,
     &:focus-visible {
@@ -98,6 +97,12 @@ const props = defineProps({
     .icon, .title {
       opacity: 0.7;
     }
+  }
+}
+
+.app-theme-provider.dark {
+  .button.accent {
+    font-weight: 500;
   }
 }
 </style>

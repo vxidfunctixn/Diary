@@ -76,7 +76,7 @@ function update(event) {
         rgba(251, 7, 217, 1) 90%,
         rgba(255, 0, 0, 1) 100%
       );
-      top: 15.5px;
+      top: 15px;
       left: 16px;
       width: calc(100% - 32px);
     }

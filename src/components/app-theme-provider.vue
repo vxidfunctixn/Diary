@@ -6,23 +6,27 @@ const diaryStore = useDiaryStore()
 const { themeColor } = storeToRefs(diaryStore)
 
 watch(themeColor, newValue => {
-  updateVariables()
+  updateTheme()
 })
 
 const variables = ref({})
-updateVariables()
 
 const classes = ref({
-  "light": diaryStore.themeColorColor === 'light',
-  "dark": diaryStore.themeColorColor === 'dark',
+  "light": diaryStore.theme === 'light',
+  "dark": diaryStore.theme === 'dark',
   "maximized": false,
   "active": true,
 })
 
-function updateVariables() {
+updateTheme()
+
+
+function updateTheme() {
   for (const [ key, color ] of Object.entries(themeColor.value)) {
     variables.value[ '--' + key ] = color.value
   }
+  classes.value.light = diaryStore.theme === 'light'
+  classes.value.dark = diaryStore.theme === 'dark'
 }
 
 onMounted(() => {

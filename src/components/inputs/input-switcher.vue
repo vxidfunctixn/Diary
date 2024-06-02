@@ -40,11 +40,11 @@ function update(event) {
     border-radius: 16px;
 
     .checkbox {
-      --_background_color: var(--HL3);
+      --_background_color: var(--BG4);
       --_border_color: var(--HL2);
       --_accent_color: var(--A1);
       --_thumb_color: var(--BG3);
-      --_thumb_border_color: var(--F2);
+      --_thumb_border_color: var(--A3);
 
       width: 58px;
       height: 32px;
@@ -63,7 +63,7 @@ function update(event) {
         width: 26px;
         aspect-ratio: 1 / 1;
         border-radius: 50%;
-        border: 2px solid var(--_border_color);
+        border: 2px solid var(--A4);
         background-color: var(--_thumb_color);
         transition: transform .2s ease-out, box-shadow .1s ease-out;
         box-shadow: inset 0 0 0 6px var(--_thumb_border_color);
@@ -111,14 +111,16 @@ function update(event) {
         --_background_color: var(--HL2);
         --_border_color: var(--HL1);
         --_accent_color: var(--A2);
+        --_thumb_border_color: var(--A2);
       }
     }
 
     &:hover {
       .checkbox {
-        --_background_color: var(--HL2);
+        --_background_color: var(--BG3);
         --_border_color: var(--HL1);
         --_accent_color: var(--A2);
+        --_thumb_border_color: var(--A2);
       }
     }
   }
