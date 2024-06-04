@@ -15,6 +15,7 @@ const { settings, app } = storeToRefs(diaryStore)
     <NavItem v-if="app.view !== VIEW.HOME && app.view !== VIEW.LOCK" :level="1" icon="diary" :title="settings.diary_name" @click="diaryStore.setView(VIEW.HOME)"/>
 
     <NavItem v-if="app.view === VIEW.SETTINGS" :level="2" icon="settings" title="Ustawienia"/>
+    <NavItem v-if="app.view === VIEW.ABOUT" :level="2" icon="info" title="O aplikacji"/>
     <NavItem v-if="app.view === VIEW.MONTH" :level="2" icon="date" title="06.2024"/>
     <NavItem v-if="app.view === VIEW.YEAR" :level="2" icon="date" title="2024"/>
     <NavItem v-if="app.view === VIEW.SEARCH" :level="2" icon="search" title="Szukaj"/>

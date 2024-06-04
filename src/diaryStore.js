@@ -9,7 +9,8 @@ export const VIEW = {
   YEAR: 'year',
   SETTINGS: 'settings',
   LOCK: 'lock',
-  EDIT_NOTE: 'edit_note'
+  EDIT_NOTE: 'edit_note',
+  ABOUT: 'about',
 }
 
 export const REQUIRE_PASSWORD = {

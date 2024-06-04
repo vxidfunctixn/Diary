@@ -81,4 +81,13 @@ function close() {
     }
   }
 }
+
+.app-theme-provider.maximized {
+  .input-modal-wrapper {
+    top: 41px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 41px);
+  }
+}
 </style>

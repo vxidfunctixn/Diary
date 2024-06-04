@@ -2,8 +2,7 @@
 import Icon from '@/components/icon.vue'
 const props = defineProps({
   title: String,
-  icon: String,
-  clickFn: () => {}
+  icon: String
 })
 </script>
 

@@ -7,6 +7,7 @@ import { storeToRefs } from 'pinia'
 import Cockpit from '@/views/cockpit.vue'
 import Lock from '@/views/lock.vue'
 import Settings from '@/views/settings.vue'
+import NoteList from '@/views/note-list.vue'
 
 const diaryStore = useDiaryStore()
 const { app } = storeToRefs(diaryStore)
@@ -19,6 +20,7 @@ const { app } = storeToRefs(diaryStore)
       <Cockpit v-if="app.view === VIEW.HOME"/>
       <Lock v-if="app.view === VIEW.LOCK"/>
       <Settings v-if="app.view === VIEW.SETTINGS"/>
+      <NoteList v-if="app.view === VIEW.NOTE_LIST"/>
     </div>
   </AppThemeProvider>
 </template>
