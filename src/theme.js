@@ -22,7 +22,7 @@ export class Theme {
       F2:     new Color(this.hue, '8%', '30%'),
       HL1:    new Color(this.hue, '25%', '19%'),
       HL2:    new Color(this.hue, '26%', '14%'),
-      HL3:    new Color(this.hue, '35%', '11%'),
+      HL3:    new Color(this.hue, '35%', '12%'),
       BG1:    new Color(this.hue, '36%', '11%'),
       BG2:    new Color(this.hue, '42%', '9%'),
       BG2T:   new Color(this.hue, '42%', '9%', '80%'),

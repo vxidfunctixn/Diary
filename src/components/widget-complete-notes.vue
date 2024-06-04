@@ -2,10 +2,39 @@
 import Section from '@/components/section.vue'
 import Row from '@/components/section-row.vue'
 import Button from '@/components/button.vue'
+import { Calendar } from '@/utils'
+
+const today = new Date(Date.now())
+const calendar = new Calendar(today)
+const month = calendar.getMonth((day) => {
+  day.tempVar = 'test'
+  return day
+})
 </script>
 
 <template>
   <Section title="Uzupełnij notatki">
+    <div class="calendar">
+      <div class="dayName">PN</div>
+      <div class="dayName">WT</div>
+      <div class="dayName">ŚR</div>
+      <div class="dayName">CZ</div>
+      <div class="dayName">PT</div>
+      <div class="dayName">SB</div>
+      <div class="dayName">ND</div>
+      <template v-for="row in month">
+        <div
+          v-for="day in row"
+          class="day"
+          :class="{
+            disabled: !day.currentMonth,
+            active: day.currentDay
+          }"
+        >
+          {{ day.number }}
+        </div>
+      </template>
+    </div>
     <Row>
       <div>Dzisiaj</div>
       <Button icon="add-note" small>Dodaj notatkę</Button>
@@ -24,3 +53,56 @@ import Button from '@/components/button.vue'
     </Row>
   </Section>
 </template>
+
+<style lang="scss" scoped>
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 40px;
+  padding: 12px;
+  border-bottom: 1px solid var(--HL2);
+
+  .dayName {
+    text-align: center;
+    line-height: 38px;
+    color: var(--A1);
+    user-select: none;
+  }
+
+  .day {
+    text-align: center;
+    line-height: 38px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    user-select: none;
+
+    &:hover {
+      background-color: var(--HL2);
+      border: 1px solid var(--HL1);
+    }
+
+    &:active {
+      border-color: var(--F2);
+    }
+
+    &.disabled {
+      color: var(--F2);
+    }
+
+    &.active {
+      border: 1px solid var(--A2);
+      background-color: var(--BG3);
+
+      &:hover {
+        border-color: var(--A1);
+        background-color: var(--HL3);
+      }
+
+      &:active {
+        background-color: var(--HL2);
+      }
+    }
+  }
+}
+</style>

@@ -5,24 +5,36 @@ import WidgetCompleteNotes from '@/components/widget-complete-notes.vue'
 
 <template>
   <div class="cockpit">
-    <WidgetNavigation/>
-    <WidgetCompleteNotes/>
+    <div class="widget">
+      <WidgetNavigation/>
+    </div>
+    <div class="widget">
+      <WidgetCompleteNotes/>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .cockpit {
-  padding: 24px;
-  column-count: 2;
+  padding: 12px 24px;
+  column-count: 3;
   column-gap: 24px;
+  max-width: 1488px;
+  margin: 0 auto;
 
-  & > div {
+  & > .widget {
     break-inside: avoid;
-    margin-bottom: 24px;
+    padding: 12px 0;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 1200px) {
+    column-count: 2;
+    max-width: 1144px;
+  }
+
+  @media (max-width: 820px) {
     column-count: 1;
+    max-width: 560px;
   }
 }
 </style>

@@ -16,7 +16,7 @@ const props = defineProps({
 <style lang="scss" scoped>
 .input-row {
   padding: 12px 0;
-  border-bottom: 1px solid var(--HL1);
+  border-bottom: 1px solid var(--HL2);
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 12px;
