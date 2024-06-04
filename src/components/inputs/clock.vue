@@ -8,6 +8,9 @@ const props = defineProps({
   time: Object
 })
 
+const inputMinutes = ref(null)
+const inputHours = ref(null)
+
 const time = ref({
   hours: props.time.hours,
   minutes: props.time.minutes
@@ -25,8 +28,8 @@ const draggedObject = ref({
 
 function handleWheel(event, type) {
   if(event.deltaY > 0 || -event.deltaX > 0) {
-    if(type === 'hours' && time.value.hours === 0) time.value.hours= 24
-    if(type === 'minutes' && time.value.minutes === 0) time.value.minutes= 60
+    if(type === 'hours' && time.value.hours === 0) time.value.hours = 24
+    if(type === 'minutes' && time.value.minutes === 0) time.value.minutes = 60
     time.value[type] -= 1
   }
   if(event.deltaY < 0 || -event.deltaX < 0) {
@@ -38,7 +41,8 @@ function handleWheel(event, type) {
 }
 
 function formatNumber(number) {
-  return String(number).padStart(2, '0');
+  const value = String(number).padStart(2, '0')
+  return value
 }
 
 function clockHover(event, type) {
@@ -85,23 +89,68 @@ function update(type, from_selected = false) {
   }
   emit('update', new Date().setHours(time.value.hours, time.value.minutes, 0, 0))
 }
+
+function handleInput(event) {
+  let value = Number(event.target.value.slice(-2))
+  const type = event.target.name
+  if(type === 'hours') {
+    if(value < 0) value = 23
+    if(value > 23) value = Number(event.target.value.slice(-1))
+  } else if(type === 'minutes') {
+    if(value < 0) value = 59
+    if(value > 59) value = Number(event.target.value.slice(-1))
+  }
+  event.target.value = formatNumber(value)
+  selectedTime.value[type] = value
+  update(type, true)
+}
 </script>
 
 <template>
   <div class="clock-wrapper">
     <div class="inputs">
-      <div class="input" @wheel="handleWheel($event, 'hours')" title="Użyj kółka myszy aby edytować">
+      <label
+        class="input"
+        title="Użyj kółka myszy aby edytować"
+        @wheel="handleWheel($event, 'hours')"
+        @click="inputHours.select()"
+      >
         <div class="icon">
           <Icon name="number-scroll" :size="16"/>
         </div>
-        {{ formatNumber(time.hours) }}
-      </div>
-      <div class="input" @wheel="handleWheel($event, 'minutes')" title="Użyj kółka myszy aby edytować">
+        <input
+          class="inputDefault"
+          name="hours"
+          type="number"
+          min="-1"
+          max="24"
+          step="1"
+          :value="formatNumber(time.hours)"
+          @input="handleInput($event)"
+          ref="inputHours"
+        >
+      </label>
+      <label
+        class="input"
+        title="Użyj kółka myszy aby edytować"
+        @wheel="handleWheel($event, 'minutes')"
+        @click="inputMinutes.select()"
+      >
         <div class="icon">
           <Icon name="number-scroll" :size="16"/>
         </div>
-        {{ formatNumber(time.minutes) }}
-      </div>
+        <input
+          class="inputDefault"
+          name="minutes"
+          type="number"
+          min="-1"
+          max="60"
+          step="1"
+          :value="formatNumber(time.minutes)"
+          @input="handleInput($event)"
+          ref="inputMinutes"
+        >
+      </label>
     </div>
 
     <div class="clock">
@@ -197,6 +246,29 @@ function update(type, from_selected = false) {
         .icon {
           right: 8px;
         }
+      }
+
+      .inputDefault {
+        appearance: none;
+        outline: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        display: inline;
+        background-color: transparent;
+        color: inherit;
+        font-size: inherit;
+        text-align: inherit;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+        }
+      }
+
+      &:focus-within {
+        border-color: var(--A1);
+        background: var(--BG3);
       }
     }
   }
