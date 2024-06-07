@@ -13,16 +13,35 @@ const props = defineProps({
   small: Boolean,
   disabled: Boolean,
   accent: Boolean,
-  submit: Boolean
+  submit: Boolean,
+  width: {
+    type: String,
+    default: 'auto',
+  },
+  center: Boolean,
+  stick: String,
 })
 </script>
 
 <template>
-  <button :type="submit ? 'submit' : 'button'" class="button" :class="{ small, accent }" :disabled="disabled" :title="title">
-    <div class="icon">
+  <button
+    :type="submit ? 'submit' : 'button'"
+    class="button"
+    :class="{
+      small,
+      accent,
+      center,
+      stickLeft: stick === 'left' || stick === 'both',
+      stickRight: stick === 'right' || stick === 'both'
+    }"
+    :disabled="disabled"
+    :title="title"
+    :style="{ width }"
+  >
+    <div class="icon" v-if="icon">
       <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.value : themeColor.F1.value"/>
     </div>
-    <div v-if="slots.default" class="text">
+    <div v-if="slots.default" class="text" :class="{ hasIcon: icon }">
       <slot></slot>
     </div>
   </button>
@@ -43,6 +62,7 @@ const props = defineProps({
   cursor: pointer;
   font-size: var(--FS4);
   -webkit-app-region: no-drag;
+  min-width: 44px;
 
   .icon {
     width: 16px;
@@ -50,9 +70,12 @@ const props = defineProps({
   }
 
   .text {
-    margin-left: 8px;
     text-align: left;
     line-height: 21px;
+
+    &.hasIcon {
+      margin-left: 8px;
+    }
   }
 
   &:hover,
@@ -69,6 +92,7 @@ const props = defineProps({
     min-height: 36px;
     margin: 2px;
     padding: 2px 9px;
+    min-width: 36px;
 
     .title {
       line-height: 20px;
@@ -89,6 +113,20 @@ const props = defineProps({
     &:active {
       border-color: var(--A1);
     }
+  }
+
+  &.center {
+    justify-content: center;
+  }
+
+  &.stickLeft {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  &.stickRight {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   &:disabled {

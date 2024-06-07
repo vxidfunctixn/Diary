@@ -16,6 +16,7 @@ const { app } = storeToRefs(diaryStore)
 <template>
   <AppThemeProvider>
     <WindowTitleBar/>
+    <div id="modal"></div>
     <div class="app-wrapper">
       <Cockpit v-if="app.view === VIEW.HOME"/>
       <Lock v-if="app.view === VIEW.LOCK"/>

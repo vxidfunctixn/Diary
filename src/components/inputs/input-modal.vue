@@ -13,19 +13,21 @@ function close() {
 </script>
 
 <template>
-  <div class="input-modal-wrapper">
-    <div class="overlay" @click="close()"></div>
-    <div class="input-modal-container">
-      <div class="input-modal" :style="{ width }">
-        <div class="content">
-          <slot name="content"></slot>
-        </div>
-        <div class="buttons">
-          <slot name="buttons"></slot>
+  <Teleport to="#modal">
+    <div class="input-modal-wrapper">
+      <div class="overlay" @click="close()"></div>
+      <div class="input-modal-container">
+        <div class="input-modal" :style="{ width }">
+          <div class="content">
+            <slot name="content"></slot>
+          </div>
+          <div class="buttons">
+            <slot name="buttons"></slot>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <style lang="scss" scoped>
@@ -88,6 +90,13 @@ function close() {
     left: 0;
     width: 100%;
     height: calc(100vh - 41px);
+
+    .overlay {
+      top: 41px;
+      left: 0;
+      width: calc(100% - 8px);
+      height: calc(100vh - 41px - 8px);
+    }
   }
 }
 </style>
