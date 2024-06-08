@@ -26,11 +26,15 @@ export const THEME = {
   SYSTEM: 'system',
 }
 
+const datenow = new Date(Date.now())
+const today = new Date(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())
+
 export const useDiaryStore = defineStore('diary', {
   state: () => ({
     app: {
       view: VIEW.HOME,
       nativeTheme: 'dark',
+      selected_day: today.valueOf()
     },
     settings: {
       diary_name: 'Nazwa dziennika',
@@ -94,6 +98,9 @@ export const useDiaryStore = defineStore('diary', {
     },
     async setNativeTheme(theme) {
       this.app.nativeTheme = theme
+    },
+    setSelectedDay(date) {
+      this.app.selected_day = date
     }
   },
 })

@@ -11,6 +11,7 @@ const props = defineProps({
   newValue: Number,
   oldValue: Number,
   infoText: String,
+  controls: Boolean,
 })
 
 const modalOpen = ref(false)
@@ -25,14 +26,26 @@ function update(event) {
   calendarValue.value = event
 }
 
-function save() {
-  dateTime.value = new DateTime(calendarValue.value)
-  modalOpen.value = false
+function save(fromModal = true) {
+  if(fromModal) {
+    dateTime.value = new DateTime(calendarValue.value)
+    modalOpen.value = false
+  }
 
   emit('update', {
     name: props.name,
     value: dateTime.value.timestamp
   })
+}
+
+function handlePrev() {
+  dateTime.value.prevDay()
+  save(false)
+}
+
+function handleNext() {
+  dateTime.value.nextDay()
+  save(false)
 }
 
 const isNewDate = computed(() => {
@@ -44,9 +57,11 @@ const isNewDate = computed(() => {
 <template>
   <div class="input-time">
     <div class="button">
-      <Button icon="date" @click="modalOpen = true">
+      <Button v-if="controls" icon="arrow-left" stick="right" @click="handlePrev()"></Button>
+      <Button icon="date" @click="modalOpen = true" :stick="controls ? 'both' : null">
         {{ dateTime.dateString }} <span class="accent-span" v-if="isNewDate">*</span>
       </Button>
+      <Button v-if="controls" icon="arrow-right" stick="left" @click="handleNext()"></Button>
     </div>
     <InfoText v-if="infoText">{{ infoText }}</InfoText>
     <InputModal v-if="modalOpen" @close="modalOpen = false">
