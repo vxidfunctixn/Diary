@@ -2,7 +2,7 @@
 import Section from '@/components/section.vue'
 import Row from '@/components/section-row.vue'
 import Button from '@/components/button.vue'
-import { Calendar } from '@/utils'
+import { Calendar, getMonthName } from '@/utils'
 
 const today = new Date(Date.now())
 const calendar = new Calendar(today)
@@ -10,10 +10,16 @@ const month = calendar.getMonth((day) => {
   day.tempVar = 'test'
   return day
 })
+
+function getTitle() {
+  const month = getMonthName(today.getMonth())
+  return `${month} ${today.getFullYear()}`
+}
 </script>
 
 <template>
   <Section title="Uzupełnij notatki">
+    <div class="calendar-title">{{ getTitle() }}</div>
     <div class="calendar">
       <div class="dayName">PN</div>
       <div class="dayName">WT</div>
@@ -55,6 +61,15 @@ const month = calendar.getMonth((day) => {
 </template>
 
 <style lang="scss" scoped>
+.calendar-title {
+  text-align: center;
+  border: 1px solid var(--HL2);
+  border-radius: 8px;
+  line-height: 22px;
+  padding: 6px;
+  margin: 12px 12px 0;
+}
+
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
