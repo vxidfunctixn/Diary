@@ -44,6 +44,7 @@ const props = defineProps({
 
     .note-title-bar {
       position: relative;
+      user-select: none;
 
       .note-title {
         background-color: var(--BG3);
@@ -83,13 +84,6 @@ const props = defineProps({
         gap: 4px;
       }
 
-      &:hover,
-      &:focus-within {
-        .note-options {
-          opacity: 1;
-        }
-      }
-
       &:active {
         border-color: var(--F2);
       }
@@ -104,6 +98,15 @@ const props = defineProps({
         .note-title {
           border-top-left-radius: 8px;
           border-top-right-radius: 8px;
+        }
+      }
+    }
+
+    &:hover,
+    &:focus-within {
+      .note-title-bar {
+        .note-options {
+          opacity: 1;
         }
       }
     }
