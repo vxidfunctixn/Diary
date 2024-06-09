@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { Theme } from '@/theme'
+import { isEqualDate } from './utils'
 
 export const VIEW = {
   HOME: 'home',
@@ -51,21 +52,55 @@ export const useDiaryStore = defineStore('diary', {
         {code: 78, key: "N"}
       ]
     },
-    tags: [
-      {
-        id: '1',
-        name: 'Test',
-      }
-    ],
     notes: [
       {
         id: '1',
-        time: new Date("2019-12-17T03:24:00"),
-        created: new Date("2019-12-17T03:24:00"),
-        last_modify: null,
+        modify: new Date("2024-02-17T15:24:00").valueOf(),
+        created: new Date("2024-02-17T15:24:00").valueOf(),
         content: 'Lorem ipsum dolor sit amet',
-        tags: ["1"]
-      }
+      },
+      {
+        id: '2',
+        modify: new Date("2024-02-19T08:12:00").valueOf(),
+        created: new Date("2024-02-17T16:15:00").valueOf(),
+        content: 'Lorem ipsum dolor sit amet',
+      },
+      {
+        id: '3',
+        modify: new Date("2024-02-17T19:44:15").valueOf(),
+        created: new Date("2024-02-17T19:44:15").valueOf(),
+        content: 'Lorem ipsum dolor sit amet',
+      },
+      {
+        id: '4',
+        modify: new Date("2024-02-22T01:23:58").valueOf(),
+        created: new Date("2024-02-18T18:31:12").valueOf(),
+        content: 'Lorem ipsum dolor sit amet',
+      },
+      {
+        id: '5',
+        modify: new Date("2024-02-18T23:01:19").valueOf(),
+        created: new Date("2024-02-18T23:01:19").valueOf(),
+        content: 'Lorem ipsum dolor sit amet',
+      },
+      {
+        id: '6',
+        modify: new Date("2024-02-19T23:44:10").valueOf(),
+        created: new Date("2024-02-19T23:44:10").valueOf(),
+        content: 'Lorem ipsum dolor sit amet',
+      },
+      {
+        id: '7',
+        modify: new Date("2024-02-21T20:01:33").valueOf(),
+        created: new Date("2024-02-21T20:01:33").valueOf(),
+        content: 'Lorem ipsum dolor sit amet',
+      },
+      {
+        id: '8',
+        modify: new Date("2024-02-22T21:02:01").valueOf(),
+        created: new Date("2024-02-22T21:02:01").valueOf(),
+        content: 'Lorem ipsum dolor sit amet',
+      },
     ]
   }),
   getters: {
@@ -88,15 +123,9 @@ export const useDiaryStore = defineStore('diary', {
     },
     getNotes: state => {
       return date => {
-        const result = []
-        state.notes.map(note => {
-          const title = 'N1 21:35 22.05.2024'
-          result.push([{
-            title,
-            ...note
-          }])
-        })
-        return result
+        const notes = addNoteTitle(groupNotes([...state.notes]))
+
+        return notes
       }
     }
   },
@@ -117,3 +146,56 @@ export const useDiaryStore = defineStore('diary', {
     }
   },
 })
+
+function groupNotes(notes) {
+  const result = []
+  const day = []
+  notes.map((note, index) => {
+    if(day.length === 0) {
+      day.push({ ...note })
+    } else {
+      if(isEqualDate(note.created, day[0].created)) {
+        day.push({ ...note })
+      } else {
+        result.push([ ...day ])
+        day.splice( 0, day.length )
+        day.push({ ...note })
+      }
+    }
+
+    if(index === notes.length - 1 && day.length) {
+      result.push([ ...day ])
+    }
+  })
+
+  return result
+}
+
+function addNoteTitle(notes) {
+  const result = [...notes]
+
+  result.forEach(group => {
+    group.forEach((note, index) => {
+      const createdDate = new Date(note.created)
+      const modifyDate = new Date(note.modify)
+      const isModify = !isEqualDate(createdDate, modifyDate)
+      let title = `N${index + 1}`
+      if(isModify) title += 'M'
+      title += ` ${formatDate(createdDate)}`
+      if(isModify) title += ` U ${formatDate(modifyDate)}`
+
+      note.title = title
+    })
+  })
+
+  return result
+}
+
+function formatDate(date) {
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  const hours = date.getHours().toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const year = date.getFullYear()
+  return `${hours}:${minutes} ${day}.${month}.${year}`
+}
