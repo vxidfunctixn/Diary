@@ -55,7 +55,7 @@ const isNewDate = computed(() => {
 </script>
 
 <template>
-  <div class="input-time">
+  <div class="input-date">
     <div class="button">
       <Button v-if="controls" icon="arrow-left" stick="right" @click="handlePrev()"></Button>
       <Button icon="date" @click="modalOpen = true" :stick="controls ? 'both' : null" monospace>
@@ -77,10 +77,10 @@ const isNewDate = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.input-time {
+.input-date {
 
   .button {
-    text-align: right;
+    display: flex;
   }
 
   .accent-span {

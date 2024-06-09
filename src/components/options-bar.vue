@@ -28,13 +28,18 @@
   top: 43px;
   left: 2px;
   width: calc(100% - 4px);
+  overflow-x: auto;
 
+  .right {
+    margin-left: 8px;
+  }
 
   .left,
   .right {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-shrink: 0;
   }
 }
 
