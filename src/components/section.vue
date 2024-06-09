@@ -2,13 +2,22 @@
 import Icon from '@/components/icon.vue'
 const props = defineProps({
   title: String,
-  icon: String
+  icon: String,
+  stick: String,
+  shadow: {
+    type: Boolean,
+    default: true,
+  }
 })
 </script>
 
 <template>
-  <div class="section">
-    <div class="title-bar" :class="{ icon }">
+  <div class="section" :class="{
+    stickTop: stick === 'top' || stick === 'both',
+    stickBottom: stick === 'bottom' || stick === 'both',
+    shadow
+  }">
+    <div class="title-bar" :class="{ hasIcon: icon }">
       <div class="icon" v-if="icon">
         <Icon :name="icon" :size="16"/>
       </div>
@@ -27,25 +36,38 @@ const props = defineProps({
   border-radius: 8px;
   overflow: hidden;
   background-color: var(--BG1);
-  box-shadow: 0 4px 16px -4px rgba(black, .25);
+
+  &.shadow {
+    box-shadow: 0 4px 16px -4px rgba(black, .25);
+  }
+
+  &.stickTop {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  &.stickBottom {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 
   .title-bar {
     background-color: var(--BG3);
-    padding: 4px 12px;
+    padding: 12px;
     position: relative;
-    min-height: 32px;
+    min-height: 44px;
 
     .title {
-      line-height: 24px;
+      line-height: 20px;
     }
 
-    &.icon {
+    &.hasIcon {
       padding-left: 12px + 16px + 8px;
 
       .icon {
         position: absolute;
         left: 12px;
-        top: 5px;
+        top: 8px;
       }
     }
   }

@@ -20,6 +20,7 @@ const props = defineProps({
   },
   center: Boolean,
   stick: String,
+  monospace: Boolean
 })
 </script>
 
@@ -31,6 +32,7 @@ const props = defineProps({
       small,
       accent,
       center,
+      monospace,
       stickLeft: stick === 'left' || stick === 'both',
       stickRight: stick === 'right' || stick === 'both'
     }"
@@ -90,7 +92,6 @@ const props = defineProps({
 
   &.small {
     min-height: 36px;
-    margin: 2px;
     padding: 2px 9px;
     min-width: 36px;
 
@@ -127,6 +128,10 @@ const props = defineProps({
   &.stickRight {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+  }
+
+  &.monospace {
+    font-family: var(--FF2);
   }
 
   &:disabled {

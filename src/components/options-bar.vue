@@ -15,6 +15,7 @@
 
 <style lang="scss" scoped>
 .options-bar {
+  position: fixed;
   width: 100%;
   background-color: var(--BG2T);
   box-shadow: 0px 4px 16px -4px rgba(black, .65);
@@ -24,12 +25,24 @@
   align-items: center;
   backdrop-filter: blur(16px);
   z-index: 5;
+  top: 43px;
+  left: 2px;
+  width: calc(100% - 4px);
+
 
   .left,
   .right {
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+}
+
+.app-theme-provider.maximized {
+  .options-bar {
+    top: 41px;
+    left: 0;
+    width: 100%;
   }
 }
 </style>

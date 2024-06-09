@@ -110,7 +110,7 @@ const theme_options = [
 <style lang="scss" scoped>
 .settings {
   padding: 24px;
-  max-width: 830px;
+  max-width: var(--CW);
   margin: 0 auto;
 
   .options {

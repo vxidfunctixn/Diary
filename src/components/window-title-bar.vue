@@ -82,9 +82,13 @@ onMounted(() => {
   overflow: hidden;
   -webkit-app-region: drag;
   border-bottom: 1px solid var(--HL2);
+  position: relative;
+  z-index: 9999;
 
   .app-options {
     display: flex;
+    align-items: center;
+    gap: 4px;
   }
 
   .separator {

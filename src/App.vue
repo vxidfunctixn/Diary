@@ -28,12 +28,15 @@ const { app } = storeToRefs(diaryStore)
 
 <style lang="scss">
 :root {
-  --FS1: 8px;
+  --FF1: Saira; //Font family
+  --FF2: RedditMono;
+  --FS1: 8px; // Font size
   --FS2: 12px;
   --FS3: 14px;
   --FS4: 16px;
+  --CW: 830px; // Container width
 
-  font-family: Saira;
+  font-family: var(--FF1);
   font-size: var(--FS4);
 }
 
@@ -58,6 +61,6 @@ body {
 }
 
 input, textarea, button {
-  font-family: Saira;
+  font-family: var(--FF1);
 }
 </style>

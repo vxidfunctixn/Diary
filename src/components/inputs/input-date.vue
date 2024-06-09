@@ -58,7 +58,7 @@ const isNewDate = computed(() => {
   <div class="input-time">
     <div class="button">
       <Button v-if="controls" icon="arrow-left" stick="right" @click="handlePrev()"></Button>
-      <Button icon="date" @click="modalOpen = true" :stick="controls ? 'both' : null">
+      <Button icon="date" @click="modalOpen = true" :stick="controls ? 'both' : null" monospace>
         {{ dateTime.dateString }} <span class="accent-span" v-if="isNewDate">*</span>
       </Button>
       <Button v-if="controls" icon="arrow-right" stick="left" @click="handleNext()"></Button>
