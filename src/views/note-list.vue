@@ -8,6 +8,7 @@ import { useDiaryStore } from '@/diaryStore'
 
 const diaryStore = useDiaryStore()
 const selectedDate = ref(new Date(Date.now()).valueOf())
+const notes = ref(diaryStore.getNotes(Date.now()))
 
 function onDateUpdate(event) {
   if(event.name === 'selected_day') {
@@ -16,27 +17,6 @@ function onDateUpdate(event) {
   }
 }
 
-const data1 = [
-  {
-    title: 'N1 20:32 22.05.2024',
-    message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a nunc vulputate, porttitor arcu ac, imperdiet odio. Vivamus sagittis sapien quis lacus dignissim pulvinar. Mauris tristique egestas lorem eu fermentum. Mauris tempus purus sit amet tincidunt finibus. Ut sagittis dapibus gravida. Suspendisse posuere purus molestie, pulvinar nisl non, fermentum tortor.'
-  }
-]
-
-const data2 = [
-  {
-    title: 'N1 20:32 22.05.2024',
-    message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a nunc vulputate, porttitor arcu ac, imperdiet odio. Vivamus sagittis sapien quis lacus dignissim pulvinar. Mauris tristique egestas lorem eu fermentum. Mauris tempus purus sit amet tincidunt finibus. Ut sagittis dapibus gravida. Suspendisse posuere purus molestie, pulvinar nisl non, fermentum tortor.'
-  },
-  {
-    title: 'N2 20:33 22.05.2024',
-    message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a nunc vulputate, porttitor arcu ac, imperdiet odio. Vivamus sagittis sapien quis lacus dignissim pulvinar. Mauris tristique egestas lorem eu fermentum. Mauris tempus purus sit amet tincidunt finibus. Ut sagittis dapibus gravida. Suspendisse posuere purus molestie, pulvinar nisl non, fermentum tortor.'
-  },
-  {
-    title: 'N3 20:35 22.05.2024',
-    message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a nunc vulputate, porttitor arcu ac, imperdiet odio. Vivamus sagittis sapien quis lacus dignissim pulvinar. Mauris tristique egestas lorem eu fermentum. Mauris tempus purus sit amet tincidunt finibus. Ut sagittis dapibus gravida. Suspendisse posuere purus molestie, pulvinar nisl non, fermentum tortor.'
-  },
-]
 
 </script>
 
@@ -52,9 +32,7 @@ const data2 = [
         <Button icon="add-note">Dodaj notatkę</Button>
       </template>
     </OptionsBar>
-    <Note :data="data1"/>
-    <Note :data="data2"/>
-    <Note :data="data1"/>
+    <Note v-for="note in notes" :data="note"/>
   </div>
 </template>
 

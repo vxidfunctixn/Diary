@@ -1,11 +1,6 @@
 <script setup>
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
-import { storeToRefs } from 'pinia'
-import { useDiaryStore } from '@/diaryStore'
-const diaryStore = useDiaryStore()
-const { themeColor } = storeToRefs(diaryStore)
-
 
 const props = defineProps({
   data: Array
@@ -27,7 +22,7 @@ const props = defineProps({
         <Button icon="delete" small>Usuń</Button>
       </div>
     </div>
-    <div class="note-message">{{ note.message }}</div>
+    <div class="note-message">{{ note.content }}</div>
   </div>
 </div>
 </template>
@@ -47,7 +42,7 @@ const props = defineProps({
       user-select: none;
 
       .note-title {
-        background-color: var(--BG3);
+        background-color: var(--HL3);
         padding: 11px 11px;
         line-height: 20px;
         position: relative;
@@ -66,7 +61,7 @@ const props = defineProps({
 
         &:hover,
         &:focus-visible {
-          background-color: var(--BG2);
+          background-color: var(--HL2);
           border-color: var(--HL1);
         }
 

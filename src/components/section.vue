@@ -52,7 +52,7 @@ const props = defineProps({
   }
 
   .title-bar {
-    background-color: var(--BG3);
+    background-color: var(--HL3);
     padding: 12px;
     position: relative;
     min-height: 44px;

@@ -50,4 +50,10 @@
     width: 100%;
   }
 }
+
+.app-theme-provider.light {
+  .options-bar {
+    box-shadow: 0px 4px 16px -4px rgba(black, .25);
+  }
+}
 </style>

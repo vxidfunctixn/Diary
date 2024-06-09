@@ -63,7 +63,7 @@ export const useDiaryStore = defineStore('diary', {
         time: new Date("2019-12-17T03:24:00"),
         created: new Date("2019-12-17T03:24:00"),
         last_modify: null,
-        content: '<p>Lorem ipsum <tag id="1">Test</tag></p>',
+        content: 'Lorem ipsum dolor sit amet',
         tags: ["1"]
       }
     ]
@@ -84,6 +84,19 @@ export const useDiaryStore = defineStore('diary', {
         return theme.dark()
       } else {
         return theme.light()
+      }
+    },
+    getNotes: state => {
+      return date => {
+        const result = []
+        state.notes.map(note => {
+          const title = 'N1 21:35 22.05.2024'
+          result.push([{
+            title,
+            ...note
+          }])
+        })
+        return result
       }
     }
   },
