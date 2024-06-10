@@ -22,6 +22,7 @@ const hasClickEventListener = computed(
     class="nav-item"
     :class="{ lv1: level === 1, lv2: level === 2, lv3: level === 3, link: hasClickEventListener }"
     :tabindex="hasClickEventListener ? 0 : -1"
+    :title="title"
   >
     <div class="icon">
       <Icon  :name="icon" :size="16" :color="themeColor.F1.value"/>
@@ -42,9 +43,9 @@ const hasClickEventListener = computed(
   position: relative;
   min-width: 0;
   outline: none;
+  -webkit-app-region: no-drag;
 
   &.link {
-    -webkit-app-region: no-drag;
     cursor: pointer;
 
     &::after {

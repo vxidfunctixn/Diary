@@ -4,7 +4,7 @@ import InputDate from '@/components/inputs/input-date.vue'
 import Button from '@/components/button.vue'
 import Note from '@/components/note.vue'
 import { ref } from 'vue'
-import { useDiaryStore } from '@/diaryStore'
+import { useDiaryStore, VIEW } from '@/diaryStore'
 
 const diaryStore = useDiaryStore()
 const selectedDate = ref(new Date(Date.now()).valueOf())
@@ -29,7 +29,7 @@ function onDateUpdate(event) {
         <Button icon="date">Dzisiaj</Button>
       </template>
       <template #right>
-        <Button icon="add-note">Dodaj notatkę</Button>
+        <Button icon="add-note" @click="diaryStore.setView(VIEW.EDIT_NOTE)">Dodaj notatkę</Button>
       </template>
     </OptionsBar>
     <Note v-for="note in notes" :data="note"/>
