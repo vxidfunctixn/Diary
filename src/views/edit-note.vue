@@ -2,6 +2,7 @@
 import OptionsBar from '@/components/options-bar.vue'
 import Button from '@/components/button.vue'
 import { useDiaryStore, VIEW } from '@/diaryStore'
+import InputContent from '@/components/inputs/input-content.vue'
 
 const diaryStore = useDiaryStore()
 
@@ -24,14 +25,21 @@ const diaryStore = useDiaryStore()
         <Button icon="save">Zapisz</Button>
       </template>
     </OptionsBar>
+    <InputContent value="test"/>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .edit-note {
-  padding: 60px 24px 2px 24px;
+  padding: 60px 2px 2px 2px;
   width: 100%;
   height: 100%;
   background-color: var(--BG1);
+}
+
+
+.app-theme-provider.maximized .edit-note {
+
+  padding: 60px 0px 0px 0px;
 }
 </style>
