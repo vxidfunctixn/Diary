@@ -107,6 +107,10 @@ const slots = useSlots()
     border-color: var(--A4);
     color: var(--HL3);
 
+    @include theme-dark() {
+      font-weight: 500;
+    }
+
     &:hover,
     &:focus-visible {
       background-color: var(--A2);
@@ -142,12 +146,6 @@ const slots = useSlots()
     .icon, .title {
       opacity: 0.7;
     }
-  }
-}
-
-.app-theme-provider.dark {
-  .button.accent {
-    font-weight: 500;
   }
 }
 </style>

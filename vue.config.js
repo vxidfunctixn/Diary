@@ -6,6 +6,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 module.exports = defineConfig({
   transpileDependencies: true,
 
+  css: {
+    loaderOptions: {
+      scss: {
+        additionalData: `@import "@/theme/mixins.scss";`
+      }
+    }
+  },
+
   configureWebpack: {
     plugins: [
       new webpack.DefinePlugin({

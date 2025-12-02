@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Theme, type ThemeColors } from '@/theme'
+import { Theme, type ThemeColors } from '@/theme/theme'
 import { isEqualDate } from './utils'
 
 // Definiujemy typy
