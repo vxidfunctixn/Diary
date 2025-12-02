@@ -4,7 +4,6 @@ import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
 import { useSlots } from 'vue'
 
-// Definiujemy interfejs dla props
 interface Props {
   icon?: string
   title?: string
@@ -18,7 +17,6 @@ interface Props {
   monospace?: boolean
 }
 
-// Używamy withDefaults dla wartości domyślnych
 withDefaults(defineProps<Props>(), {
   width: 'auto'
 })
