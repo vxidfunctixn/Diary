@@ -9,15 +9,13 @@
     "type-check:watch": "vue-tsc --noEmit --watch"
   },
   "main": "background.js",
-  "preload": {
-    "js": "./src/preload.js"
-  },
   "dependencies": {
     "argon2": "^0.40.3",
     "core-js": "^3.8.3",
     "jssha": "^3.3.1",
     "pinia": "^2.1.7",
-    "vue": "^3.2.13"
+    "vue": "^3.2.13",
+    "vue-class-component": "^8.0.0-0"
   },
   "devDependencies": {
     "@types/electron": "^1.6.12",
@@ -31,7 +29,10 @@
     "sass-loader": "^12.0.0",
     "ts-loader": "^9.5.1",
     "typescript": "~5.0.0",
-    "vue-cli-plugin-electron-builder": "~2.1.1",
+    "vue-cli-plugin-electron-builder": "~3.0.0-alpha.0",
     "vue-tsc": "^1.8.27"
+  },
+  "preload": {
+    "js": "./src/preload.js"
   }
 }
