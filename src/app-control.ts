@@ -18,7 +18,7 @@ export class AppControl {
     this.win.on('blur',       () => { this.win.webContents.send('window-blur') })
     nativeTheme.on('updated', () => { this.sendNativeTheme() })
 
-    ipcMain.on('app-control', (event: IpcMainEvent, action: AppControlAction) => {
+    ipcMain.on('app-control', (_event: IpcMainEvent, action: AppControlAction) => {
       switch (action) {
         case 'minimize':
           this.win.minimize()

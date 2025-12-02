@@ -1,4 +1,4 @@
-import { app, protocol, BrowserWindow, ipcMain, nativeTheme } from 'electron'
+import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { AppControl } from '@/app-control'
 import path from 'path'
@@ -40,7 +40,7 @@ async function createWindow(): Promise<void> {
     win.loadURL('app://./index.html')
   }
 
-  const appControl = new AppControl(win)
+  new AppControl(win)
 }
 
 app.on('window-all-closed', () => {

@@ -19,7 +19,7 @@ interface Props {
 }
 
 // Używamy withDefaults dla wartości domyślnych
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   width: 'auto'
 })
 
