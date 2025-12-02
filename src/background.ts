@@ -1,9 +1,8 @@
-'use strict'
-
 import { app, protocol, BrowserWindow, ipcMain, nativeTheme } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { AppControl } from '@/app-control'
 import path from 'path'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 protocol.registerSchemesAsPrivileged([
@@ -16,7 +15,7 @@ protocol.registerSchemesAsPrivileged([
   }
 ])
 
-async function createWindow() {
+async function createWindow(): Promise<void> {
   const win = new BrowserWindow({
     width: 1024,
     minWidth: 486,
@@ -34,7 +33,7 @@ async function createWindow() {
   win.setBackgroundColor('#00000000')
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
     // if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')

@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "types": ["node", "electron"]
+  },
+  "include": [
+    "src/background.ts",
+    "src/app-control.ts",
+    "vue.config.js"
+  ]
+}

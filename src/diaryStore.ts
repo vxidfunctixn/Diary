@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
-import { Theme } from '@/theme'
+import { Theme, type ThemeColors } from '@/theme'
 import { isEqualDate } from './utils'
 
+// Definiujemy typy
 export const VIEW = {
   HOME: 'home',
   NOTE_LIST: 'note_list',
@@ -12,26 +13,70 @@ export const VIEW = {
   LOCK: 'lock',
   EDIT_NOTE: 'edit_note',
   ABOUT: 'about',
-}
+} as const
+
+export type ViewType = typeof VIEW[keyof typeof VIEW]
 
 export const REQUIRE_PASSWORD = {
   EVERY_LAUNCH: 'every_launch',
   EVERY_DAY: 'every_day',
   ON_STARTUP: 'on_startup',
   AFTER_LOCK: 'after_lock'
-}
+} as const
+
+export type RequirePasswordType = typeof REQUIRE_PASSWORD[keyof typeof REQUIRE_PASSWORD]
 
 export const THEME = {
   DARK: 'dark',
   LIGHT: 'light',
   SYSTEM: 'system',
+} as const
+
+export type ThemeType = typeof THEME[keyof typeof THEME]
+
+// Typy dla state
+interface KeyBinding {
+  code: number
+  key: string
+}
+
+interface Note {
+  id: string
+  modify: number
+  created: number
+  content: string
+  title?: string
+}
+
+interface AppState {
+  view: ViewType
+  nativeTheme: 'dark' | 'light'
+  selected_day: number
+}
+
+interface Settings {
+  diary_name: string
+  reminder: boolean
+  remind_time: number
+  password: string
+  require_password: RequirePasswordType
+  theme: ThemeType
+  theme_hue: number
+  standby: boolean
+  quick_note_shortcut: KeyBinding[]
+}
+
+interface DiaryState {
+  app: AppState
+  settings: Settings
+  notes: Note[]
 }
 
 const datenow = new Date(Date.now())
 const today = new Date(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())
 
 export const useDiaryStore = defineStore('diary', {
-  state: () => ({
+  state: (): DiaryState => ({
     app: {
       view: VIEW.HOME,
       nativeTheme: 'dark',
@@ -104,15 +149,16 @@ export const useDiaryStore = defineStore('diary', {
     ]
   }),
   getters: {
-    theme: state => {
+    theme(state): 'dark' | 'light' {
       if(state.settings.theme === THEME.SYSTEM) {
         return state.app.nativeTheme
       } else {
         return state.settings.theme === THEME.DARK ? 'dark' : 'light'
       }
     },
-    themeColor: state => {
-      const mode = state.theme
+    themeColor(state): ThemeColors {
+      // @ts-ignore - this.theme odnosi się do gettera powyżej
+      const mode = this.theme
       const theme = new Theme(state.settings.theme_hue)
 
       if(mode === 'dark') {
@@ -121,35 +167,37 @@ export const useDiaryStore = defineStore('diary', {
         return theme.light()
       }
     },
-    getNotes: state => {
-      return date => {
+    getNotes: (state) => {
+      return (): Note[][] => {
         const notes = addNoteTitle(groupNotes([...state.notes]))
-
         return notes
       }
     }
   },
   actions: {
-    setView(view) {
+    setView(view: ViewType): void {
       this.app.view = view
     },
-    saveSettings(form) {
+    saveSettings(form: Partial<Settings>): void {
       for (const [key, value] of Object.entries(form)) {
-        if(this.settings[key] !== undefined) this.settings[key] = value
+        if(this.settings[key as keyof Settings] !== undefined) {
+          (this.settings as any)[key] = value
+        }
       }
     },
-    async setNativeTheme(theme) {
+    async setNativeTheme(theme: 'dark' | 'light'): Promise<void> {
       this.app.nativeTheme = theme
     },
-    setSelectedDay(date) {
+    setSelectedDay(date: number): void {
       this.app.selected_day = date
     }
   },
 })
 
-function groupNotes(notes) {
-  const result = []
-  const day = []
+// Funkcje pomocnicze
+function groupNotes(notes: Note[]): Note[][] {
+  const result: Note[][] = []
+  const day: Note[] = []
   notes.map((note, index) => {
     if(day.length === 0) {
       day.push({ ...note })
@@ -171,7 +219,7 @@ function groupNotes(notes) {
   return result
 }
 
-function addNoteTitle(notes) {
+function addNoteTitle(notes: Note[][]): Note[][] {
   const result = [...notes]
 
   result.forEach(group => {
@@ -191,7 +239,7 @@ function addNoteTitle(notes) {
   return result
 }
 
-function formatDate(date) {
+function formatDate(date: Date): string {
   const minutes = date.getMinutes().toString().padStart(2, '0')
   const hours = date.getHours().toString().padStart(2, '0')
   const day = date.getDate().toString().padStart(2, '0')

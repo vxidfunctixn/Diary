@@ -1,24 +1,24 @@
-<script setup>
-import { ref, watch } from 'vue'
+<script setup lang="ts">
+import { ref, watch, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
+
+interface Props {
+  name?: string
+  size?: number
+  color?: string | null
+  secondaryColor?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  color: null,
+  secondaryColor: 'transparent'
+})
+
 const diaryStore = useDiaryStore()
 const { themeColor } = storeToRefs(diaryStore)
 
-const props = defineProps({
-  name: String,
-  size: Number,
-  color: {
-    type: String,
-    default: null
-  },
-  secondaryColor: {
-    type: String,
-    default: 'transparent'
-  }
-})
-
-const currentColor = ref(props.color ? props.color : diaryStore.themeColor.F1.value)
+const currentColor: Ref<string> = ref(props.color ? props.color : diaryStore.themeColor.F1.value)
 
 watch(themeColor, () => {
   currentColor.value = props.color ? props.color : diaryStore.themeColor.F1.value

@@ -1,5 +1,12 @@
 export class Color {
-  constructor(h, s, l, a = '100%') {
+  h: number
+  s: string
+  l: string
+  hsl: string
+  hsla: string
+  value: string
+
+  constructor(h: number, s: string, l: string, a: string = '100%') {
     this.h = h
     this.s = s
     this.l = l
@@ -9,12 +16,40 @@ export class Color {
   }
 }
 
+interface HueValue {
+  value: number
+}
+
+export interface ThemeColors {
+  hue: HueValue
+  F1: Color
+  F1T: Color
+  F2: Color
+  HL1: Color
+  HL2: Color
+  HL3: Color
+  HL4: Color
+  BG1: Color
+  BG2: Color
+  BG2T: Color
+  BG3: Color
+  BG4: Color
+  A1: Color
+  A2: Color
+  A3: Color
+  A4: Color
+  yellow: Color
+  red: Color
+}
+
 export class Theme {
-  constructor(hue) {
+  private hue: number
+
+  constructor(hue: number) {
     this.hue = hue
   }
 
-  dark() {
+  dark(): ThemeColors {
     return {
       hue:    { value: this.hue },
       F1:     new Color(this.hue, '10%', '85%'),
@@ -38,7 +73,7 @@ export class Theme {
     }
   }
 
-  light() {
+  light(): ThemeColors {
     return {
       hue:    { value: this.hue },
       F1:     new Color(this.hue, '10%', '15%'),

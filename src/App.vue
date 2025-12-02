@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import WindowTitleBar from '@/components/window-title-bar.vue'
 import AppThemeProvider from '@/components/app-theme-provider.vue'
 import { useDiaryStore, VIEW } from './diaryStore'

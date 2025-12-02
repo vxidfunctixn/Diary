@@ -1,27 +1,31 @@
-<script setup>
+<script setup lang="ts">
 import Icon from '@/components/icon.vue'
 import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
 import { useSlots } from 'vue'
+
+// Definiujemy interfejs dla props
+interface Props {
+  icon?: string
+  title?: string
+  small?: boolean
+  disabled?: boolean
+  accent?: boolean
+  submit?: boolean
+  width?: string
+  center?: boolean
+  stick?: 'left' | 'right' | 'both'
+  monospace?: boolean
+}
+
+// Używamy withDefaults dla wartości domyślnych
+const props = withDefaults(defineProps<Props>(), {
+  width: 'auto'
+})
+
 const diaryStore = useDiaryStore()
 const { themeColor } = storeToRefs(diaryStore)
 const slots = useSlots()
-
-const props = defineProps({
-  icon: String,
-  title: String,
-  small: Boolean,
-  disabled: Boolean,
-  accent: Boolean,
-  submit: Boolean,
-  width: {
-    type: String,
-    default: 'auto',
-  },
-  center: Boolean,
-  stick: String,
-  monospace: Boolean
-})
 </script>
 
 <template>

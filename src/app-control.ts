@@ -1,20 +1,24 @@
-import { ipcMain, nativeTheme } from 'electron'
+import { ipcMain, nativeTheme, BrowserWindow, IpcMainEvent } from 'electron'
+
+type AppControlAction = 'minimize' | 'maximize' | 'exit'
 
 export class AppControl {
-  constructor(win) {
+  private win: BrowserWindow
+
+  constructor(win: BrowserWindow) {
     this.win = win
     this.sendNativeTheme()
     this.initEvents()
   }
 
-  initEvents() {
+  private initEvents(): void {
     this.win.on('maximize',   () => { this.win.webContents.send('window-maximized') })
     this.win.on('unmaximize', () => { this.win.webContents.send('window-unmaximized') })
     this.win.on('focus',      () => { this.win.webContents.send('window-focus') })
     this.win.on('blur',       () => { this.win.webContents.send('window-blur') })
     nativeTheme.on('updated', () => { this.sendNativeTheme() })
 
-    ipcMain.on('app-control', (event, action) => {
+    ipcMain.on('app-control', (event: IpcMainEvent, action: AppControlAction) => {
       switch (action) {
         case 'minimize':
           this.win.minimize()
@@ -35,7 +39,7 @@ export class AppControl {
     })
   }
 
-  sendNativeTheme() {
+  private sendNativeTheme(): void {
     if(nativeTheme.shouldUseDarkColors) {
       this.win.webContents.send('native-theme-dark')
     } else {
