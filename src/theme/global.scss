@@ -1,0 +1,36 @@
+:root {
+  --FF1: Saira; //Font family
+  --FF2: RedditMono;
+  --FS1: 8px; // Font size
+  --FS2: 12px;
+  --FS3: 14px;
+  --FS4: 16px;
+  --CW: 830px; // Container width
+
+  font-family: var(--FF1);
+  font-size: var(--FS4);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-wrapper {
+  height: calc(100vh - 41px - 2px);
+  width: 100%;
+  overflow: auto;
+}
+
+input, textarea, button {
+  font-family: var(--FF1);
+}

@@ -11,7 +11,7 @@ module.exports = defineConfig({
   css: {
     loaderOptions: {
       scss: {
-        additionalData: `@import "@/theme/mixins.scss";`
+        additionalData: `@import "@/theme/global.scss"; @import "@/theme/mixins.scss";`
       }
     }
   },
