@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { Theme, type ThemeColors } from '@/theme/theme'
+import { Theme } from '@/theme/theme'
+import type { ThemeColors } from '@/interfaces/theme'
 import { isEqualDate } from './utils'
 import type { KeyBinding, Note, AppState, Settings, DiaryState } from '@/interfaces/diary'
 

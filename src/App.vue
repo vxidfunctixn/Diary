@@ -4,7 +4,7 @@ import AppThemeProvider from '@/components/app-theme-provider.vue'
 import { useDiaryStore, VIEW } from './diaryStore'
 import { storeToRefs } from 'pinia'
 
-import Cockpit from '@/views/cockpit.vue'
+import Cockpit from '@/views/dashboard.vue'
 import Lock from '@/views/lock.vue'
 import Settings from '@/views/settings.vue'
 import NoteList from '@/views/note-list.vue'
