@@ -3,21 +3,9 @@ import Icon from '@/components/icon.vue'
 import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
 import { useSlots } from 'vue'
+import type { ButtonProps } from '@/interfaces/components'
 
-interface Props {
-  icon?: string
-  title?: string
-  small?: boolean
-  disabled?: boolean
-  accent?: boolean
-  submit?: boolean
-  width?: string
-  center?: boolean
-  stick?: 'left' | 'right' | 'both'
-  monospace?: boolean
-}
-
-withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<ButtonProps>(), {
   width: 'auto'
 })
 

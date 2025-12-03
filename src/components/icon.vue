@@ -2,15 +2,9 @@
 import { ref, watch, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
+import type { IconProps } from '@/interfaces/components'
 
-interface Props {
-  name?: string
-  size?: number
-  color?: string | null
-  secondaryColor?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<IconProps>(), {
   color: null,
   secondaryColor: 'transparent'
 })

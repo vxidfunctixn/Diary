@@ -1,5 +1,8 @@
 import { toRaw } from 'vue'
 import jsSHA from 'jssha'
+import type { DateCompareOptions, CalendarDay, CalendarMonth, CalendarYear } from '@/interfaces/calendar'
+
+type CalendarCallback<T> = (this: T, column: T) => T
 
 // Funkcja porównująca Vue proxy
 export function isProxyDifferent(proxy1: any, proxy2: any): boolean {
@@ -125,13 +128,6 @@ export function hashPassword(password: string): string {
   // Change to Argon2
 }
 
-// Interfejs opcji dla isEqualDate
-interface DateCompareOptions {
-  day?: boolean
-  month?: boolean
-  year?: boolean
-}
-
 // Funkcja porównująca daty
 export function isEqualDate(
   dateA: number | Date,
@@ -184,28 +180,6 @@ export function isEqualDate(
 export function isToday(date: number | Date, options?: DateCompareOptions): boolean {
   return isEqualDate(date, Date.now(), options)
 }
-
-// Interfejsy dla Calendar
-interface CalendarDay {
-  date: Date
-  number: number
-  currentMonth: boolean
-  currentDay: boolean
-}
-
-interface CalendarMonth {
-  date: Date
-  name: string
-  currentMonth: boolean
-}
-
-interface CalendarYear {
-  date: Date
-  number: number
-  currentYear: boolean
-}
-
-type CalendarCallback<T> = (this: T, column: T) => T
 
 // Klasa Calendar
 export class Calendar {

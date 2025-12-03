@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { Theme, type ThemeColors } from '@/theme/theme'
 import { isEqualDate } from './utils'
+import type { KeyBinding, Note, AppState, Settings, DiaryState } from '@/interfaces/diary'
 
 // Definiujemy typy
 export const VIEW = {
@@ -33,44 +34,6 @@ export const THEME = {
 } as const
 
 export type ThemeType = typeof THEME[keyof typeof THEME]
-
-// Typy dla state
-interface KeyBinding {
-  code: number
-  key: string
-}
-
-interface Note {
-  id: string
-  modify: number
-  created: number
-  content: string
-  title?: string
-}
-
-interface AppState {
-  view: ViewType
-  nativeTheme: 'dark' | 'light'
-  selected_day: number
-}
-
-interface Settings {
-  diary_name: string
-  reminder: boolean
-  remind_time: number
-  password: string
-  require_password: RequirePasswordType
-  theme: ThemeType
-  theme_hue: number
-  standby: boolean
-  quick_note_shortcut: KeyBinding[]
-}
-
-interface DiaryState {
-  app: AppState
-  settings: Settings
-  notes: Note[]
-}
 
 const datenow = new Date(Date.now())
 const today = new Date(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())

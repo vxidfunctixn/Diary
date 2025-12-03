@@ -1,3 +1,5 @@
+import type { ThemeColors } from '@/interfaces/theme'
+
 export class Color {
   h: number
   s: string
@@ -14,32 +16,6 @@ export class Color {
     this.hsla = `hsla(${h}, ${s}, ${l}, ${a})`,
     this.value = a === '100%' ? `hsl(${h}, ${s}, ${l})` : `hsla(${h}, ${s}, ${l}, ${a})`
   }
-}
-
-interface HueValue {
-  value: number
-}
-
-export interface ThemeColors {
-  hue: HueValue
-  F1: Color
-  F1T: Color
-  F2: Color
-  HL1: Color
-  HL2: Color
-  HL3: Color
-  HL4: Color
-  BG1: Color
-  BG2: Color
-  BG2T: Color
-  BG3: Color
-  BG4: Color
-  A1: Color
-  A2: Color
-  A3: Color
-  A4: Color
-  yellow: Color
-  red: Color
 }
 
 export class Theme {
