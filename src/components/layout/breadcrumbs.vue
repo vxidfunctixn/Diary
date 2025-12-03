@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NavItem from '@/components/nav-item.vue'
+import NavItem from '@/components/layout/nav-item.vue'
 import { storeToRefs } from 'pinia'
 import { useDiaryStore, VIEW } from '@/diaryStore'
 import { computed } from 'vue'
