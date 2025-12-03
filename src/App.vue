@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import WindowTitleBar from '@/components/window-title-bar.vue'
-import AppThemeProvider from '@/components/app-theme-provider.vue'
+import WindowTitleBar from '@/components/layout/window-title-bar.vue'
+import AppThemeProvider from '@/components/layout/app-theme-provider.vue'
 import { useDiaryStore, VIEW } from './diaryStore'
 import { storeToRefs } from 'pinia'
 
-import Cockpit from '@/views/dashboard.vue'
-import Lock from '@/views/lock.vue'
-import Settings from '@/views/settings.vue'
-import NoteList from '@/views/note-list.vue'
-import EditNote from '@/views/edit-note.vue'
+import Cockpit from '@/components/views/dashboard.vue'
+import Lock from '@/components/views/lock.vue'
+import Settings from '@/components/views/settings.vue'
+import NoteList from '@/components/views/note-list.vue'
+import EditNote from '@/components/views/edit-note.vue'
 
 const diaryStore = useDiaryStore()
 const { app } = storeToRefs(diaryStore)

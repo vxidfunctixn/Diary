@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Section from '@/components/section.vue'
-import Row from '@/components/section-row.vue'
+import Section from '@/components/layout/section.vue'
+import Row from '@/components/layout/section-row.vue'
 import Button from '@/components/button.vue'
 import { Calendar, getMonthName } from '@/utils'
 

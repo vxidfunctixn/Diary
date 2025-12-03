@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import OptionsBar from '@/components/options-bar.vue'
+import OptionsBar from '@/components/layout/options-bar.vue'
 import InputDate from '@/components/inputs/input-date.vue'
 import Button from '@/components/button.vue'
 import Note from '@/components/note.vue'

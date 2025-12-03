@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Section from '@/components/section.vue'
+import Section from '@/components/layout/section.vue'
 import Button from '@/components/button.vue'
 import { useDiaryStore, VIEW } from '@/diaryStore'
 import { useI18n } from 'vue-i18n'
