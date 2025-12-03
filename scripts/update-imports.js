@@ -86,27 +86,34 @@ function updateImportsAuto() {
       // Ignoruj błędy diff
     }
 
-    // Dopasuj usunięte i dodane pliki w tym samym katalogu (zmiana nazwy)
+    // Dopasuj usunięte i dodane pliki (przeniesienie lub zmiana nazwy)
     deletedFiles.forEach(deleted => {
+      const deletedName = path.basename(deleted)
       const deletedDir = path.dirname(deleted)
       const deletedExt = path.extname(deleted)
 
-      // Szukaj plików w tym samym katalogu z tym samym rozszerzeniem
       addedFiles.forEach(added => {
+        const addedName = path.basename(added)
         const addedDir = path.dirname(added)
         const addedExt = path.extname(added)
 
-        // Jeśli są w tym samym katalogu i mają to samo rozszerzenie
-        if (deletedDir === addedDir && deletedExt === addedExt) {
-          // Sprawdź czy nie są już sparowane
-          const alreadyPaired = renamedFiles.some(r => r.oldPath === deleted || r.newPath === added)
+        // Sprawdź czy nie są już sparowane
+        const alreadyPaired = renamedFiles.some(r => r.oldPath === deleted || r.newPath === added)
+        if (alreadyPaired) return
 
-          if (!alreadyPaired) {
-            renamedFiles.push({
-              oldPath: deleted,
-              newPath: added
-            })
-          }
+        // Przypadek 1: Ta sama nazwa pliku (przeniesienie do innego katalogu)
+        if (deletedName === addedName) {
+          renamedFiles.push({
+            oldPath: deleted,
+            newPath: added
+          })
+        }
+        // Przypadek 2: Ten sam katalog i rozszerzenie (zmiana nazwy)
+        else if (deletedDir === addedDir && deletedExt === addedExt) {
+          renamedFiles.push({
+            oldPath: deleted,
+            newPath: added
+          })
         }
       })
     })
