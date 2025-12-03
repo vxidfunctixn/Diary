@@ -6,10 +6,7 @@ import { Calendar, getMonthName } from '@/utils'
 
 const today = new Date(Date.now())
 const calendar = new Calendar(today)
-const month = calendar.getMonth((day) => {
-  day.tempVar = 'test'
-  return day
-})
+const month = calendar.getMonth()
 
 function getTitle() {
   const month = getMonthName(today.getMonth())

@@ -10,23 +10,23 @@ const props = defineProps({
   name: String,
   newValue: Number,
   oldValue: Number,
-  infoText: String,
+  infoText: String
 })
 
 const modalOpen = ref(false)
-const time = ref(new DateTime(props.newValue))
-const clockValue = ref(props.newValue)
+const time = ref(new DateTime(props.newValue ?? Date.now()))
+const clockValue = ref(props.newValue ?? Date.now())
 
-watch(props, (newProps) => {
-  time.value = new DateTime(newProps.newValue)
+watch(props, newProps => {
+  time.value = new DateTime(newProps.newValue ?? Date.now())
 })
 
-function update(event) {
+function update(event: number) {
   clockValue.value = event
 }
 
 function save() {
-  time.value = new DateTime(clockValue.value)
+  time.value = new DateTime(clockValue.value ?? Date.now())
   modalOpen.value = false
 
   emit('update', {
@@ -36,9 +36,8 @@ function save() {
 }
 
 const isNewTime = computed(() => {
-  return (props.newValue && props.oldValue && props.oldValue !== props.newValue)
+  return props.newValue && props.oldValue && props.oldValue !== props.newValue
 })
-
 </script>
 
 <template>
@@ -63,7 +62,6 @@ const isNewTime = computed(() => {
 
 <style lang="scss" scoped>
 .input-time {
-
   .button {
     text-align: right;
   }

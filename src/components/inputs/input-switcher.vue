@@ -4,13 +4,13 @@ const emit = defineEmits(['update'])
 const props = defineProps({
   name: String,
   value: Boolean,
-  infoText: String,
+  infoText: String
 })
 
-function update(event) {
+function update(event: Event) {
   emit('update', {
     name: props.name,
-    value: event.target.checked
+    value: (event.target as HTMLInputElement).checked
   })
 }
 </script>
@@ -18,7 +18,13 @@ function update(event) {
 <template>
   <div class="input-switcher">
     <label class="input-label">
-      <input type="checkbox" :name="name" :checked="value" @input="update($event)" class="default-input">
+      <input
+        type="checkbox"
+        :name="name"
+        :checked="value"
+        @input="update($event)"
+        class="default-input"
+      />
       <div class="checkbox"></div>
     </label>
     <InfoText v-if="infoText">{{ infoText }}</InfoText>
@@ -55,7 +61,7 @@ function update(event) {
       overflow: hidden;
 
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         top: 2px;
         left: 2px;
@@ -65,13 +71,15 @@ function update(event) {
         border-radius: 50%;
         border: 2px solid var(--A4);
         background-color: var(--_thumb_color);
-        transition: transform .2s ease-out, box-shadow .1s ease-out;
+        transition:
+          transform 0.2s ease-out,
+          box-shadow 0.1s ease-out;
         box-shadow: inset 0 0 0 6px var(--_thumb_border_color);
         z-index: 1;
       }
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
@@ -79,7 +87,9 @@ function update(event) {
         height: 30px;
         border-radius: 15px;
         background-color: var(--_accent_color);
-        transition: transform .2s ease-out, opacity .1s ease-out;
+        transition:
+          transform 0.2s ease-out,
+          opacity 0.1s ease-out;
         transform: translateX(-26px);
         z-index: 0;
         opacity: 0;

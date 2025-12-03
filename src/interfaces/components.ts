@@ -1,4 +1,4 @@
-// Button component props
+import type { Settings } from '@/interfaces/diary'
 export interface ButtonProps {
   icon?: string
   title?: string
@@ -12,10 +12,19 @@ export interface ButtonProps {
   monospace?: boolean
 }
 
-// Icon component props
 export interface IconProps {
   name?: string
   size?: number
   color?: string | null
   secondaryColor?: string
+}
+
+export interface InputUpdateEvent<K extends keyof Settings> {
+  name: K
+  value: Settings[K]
+}
+
+export interface UpdateEvent {
+  name: string
+  value: number
 }

@@ -2,37 +2,42 @@
 import InfoText from '@/components/inputs/info-text.vue'
 import Icon from '@/components/icon.vue'
 import { ref, watch, toRaw } from 'vue'
+import type { KeyBinding } from '@/interfaces/diary'
+
 const emit = defineEmits(['update'])
 const props = defineProps({
   name: String,
   value: Object,
-  infoText: String,
+  infoText: String
 })
 
-const currentValue = ref(props.value)
+const currentValue = ref<KeyBinding[] | undefined>(props.value as KeyBinding[] | undefined)
 
 watch(props, newProps => {
-  currentValue.value = newProps.value
+  currentValue.value = newProps.value as KeyBinding[] | undefined
 })
 
-const buttonRef = ref(null)
-const combination = ref([])
-const combinationApprove = ref([])
+const buttonRef = ref<HTMLButtonElement | null>(null)
+const combination = ref<KeyBinding[]>([])
+const combinationApprove = ref<number[]>([])
 
 function resetCombination() {
   combination.value = []
   combinationApprove.value = []
 }
 
-function handleKeydown(event) {
-  if(event.keyCode === 27) { // Esc key
-    buttonRef.value.blur()
+function handleKeydown(event: KeyboardEvent) {
+  if (event.keyCode === 27) {
+    // Esc key
+    buttonRef.value?.blur()
     resetCombination()
     return
   }
 
-  if(!combination.value.find(x => x.code === event.keyCode) &&
-      combination.value.length === combinationApprove.value.length) {
+  if (
+    !combination.value.find(x => x.code === event.keyCode) &&
+    combination.value.length === combinationApprove.value.length
+  ) {
     combination.value.push({
       code: event.keyCode,
       key: event.key
@@ -41,13 +46,13 @@ function handleKeydown(event) {
   }
 }
 
-function handleKeyup(event) {
+function handleKeyup(event: KeyboardEvent) {
   const keyIndex = combinationApprove.value.indexOf(event.keyCode)
-  if(keyIndex === -1) return
+  if (keyIndex === -1) return
   combinationApprove.value.splice(keyIndex, 1)
-  if(combinationApprove.value.length === 0) {
+  if (combinationApprove.value.length === 0) {
     currentValue.value = combination.value
-    buttonRef.value.blur()
+    buttonRef.value?.blur()
     resetCombination()
     emit('update', {
       name: props.name,
@@ -56,10 +61,11 @@ function handleKeyup(event) {
   }
 }
 
-function formatCombination(combo) {
+function formatCombination(combo: KeyBinding[] | undefined) {
+  if (!combo) return ''
   let result = ''
   combo.map((el, index) => {
-    if(index > 0) result += ' + '
+    if (index > 0) result += ' + '
     result += el.key === 'Meta' ? 'Windows' : el.key.charAt(0).toUpperCase() + el.key.slice(1)
   })
   return result
@@ -81,9 +87,7 @@ function formatCombination(combo) {
       </div>
       <div class="text">{{ formatCombination(currentValue) }}</div>
       <div class="text-record">
-        <template v-if="combination.length === 0">
-          Wciśnij kombinację
-        </template>
+        <template v-if="combination.length === 0"> Wciśnij kombinację </template>
         <template v-if="combination.length > 0">
           {{ formatCombination(combination) }}
         </template>

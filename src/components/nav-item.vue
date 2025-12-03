@@ -2,19 +2,17 @@
 import Icon from '@/components/icon.vue'
 import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
-import { computed, ref, getCurrentInstance } from 'vue';
+import { computed, ref, getCurrentInstance } from 'vue'
 const diaryStore = useDiaryStore()
 const { themeColor } = storeToRefs(diaryStore)
 
 const props = defineProps({
   level: Number,
   icon: String,
-  title: String,
+  title: String
 })
 
-const hasClickEventListener = computed(
-  () => getCurrentInstance().vnode.props.onClick
-)
+const hasClickEventListener = computed(() => getCurrentInstance()?.vnode.props?.onClick)
 </script>
 
 <template>
@@ -25,7 +23,7 @@ const hasClickEventListener = computed(
     :title="title"
   >
     <div class="icon">
-      <Icon  :name="icon" :size="16" :color="themeColor.F1.value"/>
+      <Icon :name="icon" :size="16" :color="themeColor.F1.value" />
     </div>
     <div class="title">{{ title }}</div>
   </div>
@@ -38,7 +36,14 @@ const hasClickEventListener = computed(
   align-items: center;
   padding-left: 28px;
   padding-right: 28px;
-  clip-path: polygon(calc(100% - 20px) 0%, 100% 50%, calc(100% - 20px) 100%, 0% 100%, 20px 50%, 0% 0%);
+  clip-path: polygon(
+    calc(100% - 20px) 0%,
+    100% 50%,
+    calc(100% - 20px) 100%,
+    0% 100%,
+    20px 50%,
+    0% 0%
+  );
   margin-left: -20px;
   position: relative;
   min-width: 0;
@@ -49,7 +54,7 @@ const hasClickEventListener = computed(
     cursor: pointer;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       width: 100%;
@@ -98,7 +103,6 @@ const hasClickEventListener = computed(
     display: flex;
     align-items: center;
     justify-content: center;
-
   }
 
   .title {
@@ -129,12 +133,12 @@ const hasClickEventListener = computed(
         calc(100% - 22px) 2px,
         2px 2px,
         2px 100%,
-        0px 100%,
+        0px 100%
       );
     }
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
@@ -169,8 +173,9 @@ const hasClickEventListener = computed(
 
 .app-theme-provider:not(.active) {
   .nav-item {
-    .title, .icon {
-      opacity: .7;
+    .title,
+    .icon {
+      opacity: 0.7;
     }
   }
 }

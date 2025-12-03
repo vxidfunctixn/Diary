@@ -8,23 +8,26 @@ import { useDiaryStore, VIEW } from '@/diaryStore'
 
 const diaryStore = useDiaryStore()
 const selectedDate = ref(new Date(Date.now()).valueOf())
-const notes = ref(diaryStore.getNotes(Date.now()))
+const notes = ref(diaryStore.getNotes())
 
-function onDateUpdate(event) {
-  if(event.name === 'selected_day') {
+function onDateUpdate(event: { name: string; value: number }) {
+  if (event.name === 'selected_day') {
     selectedDate.value = event.value
     diaryStore.setSelectedDay(event.value)
   }
 }
-
-
 </script>
 
 <template>
   <div class="note-list">
     <OptionsBar>
       <template #left>
-        <InputDate name="selected_day" :newValue="selectedDate" controls @update="onDateUpdate($event)"/>
+        <InputDate
+          name="selected_day"
+          :newValue="selectedDate"
+          controls
+          @update="onDateUpdate($event)"
+        />
         <Button icon="date">Miesiąc</Button>
         <Button icon="date">Dzisiaj</Button>
       </template>
@@ -32,7 +35,7 @@ function onDateUpdate(event) {
         <Button icon="add-note" @click="diaryStore.setView(VIEW.EDIT_NOTE)">Dodaj notatkę</Button>
       </template>
     </OptionsBar>
-    <Note v-for="note in notes" :data="note"/>
+    <Note v-for="note in notes" :data="note" />
   </div>
 </template>
 

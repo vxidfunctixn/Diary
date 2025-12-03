@@ -1,21 +1,33 @@
 <script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
 import { ref, watch } from 'vue'
-const emit = defineEmits(['update', 'preventEnter'])
-const props = defineProps({
-  name: String,
-  value: Number,
-  infoText: String,
-})
+import type { Settings } from '@/interfaces/diary'
 
-const currentValue = ref(props.value)
+const emit = defineEmits<{
+  update: [event: { value: number; name: keyof Settings }]
+  preventEnter: []
+}>()
 
-watch(props, newProps => {
-  currentValue.value = newProps.value
-})
+const props = defineProps<{
+  name: keyof Settings
+  value?: number
+  infoText?: string
+}>()
 
-function update(event) {
-  currentValue.value = event.target.value
+const currentValue = ref(props.value ?? 0)
+
+watch(
+  () => props.value,
+  newValue => {
+    if (newValue !== undefined) {
+      currentValue.value = newValue
+    }
+  }
+)
+
+function update(event: Event): void {
+  const target = event.target as HTMLInputElement
+  currentValue.value = Number(target.value)
   emit('update', {
     value: Number(currentValue.value),
     name: props.name
@@ -37,7 +49,7 @@ function update(event) {
         :style="{ '--_selected_hue': currentValue }"
         @input="update($event)"
         @keydown.enter.prevent="emit('preventEnter')"
-      >
+      />
     </label>
     <InfoText v-if="infoText">{{ infoText }}</InfoText>
   </div>
@@ -58,7 +70,7 @@ function update(event) {
     position: relative;
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       height: 12.01px;
       border-radius: 6px;
@@ -110,6 +122,5 @@ function update(event) {
       border-color: var(--A1);
     }
   }
-
 }
 </style>

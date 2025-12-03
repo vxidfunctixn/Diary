@@ -5,29 +5,39 @@ import InputModal from '@/components/inputs/input-modal.vue'
 import Calendar from '@/components/inputs/calendar.vue'
 import { DateTime } from '@/utils'
 import { ref, watch, computed } from 'vue'
-const emit = defineEmits(['update'])
-const props = defineProps({
-  name: String,
-  newValue: Number,
-  oldValue: Number,
-  infoText: String,
-  controls: Boolean,
-})
+import type { UpdateEvent } from '@/interfaces/components'
+
+const emit = defineEmits<{
+  update: [event: UpdateEvent]
+}>()
+
+const props = defineProps<{
+  name: string
+  newValue?: number
+  oldValue?: number
+  infoText?: string
+  controls?: boolean
+}>()
 
 const modalOpen = ref(false)
-const dateTime = ref(new DateTime(props.newValue))
-const calendarValue = ref(props.newValue)
+const dateTime = ref(new DateTime(props.newValue ?? Date.now()))
+const calendarValue = ref(props.newValue ?? Date.now())
 
-watch(props, (newProps) => {
-  dateTime.value = new DateTime(newProps.newValue)
-})
+watch(
+  () => props.newValue,
+  newValue => {
+    if (newValue !== undefined) {
+      dateTime.value = new DateTime(newValue)
+    }
+  }
+)
 
-function update(event) {
+function update(event: number): void {
   calendarValue.value = event
 }
 
-function save(fromModal = true) {
-  if(fromModal) {
+function save(fromModal = true): void {
+  if (fromModal) {
     dateTime.value = new DateTime(calendarValue.value)
     modalOpen.value = false
   }
@@ -38,27 +48,31 @@ function save(fromModal = true) {
   })
 }
 
-function handlePrev() {
+function handlePrev(): void {
   dateTime.value.prevDay()
   save(false)
 }
 
-function handleNext() {
+function handleNext(): void {
   dateTime.value.nextDay()
   save(false)
 }
 
 const isNewDate = computed(() => {
-  return (props.newValue && props.oldValue && props.oldValue !== props.newValue)
+  return props.newValue && props.oldValue && props.oldValue !== props.newValue
 })
-
 </script>
 
 <template>
   <div class="input-date">
     <div class="button">
       <Button v-if="controls" icon="arrow-left" stick="right" @click="handlePrev()"></Button>
-      <Button icon="date" @click="modalOpen = true" :stick="controls ? 'both' : null" monospace>
+      <Button
+        icon="date"
+        @click="modalOpen = true"
+        :stick="controls ? 'both' : undefined"
+        monospace
+      >
         {{ dateTime.dateString }} <span class="accent-span" v-if="isNewDate">*</span>
       </Button>
       <Button v-if="controls" icon="arrow-right" stick="left" @click="handleNext()"></Button>
@@ -66,7 +80,7 @@ const isNewDate = computed(() => {
     <InfoText v-if="infoText">{{ infoText }}</InfoText>
     <InputModal v-if="modalOpen" @close="modalOpen = false">
       <template #content>
-        <Calendar :date="dateTime.date" @update="update($event)" />
+        <Calendar :date="dateTime.timestamp" @update="update($event)" />
       </template>
       <template #buttons>
         <Button icon="check" accent @click="save()">Ustaw</Button>
@@ -78,7 +92,6 @@ const isNewDate = computed(() => {
 
 <style lang="scss" scoped>
 .input-date {
-
   .button {
     display: flex;
   }

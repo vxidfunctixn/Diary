@@ -2,6 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { useDiaryStore } from '@/diaryStore'
 import { ref, onMounted, watch } from 'vue'
+
 const diaryStore = useDiaryStore()
 const { themeColor } = storeToRefs(diaryStore)
 
@@ -9,21 +10,20 @@ watch(themeColor, newValue => {
   updateTheme()
 })
 
-const variables = ref({})
+const variables = ref<Record<string, string>>({})
 
 const classes = ref({
-  "light": diaryStore.theme === 'light',
-  "dark": diaryStore.theme === 'dark',
-  "maximized": false,
-  "active": true,
+  light: diaryStore.theme === 'light',
+  dark: diaryStore.theme === 'dark',
+  maximized: false,
+  active: true
 })
 
 updateTheme()
 
-
 function updateTheme() {
-  for (const [ key, color ] of Object.entries(themeColor.value)) {
-    variables.value[ '--' + key ] = color.value
+  for (const [key, color] of Object.entries(themeColor.value)) {
+    variables.value['--' + key] = color.value
   }
   classes.value.light = diaryStore.theme === 'light'
   classes.value.dark = diaryStore.theme === 'dark'
@@ -106,6 +106,4 @@ onMounted(() => {
     background: var(--HL2);
   }
 }
-
-
 </style>

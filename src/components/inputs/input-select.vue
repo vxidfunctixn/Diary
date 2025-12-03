@@ -2,23 +2,29 @@
 import InfoText from '@/components/inputs/info-text.vue'
 import Icon from '@/components/icon.vue'
 import { ref, watch, computed } from 'vue'
+
+interface SelectOption {
+  value: string
+  title: string
+}
+
 const emit = defineEmits(['update'])
-const props = defineProps({
-  name: String,
-  value: String,
-  options: Array,
-  infoText: String,
-})
+const props = defineProps<{
+  name?: string
+  value?: string
+  options?: SelectOption[]
+  infoText?: string
+}>()
 
 const currentValue = ref(props.value)
-const wrapperRef = ref(null)
+const wrapperRef = ref<HTMLDivElement | null>(null)
 
 watch(props, newProps => {
   currentValue.value = newProps.value
 })
 
-function select(value, event) {
-  event.target.blur()
+function select(value: string, event: Event) {
+  ;(event.target as HTMLElement).blur()
   currentValue.value = value
 
   emit('update', {
@@ -27,29 +33,32 @@ function select(value, event) {
   })
 }
 
-function handleClickInput(e) {
-  if(document.activeElement == wrapperRef.value) {
-    e.preventDefault()
-    document.activeElement.blur()
+function handleClickInput(e?: Event) {
+  if (document.activeElement == wrapperRef.value) {
+    e?.preventDefault()
+    ;(document.activeElement as HTMLElement)?.blur()
   }
 }
 
 const currentTitle = computed(() => {
-  return props.options.find(x => x.value === currentValue.value).title
+  return props.options?.find(x => x.value === currentValue.value)?.title ?? ''
 })
-
 </script>
 
 <template>
   <div class="input-select">
-    <select class="default-select" :name="name" :value="currentValue" @input="update($event)">
+    <select class="default-select" :name="name" :value="currentValue">
       <option v-for="option in options" :value="option.value">{{ option.title }}</option>
     </select>
     <div class="select-wrapper" ref="wrapperRef" tabindex="0">
-      <div class="select-input" @mousedown="handleClickInput($event)" @keydown.enter="handleClickInput()">
+      <div
+        class="select-input"
+        @mousedown="handleClickInput($event)"
+        @keydown.enter="handleClickInput(undefined)"
+      >
         <div class="text">{{ currentTitle }}</div>
         <div class="icon">
-          <Icon :name="`arrow-down`" :size="16"/>
+          <Icon :name="`arrow-down`" :size="16" />
         </div>
       </div>
       <div class="select-list">
@@ -172,7 +181,7 @@ const currentTitle = computed(() => {
       }
 
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         bottom: 0;
         left: 0;
@@ -194,8 +203,6 @@ const currentTitle = computed(() => {
     }
   }
 }
-
-
 
 .default-select {
   display: none;
