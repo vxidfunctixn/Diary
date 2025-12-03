@@ -31,7 +31,7 @@ const slots = useSlots()
     :style="{ width }"
   >
     <div class="icon" v-if="icon">
-      <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.value : themeColor.F1.value"/>
+      <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.value : themeColor.F1.value" />
     </div>
     <div v-if="slots.default" class="text" :class="{ hasIcon: icon }">
       <slot></slot>
@@ -131,7 +131,8 @@ const slots = useSlots()
   &:disabled {
     pointer-events: none;
 
-    .icon, .title {
+    .icon,
+    .title {
       opacity: 0.7;
     }
   }

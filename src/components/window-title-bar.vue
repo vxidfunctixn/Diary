@@ -38,17 +38,40 @@ onMounted(() => {
     isWindowActive.value = false
   })
 })
-
 </script>
 
 <template>
   <div class="window-title-bar">
-    <Navigation/>
+    <Navigation />
     <div v-if="app.view !== VIEW.LOCK" class="app-options">
-      <Button small icon="search" title="Szukaj" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.SEARCH)"/>
-      <Button small icon="add-note" title="Dodaj notatkę" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.EDIT_NOTE)"/>
-      <Button small icon="settings" title="Ustawienia" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.SETTINGS)"/>
-      <Button small icon="lock" title="Zablokuj" :disabled="!isWindowActive" @click="diaryStore.setView(VIEW.LOCK)"/>
+      <Button
+        small
+        icon="search"
+        title="Szukaj"
+        :disabled="!isWindowActive"
+        @click="diaryStore.setView(VIEW.SEARCH)"
+      />
+      <Button
+        small
+        icon="add-note"
+        title="Dodaj notatkę"
+        :disabled="!isWindowActive"
+        @click="diaryStore.setView(VIEW.EDIT_NOTE)"
+      />
+      <Button
+        small
+        icon="settings"
+        title="Ustawienia"
+        :disabled="!isWindowActive"
+        @click="diaryStore.setView(VIEW.SETTINGS)"
+      />
+      <Button
+        small
+        icon="lock"
+        title="Zablokuj"
+        :disabled="!isWindowActive"
+        @click="diaryStore.setView(VIEW.LOCK)"
+      />
     </div>
     <div class="separator"></div>
     <div class="window-options">
@@ -137,7 +160,7 @@ onMounted(() => {
 
 .app-theme-provider:not(.active) {
   .window-options .window-button .icon {
-    opacity: .7;
+    opacity: 0.7;
   }
 
   .window-title-bar,
@@ -146,4 +169,3 @@ onMounted(() => {
   }
 }
 </style>
-

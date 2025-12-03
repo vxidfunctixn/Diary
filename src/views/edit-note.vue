@@ -5,7 +5,6 @@ import { useDiaryStore, VIEW } from '@/diaryStore'
 import InputContent from '@/components/inputs/input-content.vue'
 
 const diaryStore = useDiaryStore()
-
 </script>
 
 <template>
@@ -13,19 +12,19 @@ const diaryStore = useDiaryStore()
     <OptionsBar>
       <template #left>
         <div class="options-group">
-          <Button icon="bold" stick="right"/>
-          <Button icon="italic" stick="both"/>
-          <Button icon="underline" stick="both"/>
-          <Button icon="strikethrough" stick="both"/>
-          <Button icon="link" stick="both"/>
-          <Button icon="mark" stick="left"/>
+          <Button icon="bold" stick="right" />
+          <Button icon="italic" stick="both" />
+          <Button icon="underline" stick="both" />
+          <Button icon="strikethrough" stick="both" />
+          <Button icon="link" stick="both" />
+          <Button icon="mark" stick="left" />
         </div>
       </template>
       <template #right>
         <Button icon="save">Zapisz</Button>
       </template>
     </OptionsBar>
-    <InputContent value="test"/>
+    <InputContent value="test" />
   </div>
 </template>
 
@@ -37,9 +36,7 @@ const diaryStore = useDiaryStore()
   background-color: var(--BG1);
 }
 
-
 .app-theme-provider.maximized .edit-note {
-
   padding: 60px 0px 0px 0px;
 }
 </style>

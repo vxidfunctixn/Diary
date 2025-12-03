@@ -6,10 +6,10 @@ import WidgetCompleteNotes from '@/components/widget-complete-notes.vue'
 <template>
   <div class="cockpit">
     <div class="widget">
-      <WidgetNavigation/>
+      <WidgetNavigation />
     </div>
     <div class="widget">
-      <WidgetCompleteNotes/>
+      <WidgetCompleteNotes />
     </div>
   </div>
 </template>

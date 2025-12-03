@@ -4,7 +4,7 @@ const props = defineProps({
   width: {
     type: String,
     default: 'auto'
-  },
+  }
 })
 
 function close() {
@@ -42,7 +42,7 @@ function close() {
   border-bottom-right-radius: 8px;
   max-height: calc(100vh - 41px);
   overflow: auto;
-  background-color: rgba(black, .25);
+  background-color: rgba(black, 0.25);
   padding: 24px;
   text-align: center;
   z-index: 10;
@@ -67,7 +67,7 @@ function close() {
   .input-modal {
     background-color: var(--BG2);
     border: 1px solid var(--HL1);
-    box-shadow: 0 4px 16px -4px rgba(black, .25);
+    box-shadow: 0 4px 16px -4px rgba(black, 0.25);
     padding: 12px;
     border-radius: 8px;
     position: relative;

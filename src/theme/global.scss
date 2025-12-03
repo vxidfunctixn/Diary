@@ -11,7 +11,9 @@
   font-size: var(--FS4);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -31,6 +33,8 @@ body {
   overflow: auto;
 }
 
-input, textarea, button {
+input,
+textarea,
+button {
   font-family: var(--FF1);
 }

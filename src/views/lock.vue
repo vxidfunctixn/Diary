@@ -6,7 +6,7 @@ const diaryStore = useDiaryStore()
 
 <template>
   <div class="lock">
-   <Button icon="unlock" @click="diaryStore.setView(VIEW.HOME)">Login</Button>
+    <Button icon="unlock" @click="diaryStore.setView(VIEW.HOME)">Login</Button>
   </div>
 </template>
 

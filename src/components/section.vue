@@ -6,20 +6,23 @@ const props = defineProps({
   stick: String,
   shadow: {
     type: Boolean,
-    default: true,
+    default: true
   }
 })
 </script>
 
 <template>
-  <div class="section" :class="{
-    stickTop: stick === 'top' || stick === 'both',
-    stickBottom: stick === 'bottom' || stick === 'both',
-    shadow
-  }">
+  <div
+    class="section"
+    :class="{
+      stickTop: stick === 'top' || stick === 'both',
+      stickBottom: stick === 'bottom' || stick === 'both',
+      shadow
+    }"
+  >
     <div class="title-bar" :class="{ hasIcon: icon }">
       <div class="icon" v-if="icon">
-        <Icon :name="icon" :size="16"/>
+        <Icon :name="icon" :size="16" />
       </div>
       <div class="title">
         {{ title }}
@@ -38,7 +41,7 @@ const props = defineProps({
   background-color: var(--BG1);
 
   &.shadow {
-    box-shadow: 0 4px 16px -4px rgba(black, .25);
+    box-shadow: 0 4px 16px -4px rgba(black, 0.25);
   }
 
   &.stickTop {

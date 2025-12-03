@@ -48,6 +48,7 @@ i18n.global.locale.value = 'en'
 ## Dodawanie nowych tłumaczeń
 
 Edytuj pliki:
+
 - `src/i18n/locales/pl.json` - tłumaczenia polskie
 - `src/i18n/locales/en.json` - tłumaczenia angielskie
 
