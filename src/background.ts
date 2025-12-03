@@ -40,6 +40,11 @@ async function createWindow(): Promise<void> {
     win.loadURL('app://./index.html')
   }
 
+  // Enable remote debugging
+  if (isDevelopment) {
+    app.commandLine.appendSwitch('remote-debugging-port', '9223')
+  }
+
   new AppControl(win)
 }
 

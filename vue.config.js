@@ -6,6 +6,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 module.exports = defineConfig({
   transpileDependencies: true,
 
+  productionSourceMap: false,
+
   css: {
     loaderOptions: {
       scss: {
@@ -15,6 +17,7 @@ module.exports = defineConfig({
   },
 
   configureWebpack: {
+    devtool: 'inline-source-map',
     plugins: [
       new webpack.DefinePlugin({
         __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false',
@@ -32,7 +35,9 @@ module.exports = defineConfig({
 
   pluginOptions: {
     electronBuilder: {
-      customFileProtocol: './'
+      customFileProtocol: './',
+      nodeIntegration: false,
+      mainProcessArgs: ['--remote-debugging-port=9223']
     }
   }
 })
