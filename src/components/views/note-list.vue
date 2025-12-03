@@ -4,16 +4,18 @@ import InputDate from '@/components/inputs/input-date.vue'
 import Button from '@/components/button.vue'
 import Note from '@/components/note.vue'
 import { ref } from 'vue'
-import { useDiaryStore, VIEW } from '@/diaryStore'
+import { useDiaryStore } from '@/stores/diaryStore'
+import { useAppStore, VIEW } from '@/stores/appStore'
 
 const diaryStore = useDiaryStore()
+const appStore = useAppStore()
 const selectedDate = ref(new Date(Date.now()).valueOf())
 const notes = ref(diaryStore.getNotes())
 
 function onDateUpdate(event: { name: string; value: number }) {
   if (event.name === 'selected_day') {
     selectedDate.value = event.value
-    diaryStore.setSelectedDay(event.value)
+    appStore.setSelectedDay(event.value)
   }
 }
 </script>
@@ -32,7 +34,7 @@ function onDateUpdate(event: { name: string; value: number }) {
         <Button icon="date">Dzisiaj</Button>
       </template>
       <template #right>
-        <Button icon="add-note" @click="diaryStore.setView(VIEW.EDIT_NOTE)">Dodaj notatkę</Button>
+        <Button icon="add-note" @click="appStore.setView(VIEW.EDIT_NOTE)">Dodaj notatkę</Button>
       </template>
     </OptionsBar>
     <Note v-for="note in notes" :data="note" />

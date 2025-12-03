@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Icon from '@/components/icon.vue'
 import { storeToRefs } from 'pinia'
-import { useDiaryStore } from '@/diaryStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { useSlots } from 'vue'
 import type { ButtonProps } from '@/interfaces/components'
 
@@ -9,8 +9,8 @@ withDefaults(defineProps<ButtonProps>(), {
   width: 'auto'
 })
 
-const diaryStore = useDiaryStore()
-const { themeColor } = storeToRefs(diaryStore)
+const settingsStore = useSettingsStore()
+const { themeColor } = storeToRefs(settingsStore)
 const slots = useSlots()
 </script>
 

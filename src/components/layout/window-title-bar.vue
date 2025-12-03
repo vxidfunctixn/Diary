@@ -3,11 +3,14 @@ import { storeToRefs } from 'pinia'
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
 import Navigation from '@/components/layout/breadcrumbs.vue'
-import { useDiaryStore, VIEW } from '@/diaryStore'
+import { useAppStore, VIEW } from '@/stores/appStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { ref, onMounted } from 'vue'
 
-const diaryStore = useDiaryStore()
-const { themeColor, app } = storeToRefs(diaryStore)
+const appStore = useAppStore()
+const settingsStore = useSettingsStore()
+const { themeColor } = storeToRefs(settingsStore)
+const { view } = storeToRefs(appStore)
 const maximizeIcon = ref('maximize')
 const isWindowActive = ref(true)
 
@@ -43,34 +46,34 @@ onMounted(() => {
 <template>
   <div class="window-title-bar">
     <Navigation />
-    <div v-if="app.view !== VIEW.LOCK" class="app-options">
+    <div v-if="view !== VIEW.LOCK" class="app-options">
       <Button
         small
         icon="search"
         title="Szukaj"
         :disabled="!isWindowActive"
-        @click="diaryStore.setView(VIEW.SEARCH)"
+        @click="appStore.setView(VIEW.SEARCH)"
       />
       <Button
         small
         icon="add-note"
         title="Dodaj notatkę"
         :disabled="!isWindowActive"
-        @click="diaryStore.setView(VIEW.EDIT_NOTE)"
+        @click="appStore.setView(VIEW.EDIT_NOTE)"
       />
       <Button
         small
         icon="settings"
         title="Ustawienia"
         :disabled="!isWindowActive"
-        @click="diaryStore.setView(VIEW.SETTINGS)"
+        @click="appStore.setView(VIEW.SETTINGS)"
       />
       <Button
         small
         icon="lock"
         title="Zablokuj"
         :disabled="!isWindowActive"
-        @click="diaryStore.setView(VIEW.LOCK)"
+        @click="appStore.setView(VIEW.LOCK)"
       />
     </div>
     <div class="separator"></div>

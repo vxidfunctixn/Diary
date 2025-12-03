@@ -9,29 +9,30 @@ import InputSelect from '@/components/inputs/input-select.vue'
 import InputHue from '@/components/inputs/input-hue.vue'
 import InputKeybind from '@/components/inputs/input-keybind.vue'
 import { ref, toRaw } from 'vue'
-import { useDiaryStore, REQUIRE_PASSWORD, THEME } from '@/diaryStore'
+import { useSettingsStore, REQUIRE_PASSWORD } from '@/stores/settingsStore'
+import { THEME } from '@/stores/appStore'
 import { isProxyDifferent } from '@/utils'
 import type { InputUpdateEvent, Settings } from '@/interfaces'
 
-const diaryStore = useDiaryStore()
+const settingsStore = useSettingsStore()
 
-const form = ref<Settings>({ ...diaryStore.settings })
+const form = ref<Settings>({ ...settingsStore.$state })
 const hasChangedData = ref(false)
 
 function handleUpdate<K extends keyof Settings>(event: InputUpdateEvent<K>) {
   form.value[event.name] = event.value
-  hasChangedData.value = isProxyDifferent(form.value, diaryStore.settings)
+  hasChangedData.value = isProxyDifferent(form.value, settingsStore.$state)
 }
 
 function saveForm() {
-  if (isProxyDifferent(form.value, diaryStore.settings)) {
-    diaryStore.saveSettings(toRaw(form.value))
+  if (isProxyDifferent(form.value, settingsStore.$state)) {
+    settingsStore.saveSettings(toRaw(form.value))
     hasChangedData.value = false
   }
 }
 
 function resetForm() {
-  form.value = { ...diaryStore.settings }
+  form.value = { ...settingsStore.$state }
   hasChangedData.value = false
 }
 
@@ -83,7 +84,7 @@ const theme_options = [
         <InputTime
           name="remind_time"
           :newValue="form.remind_time"
-          :oldValue="diaryStore.settings.remind_time"
+          :oldValue="settingsStore.remind_time"
           @update="handleUpdate($event)"
         />
       </InputRow>
@@ -91,7 +92,7 @@ const theme_options = [
         <InputPassword
           name="password"
           :newValue="form.password"
-          :oldValue="diaryStore.settings.password"
+          :oldValue="settingsStore.password"
           @update="handleUpdate($event)"
         />
       </InputRow>

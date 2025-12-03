@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Icon from '@/components/icon.vue'
 import { storeToRefs } from 'pinia'
-import { useDiaryStore } from '@/diaryStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { computed, ref, getCurrentInstance } from 'vue'
-const diaryStore = useDiaryStore()
-const { themeColor } = storeToRefs(diaryStore)
+const settingsStore = useSettingsStore()
+const { themeColor } = storeToRefs(settingsStore)
 
 const props = defineProps({
   level: Number,

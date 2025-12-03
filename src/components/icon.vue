@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useDiaryStore } from '@/diaryStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import type { IconProps } from '@/interfaces/components'
 
 const props = withDefaults(defineProps<IconProps>(), {
@@ -9,13 +9,13 @@ const props = withDefaults(defineProps<IconProps>(), {
   secondaryColor: 'transparent'
 })
 
-const diaryStore = useDiaryStore()
-const { themeColor } = storeToRefs(diaryStore)
+const settingsStore = useSettingsStore()
+const { themeColor } = storeToRefs(settingsStore)
 
-const currentColor: Ref<string> = ref(props.color ? props.color : diaryStore.themeColor.F1.value)
+const currentColor: Ref<string> = ref(props.color ? props.color : settingsStore.themeColor.F1.value)
 
 watch(themeColor, () => {
-  currentColor.value = props.color ? props.color : diaryStore.themeColor.F1.value
+  currentColor.value = props.color ? props.color : settingsStore.themeColor.F1.value
 })
 </script>
 

@@ -1,38 +1,38 @@
 <script setup lang="ts">
 import Section from '@/components/layout/section.vue'
 import Button from '@/components/button.vue'
-import { useDiaryStore, VIEW } from '@/diaryStore'
+import { useAppStore, VIEW } from '@/stores/appStore'
 import { useI18n } from 'vue-i18n'
 
-const diaryStore = useDiaryStore()
+const appStore = useAppStore()
 const { t } = useI18n()
 </script>
 
 <template>
   <Section :title="t('widgets.navigation.title')">
     <div class="navigation-grid">
-      <Button icon="note-list" @click="diaryStore.setView(VIEW.NOTE_LIST)">{{
+      <Button icon="note-list" @click="appStore.setView(VIEW.NOTE_LIST)">{{
         t('widgets.navigation.noteList')
       }}</Button>
-      <Button icon="add-note" @click="diaryStore.setView(VIEW.EDIT_NOTE)">{{
+      <Button icon="add-note" @click="appStore.setView(VIEW.EDIT_NOTE)">{{
         t('widgets.navigation.addNote')
       }}</Button>
-      <Button icon="date" @click="diaryStore.setView(VIEW.MONTH)">{{
+      <Button icon="date" @click="appStore.setView(VIEW.MONTH)">{{
         t('widgets.navigation.viewMonth')
       }}</Button>
-      <Button icon="date" @click="diaryStore.setView(VIEW.YEAR)">{{
+      <Button icon="date" @click="appStore.setView(VIEW.YEAR)">{{
         t('widgets.navigation.viewYear')
       }}</Button>
-      <Button icon="search" @click="diaryStore.setView(VIEW.SEARCH)">{{
+      <Button icon="search" @click="appStore.setView(VIEW.SEARCH)">{{
         t('widgets.navigation.search')
       }}</Button>
-      <Button icon="settings" @click="diaryStore.setView(VIEW.SETTINGS)">{{
+      <Button icon="settings" @click="appStore.setView(VIEW.SETTINGS)">{{
         t('widgets.navigation.settings')
       }}</Button>
-      <Button icon="lock" @click="diaryStore.setView(VIEW.LOCK)">{{
+      <Button icon="lock" @click="appStore.setView(VIEW.LOCK)">{{
         t('widgets.navigation.lock')
       }}</Button>
-      <Button icon="info" @click="diaryStore.setView(VIEW.ABOUT)">{{
+      <Button icon="info" @click="appStore.setView(VIEW.ABOUT)">{{
         t('widgets.navigation.about')
       }}</Button>
     </div>

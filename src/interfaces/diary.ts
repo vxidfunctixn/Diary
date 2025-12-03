@@ -12,7 +12,7 @@ export interface Note {
 }
 
 export interface AppState {
-  view: import('@/diaryStore').ViewType
+  view: import('@/stores/appStore').ViewType
   nativeTheme: 'dark' | 'light'
   selected_day: number
 }
@@ -22,8 +22,8 @@ export interface Settings {
   reminder: boolean
   remind_time: number
   password: string
-  require_password: import('@/diaryStore').RequirePasswordType
-  theme: import('@/diaryStore').ThemeType
+  require_password: import('@/stores/settingsStore').RequirePasswordType
+  theme: import('@/stores/appStore').ThemeType
   theme_hue: number
   standby: boolean
   quick_note_shortcut: KeyBinding[]

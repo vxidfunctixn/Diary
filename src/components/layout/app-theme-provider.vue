@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useDiaryStore } from '@/diaryStore'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useAppStore } from '@/stores/appStore'
 import { ref, onMounted, watch } from 'vue'
 
-const diaryStore = useDiaryStore()
-const { themeColor } = storeToRefs(diaryStore)
+const settingsStore = useSettingsStore()
+const appStore = useAppStore()
+const { themeColor } = storeToRefs(settingsStore)
 
 watch(themeColor, newValue => {
   updateTheme()
@@ -13,8 +15,8 @@ watch(themeColor, newValue => {
 const variables = ref<Record<string, string>>({})
 
 const classes = ref({
-  light: diaryStore.theme === 'light',
-  dark: diaryStore.theme === 'dark',
+  light: settingsStore.theme === 'light',
+  dark: settingsStore.theme === 'dark',
   maximized: false,
   active: true
 })
@@ -25,8 +27,8 @@ function updateTheme() {
   for (const [key, color] of Object.entries(themeColor.value)) {
     variables.value['--' + key] = color.value
   }
-  classes.value.light = diaryStore.theme === 'light'
-  classes.value.dark = diaryStore.theme === 'dark'
+  classes.value.light = settingsStore.theme === 'light'
+  classes.value.dark = settingsStore.theme === 'dark'
 }
 
 onMounted(() => {
@@ -47,10 +49,10 @@ onMounted(() => {
   })
 
   window.electron.receive('native-theme-dark', () => {
-    diaryStore.setNativeTheme('dark')
+    appStore.setNativeTheme('dark')
   })
   window.electron.receive('native-theme-light', () => {
-    diaryStore.setNativeTheme('light')
+    appStore.setNativeTheme('light')
   })
 })
 </script>

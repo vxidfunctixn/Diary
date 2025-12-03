@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import Button from '@/components/button.vue'
-import { useDiaryStore, VIEW } from '@/diaryStore'
-const diaryStore = useDiaryStore()
+import { useAppStore, VIEW } from '@/stores/appStore'
+const appStore = useAppStore()
 </script>
 
 <template>
   <div class="lock">
-    <Button icon="unlock" @click="diaryStore.setView(VIEW.HOME)">Login</Button>
+    <Button icon="unlock" @click="appStore.setView(VIEW.HOME)">Login</Button>
   </div>
 </template>
 
