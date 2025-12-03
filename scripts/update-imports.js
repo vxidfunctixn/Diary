@@ -64,17 +64,51 @@ function updateImportsAuto() {
       }
     })
 
-    // Dopasuj usunięte i dodane pliki o tej samej nazwie (prawdopodobnie przeniesione)
-    deletedFiles.forEach(deleted => {
-      const fileName = path.basename(deleted)
-      const possibleNew = addedFiles.find(added => path.basename(added) === fileName)
+    // Sprawdź również git diff dla zmian nazw w staged files
+    try {
+      const gitDiff = execSync('git diff --cached --name-status', { encoding: 'utf8' })
+      gitDiff.split('\n').forEach(line => {
+        const match = line.match(/^R\d*\s+(.+?)\s+(.+)/)
+        if (match) {
+          const renamed = {
+            oldPath: match[1].trim(),
+            newPath: match[2].trim()
+          }
+          // Dodaj tylko jeśli nie jest już na liście
+          if (
+            !renamedFiles.some(r => r.oldPath === renamed.oldPath && r.newPath === renamed.newPath)
+          ) {
+            renamedFiles.push(renamed)
+          }
+        }
+      })
+    } catch (e) {
+      // Ignoruj błędy diff
+    }
 
-      if (possibleNew) {
-        renamedFiles.push({
-          oldPath: deleted,
-          newPath: possibleNew
-        })
-      }
+    // Dopasuj usunięte i dodane pliki w tym samym katalogu (zmiana nazwy)
+    deletedFiles.forEach(deleted => {
+      const deletedDir = path.dirname(deleted)
+      const deletedExt = path.extname(deleted)
+
+      // Szukaj plików w tym samym katalogu z tym samym rozszerzeniem
+      addedFiles.forEach(added => {
+        const addedDir = path.dirname(added)
+        const addedExt = path.extname(added)
+
+        // Jeśli są w tym samym katalogu i mają to samo rozszerzenie
+        if (deletedDir === addedDir && deletedExt === addedExt) {
+          // Sprawdź czy nie są już sparowane
+          const alreadyPaired = renamedFiles.some(r => r.oldPath === deleted || r.newPath === added)
+
+          if (!alreadyPaired) {
+            renamedFiles.push({
+              oldPath: deleted,
+              newPath: added
+            })
+          }
+        }
+      })
     })
 
     if (renamedFiles.length === 0) {
