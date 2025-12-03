@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   title: String
 })
@@ -24,7 +24,7 @@ const props = defineProps({
   .title {
     align-self: start;
     min-height: 44px;
-    font-size: var(--FS4);;
+    font-size: var(--FS4);
     line-height: 22px;
     padding: 11px 0;
   }

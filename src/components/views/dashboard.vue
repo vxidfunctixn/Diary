@@ -1,15 +1,15 @@
-<script setup>
-import WidgetNavigation from '@/components/widget-navigation.vue'
-import WidgetCompleteNotes from '@/components/widget-complete-notes.vue'
+<script setup lang="ts">
+import WidgetNavigation from '@/components/widgets/widget-navigation.vue'
+import WidgetCompleteNotes from '@/components/widgets/widget-complete-notes.vue'
 </script>
 
 <template>
   <div class="cockpit">
     <div class="widget">
-      <WidgetNavigation/>
+      <WidgetNavigation />
     </div>
     <div class="widget">
-      <WidgetCompleteNotes/>
+      <WidgetCompleteNotes />
     </div>
   </div>
 </template>

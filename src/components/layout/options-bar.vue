@@ -1,6 +1,4 @@
-<script setup>
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="options-bar">
@@ -18,7 +16,7 @@
   position: fixed;
   width: 100%;
   background-color: var(--BG2T);
-  box-shadow: 0px 4px 16px -4px rgba(black, .65);
+  box-shadow: 0px 4px 16px -4px rgba(black, 0.65);
   padding: 8px 12px;
   display: flex;
   justify-content: space-between;
@@ -53,7 +51,7 @@
 
 .app-theme-provider.light {
   .options-bar {
-    box-shadow: 0px 4px 16px -4px rgba(black, .25);
+    box-shadow: 0px 4px 16px -4px rgba(black, 0.25);
   }
 }
 </style>

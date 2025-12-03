@@ -1,50 +1,66 @@
-<script setup>
+<script setup lang="ts">
 import Button from '@/components/button.vue'
 import { Calendar, DateTime, isEqualDate } from '@/utils'
 import { ref, watch, computed } from 'vue'
+import type {
+  CalendarDay,
+  CalendarMonth,
+  CalendarYear,
+  ExtendedCalendarDay,
+  ExtendedCalendarMonth,
+  ExtendedCalendarYear
+} from '@/interfaces/calendar'
 
 const emit = defineEmits(['update'])
 
-const props = defineProps({
-  date: Object
-})
+const props = defineProps<{
+  date?: number
+}>()
 
-const dateValue = ref(new DateTime(props.date))
+const dateValue = ref(new DateTime(props.date ?? Date.now()))
 const calendar = ref(new Calendar(dateValue.value.date))
-const mode = ref('month')
+const mode = ref<'month' | 'year' | 'years'>('month')
 
-watch(props, newProps => {
-  dateValue.value.setTimestamp(newProps.date)
-})
+watch(
+  () => props.date,
+  newDate => {
+    if (newDate !== undefined) {
+      dateValue.value.setTimestamp(newDate)
+    }
+  }
+)
 
 watch(dateValue.value, newDate => {
   calendar.value.setDate(newDate.date)
   emit('update', newDate.date.valueOf())
 })
 
-const month = computed(() => {
-  return calendar.value.getMonth(day => {
-    day.selected = isEqualDate(day.date, dateValue.value.date)
-    return day
+const month = computed<ExtendedCalendarDay[][]>(() => {
+  return calendar.value.getMonth((day: CalendarDay): ExtendedCalendarDay => {
+    const extendedDay = day as ExtendedCalendarDay
+    extendedDay.selected = isEqualDate(day.date, dateValue.value.date)
+    return extendedDay
   })
 })
 
-const year = computed(() => {
-  return calendar.value.getYear(month => {
-    month.selected = isEqualDate(month.date, dateValue.value.date, {
+const year = computed<ExtendedCalendarMonth[][]>(() => {
+  return calendar.value.getYear((month: CalendarMonth): ExtendedCalendarMonth => {
+    const extendedMonth = month as ExtendedCalendarMonth
+    extendedMonth.selected = isEqualDate(month.date, dateValue.value.date, {
       day: false
     })
-    return month
+    return extendedMonth
   })
 })
 
-const years = computed(() => {
-  return calendar.value.getYears(year => {
-    year.selected = isEqualDate(year.date, dateValue.value.date, {
+const years = computed<ExtendedCalendarYear[][]>(() => {
+  return calendar.value.getYears((year: CalendarYear): ExtendedCalendarYear => {
+    const extendedYear = year as ExtendedCalendarYear
+    extendedYear.selected = isEqualDate(year.date, dateValue.value.date, {
       day: false,
-      month: false,
+      month: false
     })
-    return year
+    return extendedYear
   })
 })
 
@@ -54,13 +70,13 @@ const yearsTitle = computed(() => {
   return `${yearStart} - ${yearEnd}`
 })
 
-function selectMonth(date) {
-  dateValue.value.setTimestamp(date)
+function selectMonth(date: Date): void {
+  dateValue.value.setTimestamp(date.valueOf())
   mode.value = 'month'
 }
 
-function selectYear(date) {
-  dateValue.value.setTimestamp(date)
+function selectYear(date: Date): void {
+  dateValue.value.setTimestamp(date.valueOf())
   mode.value = 'year'
 }
 </script>
@@ -93,7 +109,7 @@ function selectYear(date) {
             active: day.currentDay,
             selected: day.selected
           }"
-          @click="dateValue.setTimestamp(day.date)"
+          @click="dateValue.setTimestamp(day.date.valueOf())"
         >
           {{ day.number }}
         </div>

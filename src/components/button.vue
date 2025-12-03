@@ -1,28 +1,16 @@
 <script setup lang="ts">
 import Icon from '@/components/icon.vue'
 import { storeToRefs } from 'pinia'
-import { useDiaryStore } from '@/diaryStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { useSlots } from 'vue'
+import type { ButtonProps } from '@/interfaces/components'
 
-interface Props {
-  icon?: string
-  title?: string
-  small?: boolean
-  disabled?: boolean
-  accent?: boolean
-  submit?: boolean
-  width?: string
-  center?: boolean
-  stick?: 'left' | 'right' | 'both'
-  monospace?: boolean
-}
-
-withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<ButtonProps>(), {
   width: 'auto'
 })
 
-const diaryStore = useDiaryStore()
-const { themeColor } = storeToRefs(diaryStore)
+const settingsStore = useSettingsStore()
+const { themeColor } = storeToRefs(settingsStore)
 const slots = useSlots()
 </script>
 
@@ -43,7 +31,7 @@ const slots = useSlots()
     :style="{ width }"
   >
     <div class="icon" v-if="icon">
-      <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.value : themeColor.F1.value"/>
+      <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.value : themeColor.F1.value" />
     </div>
     <div v-if="slots.default" class="text" :class="{ hasIcon: icon }">
       <slot></slot>
@@ -143,7 +131,8 @@ const slots = useSlots()
   &:disabled {
     pointer-events: none;
 
-    .icon, .title {
+    .icon,
+    .title {
       opacity: 0.7;
     }
   }

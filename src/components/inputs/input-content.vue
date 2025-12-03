@@ -1,13 +1,13 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   value: String
 })
 </script>
 
 <template>
-<div class="wrapper" contenteditable>
-  {{ value }}
-</div>
+  <div class="wrapper" contenteditable>
+    {{ value }}
+  </div>
 </template>
 
 <style lang="scss" scoped>

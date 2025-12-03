@@ -1,15 +1,12 @@
-<script setup>
-import Section from '@/components/section.vue'
-import Row from '@/components/section-row.vue'
+<script setup lang="ts">
+import Section from '@/components/layout/section.vue'
+import Row from '@/components/layout/section-row.vue'
 import Button from '@/components/button.vue'
 import { Calendar, getMonthName } from '@/utils'
 
 const today = new Date(Date.now())
 const calendar = new Calendar(today)
-const month = calendar.getMonth((day) => {
-  day.tempVar = 'test'
-  return day
-})
+const month = calendar.getMonth()
 
 function getTitle() {
   const month = getMonthName(today.getMonth())

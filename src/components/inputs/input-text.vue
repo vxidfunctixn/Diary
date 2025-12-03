@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
 import Icon from '@/components/icon.vue'
 import { ref, watch } from 'vue'
@@ -18,8 +18,8 @@ watch(props, newProps => {
   currentValue.value = newProps.value
 })
 
-function update(event) {
-  currentValue.value = event.target.value
+function update(event: Event) {
+  currentValue.value = (event.target as HTMLInputElement).value
   emit('update', {
     value: currentValue.value,
     name: props.name
@@ -38,7 +38,7 @@ function update(event) {
       :placeholder="placeholder"
       @input="update($event)"
       @keydown.enter.prevent="emit('preventEnter')"
-    >
+    />
     <button
       v-if="password"
       type="button"
@@ -46,7 +46,7 @@ function update(event) {
       @click="hideText = !hideText"
       @keydown.enter.prevent="hideText = !hideText"
     >
-      <Icon :name="hideText ? 'show' : 'hide'" :size="16"/>
+      <Icon :name="hideText ? 'show' : 'hide'" :size="16" />
     </button>
     <InfoText v-if="infoText">{{ infoText }}</InfoText>
   </div>

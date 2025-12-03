@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Button from '@/components/button.vue'
 import InfoText from '@/components/inputs/info-text.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
@@ -11,20 +11,22 @@ const props = defineProps({
   name: String,
   oldValue: String,
   newValue: String,
-  infoText: String,
+  infoText: String
 })
 
 const modalOpen = ref(false)
 const infoTextRef = ref({
-  global: props.infoText
+  global: props.infoText,
+  password1: undefined as string | undefined,
+  password2: undefined as string | undefined
 })
 
 const form = ref({
   password1: '',
-  password2: '',
+  password2: ''
 })
 
-function update(event) {
+function update(event: { name: 'password1' | 'password2'; value: string }) {
   infoTextRef.value[event.name] = undefined
   form.value[event.name] = event.value
 }
@@ -33,15 +35,15 @@ function save() {
   infoTextRef.value.password1 = undefined
   infoTextRef.value.password2 = undefined
 
-  if(form.value.password1.length < 4) {
+  if (form.value.password1.length < 4) {
     infoTextRef.value.password1 = 'Hasło musi się składać z conajmniej 4 znaków.'
     return
   }
-  if(form.value.password1.length > 24) {
+  if (form.value.password1.length > 24) {
     infoTextRef.value.password1 = 'Hasło nie może zawierać wieej niż 24 znaki.'
     return
   }
-  if(form.value.password1 !== form.value.password2) {
+  if (form.value.password1 !== form.value.password2) {
     infoTextRef.value.password2 = 'Podane hasła muszą być identyczne.'
     return
   }
@@ -55,15 +57,13 @@ function save() {
 }
 
 const isNewPassword = computed(() => {
-  return (props.newValue !== '' && props.newValue !== props.oldValue)
+  return props.newValue !== '' && props.newValue !== props.oldValue
 })
 
 function closeModal() {
-  modalOpen.value = false,
-  infoTextRef.value.password1 = undefined
+  ;((modalOpen.value = false), (infoTextRef.value.password1 = undefined))
   infoTextRef.value.password2 = undefined
 }
-
 </script>
 
 <template>
@@ -77,10 +77,22 @@ function closeModal() {
     <InputModal v-if="modalOpen" @close="closeModal()" width="480px">
       <template #content>
         <InputRow title="Wprowadź nowe hasło">
-          <InputText name="password1" password :infoText="infoTextRef.password1" @update="update($event)" @preventEnter="save()"/>
+          <InputText
+            name="password1"
+            password
+            :infoText="infoTextRef.password1"
+            @update="update($event)"
+            @preventEnter="save()"
+          />
         </InputRow>
         <InputRow title="Powtórz hasło">
-          <InputText name="password2" password :infoText="infoTextRef.password2" @update="update($event)" @preventEnter="save()"/>
+          <InputText
+            name="password2"
+            password
+            :infoText="infoTextRef.password2"
+            @update="update($event)"
+            @preventEnter="save()"
+          />
         </InputRow>
       </template>
       <template #buttons>
@@ -93,7 +105,6 @@ function closeModal() {
 
 <style lang="scss" scoped>
 .input-password {
-
   .button {
     text-align: right;
   }

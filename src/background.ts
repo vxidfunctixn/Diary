@@ -1,6 +1,7 @@
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { AppControl } from '@/app-control'
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -25,8 +26,7 @@ async function createWindow(): Promise<void> {
     webPreferences: {
       preload: path.join(app.getAppPath(), 'preload.js'),
       nodeIntegration: false,
-      contextIsolation: true,
-      sandbox: true
+      contextIsolation: true
     }
   })
   // win.removeMenu()
@@ -34,7 +34,6 @@ async function createWindow(): Promise<void> {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
-    // if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')
     win.loadURL('app://./index.html')
@@ -44,6 +43,18 @@ async function createWindow(): Promise<void> {
   if (isDevelopment) {
     app.commandLine.appendSwitch('remote-debugging-port', '9223')
   }
+
+  // Dodaj skrót F12 do otwierania/zamykania DevTools
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F12') {
+      if (win.webContents.isDevToolsOpened()) {
+        win.webContents.closeDevTools()
+      } else {
+        win.webContents.openDevTools()
+      }
+      event.preventDefault()
+    }
+  })
 
   new AppControl(win)
 }
@@ -59,12 +70,24 @@ app.on('activate', () => {
 })
 
 app.on('ready', async () => {
+  if (isDevelopment) {
+    try {
+      // Instalacja Vue Devtools dla Vue 3 (wspiera także Pinia)
+      await installExtension(VUEJS_DEVTOOLS, {
+        loadExtensionOptions: { allowFileAccess: true }
+      })
+      console.log('Vue Devtools zostały zainstalowane')
+    } catch (e) {
+      console.error('Nie udało się zainstalować Vue Devtools:', e)
+    }
+  }
+
   createWindow()
 })
 
 if (isDevelopment) {
   if (process.platform === 'win32') {
-    process.on('message', (data) => {
+    process.on('message', data => {
       if (data === 'graceful-exit') {
         app.quit()
       }

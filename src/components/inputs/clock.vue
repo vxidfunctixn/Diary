@@ -1,106 +1,113 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import Icon from '@/components/icon.vue'
+import type { Time } from '@/interfaces/calendar'
 
-const emit = defineEmits(['update'])
+type TimeType = 'hours' | 'minutes'
 
-const props = defineProps({
-  time: Object
-})
+const emit = defineEmits<{
+  update: [timestamp: number]
+}>()
 
-const inputMinutes = ref(null)
-const inputHours = ref(null)
+const props = defineProps<{
+  time: Time
+}>()
 
-const time = ref({
+const inputMinutes = ref<HTMLInputElement | null>(null)
+const inputHours = ref<HTMLInputElement | null>(null)
+
+const time = ref<Time>({
   hours: props.time.hours,
   minutes: props.time.minutes
 })
 
-const selectedTime = ref({
+const selectedTime = ref<Time>({
   hours: props.time.hours,
-  minutes: props.time.minutes,
+  minutes: props.time.minutes
 })
 
 const draggedObject = ref({
   hours: false,
-  minutes: false,
+  minutes: false
 })
 
-function handleWheel(event, type) {
-  if(event.deltaY > 0 || -event.deltaX > 0) {
-    if(type === 'hours' && time.value.hours === 0) time.value.hours = 24
-    if(type === 'minutes' && time.value.minutes === 0) time.value.minutes = 60
+function handleWheel(event: WheelEvent, type: TimeType): void {
+  if (event.deltaY > 0 || -event.deltaX > 0) {
+    if (type === 'hours' && time.value.hours === 0) time.value.hours = 24
+    if (type === 'minutes' && time.value.minutes === 0) time.value.minutes = 60
     time.value[type] -= 1
   }
-  if(event.deltaY < 0 || -event.deltaX < 0) {
-    if(type === 'hours' && time.value.hours === 23) time.value.hours = -1
-    if(type === 'minutes' && time.value.minutes === 59) time.value.minutes = -1
+  if (event.deltaY < 0 || -event.deltaX < 0) {
+    if (type === 'hours' && time.value.hours === 23) time.value.hours = -1
+    if (type === 'minutes' && time.value.minutes === 59) time.value.minutes = -1
     time.value[type] += 1
   }
   update(type)
 }
 
-function formatNumber(number) {
+function formatNumber(number: number): string {
   const value = String(number).padStart(2, '0')
   return value
 }
 
-function clockHover(event, type) {
+function clockHover(event: MouseEvent, type: TimeType): void {
+  const target = event.target as HTMLElement
   const { offsetX, offsetY } = event
-  const width = event.target.offsetWidth
-  const height = event.target.offsetHeight
+  const width = target.offsetWidth
+  const height = target.offsetHeight
   const centerX = width / 2
   const centerY = height / 2
   const x = offsetX - centerX
   const y = offsetY - centerY
-  const radians = Math.atan2(y, x);
-  let degrees = (radians * (180 / Math.PI)) + 90
+  const radians = Math.atan2(y, x)
+  let degrees = radians * (180 / Math.PI) + 90
   if (degrees < 0) degrees = 360 + degrees
 
-  if(type === 'hours') {
+  if (type === 'hours') {
     let hour = Math.floor((degrees + 7.5) / 15)
-    if(hour === 24) hour = 0
+    if (hour === 24) hour = 0
     selectedTime.value.hours = hour
-    if(draggedObject.value.hours) update("hours", true)
+    if (draggedObject.value.hours) update('hours', true)
   }
-  if(type === 'minutes') {
+  if (type === 'minutes') {
     let minute = Math.floor((degrees + 3) / 6)
-    if(minute === 60) minute = 0
+    if (minute === 60) minute = 0
     selectedTime.value.minutes = minute
-    if(draggedObject.value.minutes) update("minutes", true)
+    if (draggedObject.value.minutes) update('minutes', true)
   }
 }
 
-function clockClick(type) {
-  if(type === 'hours') {
-    update("hours", true)
+function clockClick(type: TimeType): void {
+  if (type === 'hours') {
+    update('hours', true)
     draggedObject.value.hours = true
   }
-  if(type === 'minutes') {
-    update("minutes", true)
+  if (type === 'minutes') {
+    update('minutes', true)
     draggedObject.value.minutes = true
   }
 }
 
-function update(type, from_selected = false) {
-  if(from_selected) {
-    if(type === 'hours') time.value.hours = selectedTime.value.hours
-    if(type === 'minutes') time.value.minutes = selectedTime.value.minutes
+function update(type: TimeType, from_selected = false): void {
+  if (from_selected) {
+    if (type === 'hours') time.value.hours = selectedTime.value.hours
+    if (type === 'minutes') time.value.minutes = selectedTime.value.minutes
   }
   emit('update', new Date().setHours(time.value.hours, time.value.minutes, 0, 0))
 }
 
-function handleInput(event) {
-  let value = Number(event.target.value.slice(-2))
-  const type = event.target.name
-  if(type === 'hours') {
-    if(value < 0) value = 23
-    if(value > 23) value = Number(event.target.value.slice(-1))
-  } else if(type === 'minutes') {
-    if(value < 0) value = 59
-    if(value > 59) value = Number(event.target.value.slice(-1))
+function handleInput(event: Event): void {
+  const target = event.target as HTMLInputElement
+  let value = Number(target.value.slice(-2))
+  const type = target.name as TimeType
+  if (type === 'hours') {
+    if (value < 0) value = 23
+    if (value > 23) value = Number(target.value.slice(-1))
+  } else if (type === 'minutes') {
+    if (value < 0) value = 59
+    if (value > 59) value = Number(target.value.slice(-1))
   }
-  event.target.value = formatNumber(value)
+  target.value = formatNumber(value)
   selectedTime.value[type] = value
   update(type, true)
 }
@@ -113,10 +120,10 @@ function handleInput(event) {
         class="input"
         title="Użyj kółka myszy aby edytować"
         @wheel="handleWheel($event, 'hours')"
-        @click="inputHours.select()"
+        @click="inputHours?.select()"
       >
         <div class="icon">
-          <Icon name="number-scroll" :size="16"/>
+          <Icon name="number-scroll" :size="16" />
         </div>
         <input
           class="inputDefault"
@@ -128,16 +135,16 @@ function handleInput(event) {
           :value="formatNumber(time.hours)"
           @input="handleInput($event)"
           ref="inputHours"
-        >
+        />
       </label>
       <label
         class="input"
         title="Użyj kółka myszy aby edytować"
         @wheel="handleWheel($event, 'minutes')"
-        @click="inputMinutes.select()"
+        @click="inputMinutes?.select()"
       >
         <div class="icon">
-          <Icon name="number-scroll" :size="16"/>
+          <Icon name="number-scroll" :size="16" />
         </div>
         <input
           class="inputDefault"
@@ -149,7 +156,7 @@ function handleInput(event) {
           :value="formatNumber(time.minutes)"
           @input="handleInput($event)"
           ref="inputMinutes"
-        >
+        />
       </label>
     </div>
 
@@ -163,7 +170,8 @@ function handleInput(event) {
         @wheel="handleWheel($event, 'hours')"
       >
         <div
-          v-for="n in 24" :style="{'--_rotate': `${((n - 1) * 15) + 180}deg`}"
+          v-for="n in 24"
+          :style="{ '--_rotate': `${(n - 1) * 15 + 180}deg` }"
           class="hour"
           :class="{
             active: time.hours === n - 1,
@@ -183,11 +191,12 @@ function handleInput(event) {
         @wheel="handleWheel($event, 'minutes')"
       >
         <div
-          v-for="n in 60" :style="{'--_rotate': `${((n - 1) * 6) + 180}deg`}"
+          v-for="n in 60"
+          :style="{ '--_rotate': `${(n - 1) * 6 + 180}deg` }"
           class="dot"
           :class="{
             active: time.minutes === n - 1,
-            selected: selectedTime.minutes === n - 1,
+            selected: selectedTime.minutes === n - 1
           }"
           :key="n"
         ></div>
@@ -353,7 +362,7 @@ function handleInput(event) {
         pointer-events: none;
 
         &::before {
-          content: "";
+          content: '';
           display: block;
           width: 100%;
           aspect-ratio: 1 / 1;

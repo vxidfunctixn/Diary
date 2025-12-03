@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Button from '@/components/button.vue'
 import InputText from '@/components/inputs/input-text.vue'
 import InputTime from '@/components/inputs/input-time.vue'
@@ -9,28 +9,30 @@ import InputSelect from '@/components/inputs/input-select.vue'
 import InputHue from '@/components/inputs/input-hue.vue'
 import InputKeybind from '@/components/inputs/input-keybind.vue'
 import { ref, toRaw } from 'vue'
-import { useDiaryStore, REQUIRE_PASSWORD, THEME } from '@/diaryStore'
+import { useSettingsStore, REQUIRE_PASSWORD } from '@/stores/settingsStore'
+import { THEME } from '@/stores/appStore'
 import { isProxyDifferent } from '@/utils'
+import type { InputUpdateEvent, Settings } from '@/interfaces'
 
-const diaryStore = useDiaryStore()
+const settingsStore = useSettingsStore()
 
-const form = ref({ ...diaryStore.settings })
+const form = ref<Settings>({ ...settingsStore.$state })
 const hasChangedData = ref(false)
 
-function handleUpdate(event) {
+function handleUpdate<K extends keyof Settings>(event: InputUpdateEvent<K>) {
   form.value[event.name] = event.value
-  hasChangedData.value = isProxyDifferent(form.value, diaryStore.settings)
+  hasChangedData.value = isProxyDifferent(form.value, settingsStore.$state)
 }
 
 function saveForm() {
-  if(isProxyDifferent(form.value, diaryStore.settings)) {
-    diaryStore.saveSettings(toRaw(form.value))
+  if (isProxyDifferent(form.value, settingsStore.$state)) {
+    settingsStore.saveSettings(toRaw(form.value))
     hasChangedData.value = false
   }
 }
 
 function resetForm() {
-  form.value = { ...diaryStore.settings }
+  form.value = { ...settingsStore.$state }
   hasChangedData.value = false
 }
 
@@ -56,15 +58,15 @@ const require_password_options = [
 const theme_options = [
   {
     title: 'Ciemny',
-    value: THEME.DARK,
+    value: THEME.DARK
   },
   {
     title: 'Jasny',
-    value: THEME.LIGHT,
+    value: THEME.LIGHT
   },
   {
     title: 'Jak w systemie',
-    value: THEME.SYSTEM,
+    value: THEME.SYSTEM
   }
 ]
 </script>
@@ -73,31 +75,55 @@ const theme_options = [
   <div class="settings">
     <form @submit.prevent="saveForm()">
       <InputRow title="Nazwa dziennika">
-        <InputText name="diary_name" :value="form.diary_name" @update="handleUpdate($event)"/>
+        <InputText name="diary_name" :value="form.diary_name" @update="handleUpdate($event)" />
       </InputRow>
       <InputRow title="Przypominaj jeśli zapomnę o napisaniu notatki">
-        <InputSwitcher name="reminder" :value="form.reminder" @update="handleUpdate($event)"/>
+        <InputSwitcher name="reminder" :value="form.reminder" @update="handleUpdate($event)" />
       </InputRow>
       <InputRow title="Godzina przypomnienia">
-        <InputTime name="remind_time" :newValue="form.remind_time" :oldValue="diaryStore.settings.remind_time" @update="handleUpdate($event)"/>
+        <InputTime
+          name="remind_time"
+          :newValue="form.remind_time"
+          :oldValue="settingsStore.remind_time"
+          @update="handleUpdate($event)"
+        />
       </InputRow>
       <InputRow title="Hasło do dziennika">
-        <InputPassword name="password" :newValue="form.password" :oldValue="diaryStore.settings.password" @update="handleUpdate($event)"/>
+        <InputPassword
+          name="password"
+          :newValue="form.password"
+          :oldValue="settingsStore.password"
+          @update="handleUpdate($event)"
+        />
       </InputRow>
       <InputRow title="Wymagaj hasła gdy">
-        <InputSelect name="require_password" :value="form.require_password" :options="require_password_options" @update="handleUpdate($event)"/>
+        <InputSelect
+          name="require_password"
+          :value="form.require_password"
+          :options="require_password_options"
+          @update="handleUpdate($event)"
+        />
       </InputRow>
       <InputRow title="Motyw">
-        <InputSelect name="theme" :value="form.theme" :options="theme_options" @update="handleUpdate($event)"/>
+        <InputSelect
+          name="theme"
+          :value="form.theme"
+          :options="theme_options"
+          @update="handleUpdate($event)"
+        />
       </InputRow>
       <InputRow title="Barwa motywu">
-        <InputHue name="theme_hue" :value="form.theme_hue" @update="handleUpdate($event)"/>
+        <InputHue name="theme_hue" :value="form.theme_hue" @update="handleUpdate($event)" />
       </InputRow>
       <InputRow title="Czuwaj od startu systemu">
-        <InputSwitcher name="standby" :value="form.standby" @update="handleUpdate($event)"/>
+        <InputSwitcher name="standby" :value="form.standby" @update="handleUpdate($event)" />
       </InputRow>
       <InputRow title="Skrót szybkiej notatki">
-        <InputKeybind name="quick_note_shortcut" :value="form.quick_note_shortcut" @update="handleUpdate($event)"/>
+        <InputKeybind
+          name="quick_note_shortcut"
+          :value="form.quick_note_shortcut"
+          @update="handleUpdate($event)"
+        />
       </InputRow>
     </form>
     <div class="options">

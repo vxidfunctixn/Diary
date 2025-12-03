@@ -1,36 +1,37 @@
-<script setup>
+<script setup lang="ts">
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
+import type { Note } from '@/interfaces/diary'
 
-const props = defineProps({
-  data: Array
-})
+const props = defineProps<{
+  data?: Note[]
+}>()
 </script>
 
 <template>
-<div class="note-group">
-  <div v-for="(note) in data" class="note">
-    <div class="note-title-bar">
-      <div class="note-title" tabindex="0">
-        <div class="icon">
-          <Icon name="note" :size="16"/>
+  <div class="note-group">
+    <div v-for="note in data" class="note">
+      <div class="note-title-bar">
+        <div class="note-title" tabindex="0">
+          <div class="icon">
+            <Icon name="note" :size="16" />
+          </div>
+          {{ note.title }}
         </div>
-        {{ note.title }}
+        <div class="note-options">
+          <Button icon="edit-note" small>Edytuj</Button>
+          <Button icon="delete" small>Usuń</Button>
+        </div>
       </div>
-      <div class="note-options">
-        <Button icon="edit-note" small>Edytuj</Button>
-        <Button icon="delete" small>Usuń</Button>
-      </div>
+      <div class="note-message">{{ note.content }}</div>
     </div>
-    <div class="note-message">{{ note.content }}</div>
   </div>
-</div>
 </template>
 
 <style lang="scss" scoped>
 .note-group {
   margin: 24px 0;
-  box-shadow: 0 4px 16px -4px rgba(black, .25);
+  box-shadow: 0 4px 16px -4px rgba(black, 0.25);
   border-radius: 8px;
   overflow: hidden;
 
