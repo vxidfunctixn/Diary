@@ -16,7 +16,7 @@ const noteListDate = computed(() => {
 </script>
 
 <template>
-  <div class="navigation">
+  <div class="breadcrumbs">
     <NavItem v-if="app.view === VIEW.LOCK" :level="1" icon="lock" :title="settings.diary_name" />
     <NavItem v-if="app.view === VIEW.HOME" :level="1" icon="diary" :title="settings.diary_name" />
     <NavItem
@@ -46,7 +46,7 @@ const noteListDate = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.navigation {
+.breadcrumbs {
   display: flex;
   user-select: none;
   min-width: 0;

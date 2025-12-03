@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
-import Navigation from '@/components/layout/navigation.vue'
+import Navigation from '@/components/layout/breadcrumbs.vue'
 import { useDiaryStore, VIEW } from '@/diaryStore'
 import { ref, onMounted } from 'vue'
 
