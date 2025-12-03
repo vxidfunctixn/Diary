@@ -1,3 +1,15 @@
 {
-
+  "widgets": {
+    "navigation": {
+      "title": "Nawigacja",
+      "noteList": "Lista wpisów",
+      "addNote": "Dodaj notatkę",
+      "viewMonth": "Zobacz miesiąc",
+      "viewYear": "Zobacz rok",
+      "search": "Wyszukiwarka",
+      "settings": "Ustawienia",
+      "lock": "Zablokuj",
+      "about": "O aplikacji"
+    }
+  }
 }

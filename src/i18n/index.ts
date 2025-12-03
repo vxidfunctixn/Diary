@@ -1,16 +1,14 @@
 import { createI18n } from 'vue-i18n'
 import pl from './locales/pl.json'
-import en from './locales/en.json'
 
 export type MessageSchema = typeof pl
 
-const i18n = createI18n<[MessageSchema], 'pl' | 'en'>({
+const i18n = createI18n<[MessageSchema], 'pl'>({
   legacy: false,
   locale: 'pl',
-  fallbackLocale: 'en',
+  fallbackLocale: 'pl',
   messages: {
-    pl,
-    en
+    pl
   }
 })
 
