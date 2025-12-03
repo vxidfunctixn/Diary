@@ -12,11 +12,21 @@ export class AppControl {
   }
 
   private initEvents(): void {
-    this.win.on('maximize',   () => { this.win.webContents.send('window-maximized') })
-    this.win.on('unmaximize', () => { this.win.webContents.send('window-unmaximized') })
-    this.win.on('focus',      () => { this.win.webContents.send('window-focus') })
-    this.win.on('blur',       () => { this.win.webContents.send('window-blur') })
-    nativeTheme.on('updated', () => { this.sendNativeTheme() })
+    this.win.on('maximize', () => {
+      this.win.webContents.send('window-maximized')
+    })
+    this.win.on('unmaximize', () => {
+      this.win.webContents.send('window-unmaximized')
+    })
+    this.win.on('focus', () => {
+      this.win.webContents.send('window-focus')
+    })
+    this.win.on('blur', () => {
+      this.win.webContents.send('window-blur')
+    })
+    nativeTheme.on('updated', () => {
+      this.sendNativeTheme()
+    })
 
     ipcMain.on('app-control', (_event: IpcMainEvent, action: AppControlAction) => {
       switch (action) {
@@ -40,7 +50,7 @@ export class AppControl {
   }
 
   private sendNativeTheme(): void {
-    if(nativeTheme.shouldUseDarkColors) {
+    if (nativeTheme.shouldUseDarkColors) {
       this.win.webContents.send('native-theme-dark')
     } else {
       this.win.webContents.send('native-theme-light')

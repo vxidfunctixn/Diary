@@ -16,14 +16,14 @@ const { app } = storeToRefs(diaryStore)
 
 <template>
   <AppThemeProvider>
-    <WindowTitleBar/>
+    <WindowTitleBar />
     <div id="modal"></div>
     <div class="app-wrapper">
-      <Cockpit v-if="app.view === VIEW.HOME"/>
-      <Lock v-if="app.view === VIEW.LOCK"/>
-      <Settings v-if="app.view === VIEW.SETTINGS"/>
-      <NoteList v-if="app.view === VIEW.NOTE_LIST"/>
-      <EditNote v-if="app.view === VIEW.EDIT_NOTE"/>
+      <Cockpit v-if="app.view === VIEW.HOME" />
+      <Lock v-if="app.view === VIEW.LOCK" />
+      <Settings v-if="app.view === VIEW.SETTINGS" />
+      <NoteList v-if="app.view === VIEW.NOTE_LIST" />
+      <EditNote v-if="app.view === VIEW.EDIT_NOTE" />
     </div>
   </AppThemeProvider>
 </template>

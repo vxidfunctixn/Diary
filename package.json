@@ -6,7 +6,9 @@
     "build": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service electron:build",
     "start": "SET NODE_OPTIONS= && vue-cli-service electron:serve",
     "type-check": "vue-tsc --noEmit",
-    "type-check:watch": "vue-tsc --noEmit --watch"
+    "type-check:watch": "vue-tsc --noEmit --watch",
+    "format": "prettier --write \"src/**/*.{js,ts,vue,json,css,scss,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts,vue,json,css,scss,md}\""
   },
   "main": "background.js",
   "dependencies": {
@@ -26,6 +28,7 @@
     "@vue/cli-service": "~5.0.0",
     "electron": "^13.0.0",
     "electron-devtools-installer": "^3.2.0",
+    "prettier": "^3.7.4",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
     "ts-loader": "^9.5.1",
