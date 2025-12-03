@@ -9,4 +9,10 @@ const app = createApp(App)
 
 app.use(pinia)
 app.use(i18n)
+
+// Włącz Vue Devtools w trybie deweloperskim
+if (process.env.NODE_ENV === 'development') {
+  app.config.performance = true
+}
+
 app.mount('#app')
