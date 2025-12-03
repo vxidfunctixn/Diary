@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Button from '@/components/button.vue'
 import { Calendar, DateTime, isEqualDate } from '@/utils'
 import { ref, watch, computed } from 'vue'

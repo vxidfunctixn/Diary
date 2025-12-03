@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Button from '@/components/button.vue'
 import InputText from '@/components/inputs/input-text.vue'
 import InputTime from '@/components/inputs/input-time.vue'

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'

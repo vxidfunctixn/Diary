@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
 import Icon from '@/components/icon.vue'
 import { ref, watch } from 'vue'

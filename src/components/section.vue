@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Icon from '@/components/icon.vue'
 const props = defineProps({
   title: String,

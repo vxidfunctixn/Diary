@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import WidgetNavigation from '@/components/widget-navigation.vue'
 import WidgetCompleteNotes from '@/components/widget-complete-notes.vue'
 </script>

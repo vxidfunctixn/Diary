@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import NavItem from '@/components/nav-item.vue'
 import { storeToRefs } from 'pinia'
 import { useDiaryStore, VIEW } from '@/diaryStore'

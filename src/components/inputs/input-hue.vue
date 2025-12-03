@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
 import { ref, watch } from 'vue'
 const emit = defineEmits(['update', 'preventEnter'])

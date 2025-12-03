@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import OptionsBar from '@/components/options-bar.vue'
 import Button from '@/components/button.vue'
 import { useDiaryStore, VIEW } from '@/diaryStore'

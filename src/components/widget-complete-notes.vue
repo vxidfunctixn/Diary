@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Section from '@/components/section.vue'
 import Row from '@/components/section-row.vue'
 import Button from '@/components/button.vue'

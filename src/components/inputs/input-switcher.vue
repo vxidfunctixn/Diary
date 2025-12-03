@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
 const emit = defineEmits(['update'])
 const props = defineProps({
