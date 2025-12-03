@@ -34,7 +34,6 @@ async function createWindow(): Promise<void> {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
-    if (isDevelopment) win.webContents.openDevTools()
   } else {
     createProtocol('app')
     win.loadURL('app://./index.html')
@@ -44,6 +43,18 @@ async function createWindow(): Promise<void> {
   if (isDevelopment) {
     app.commandLine.appendSwitch('remote-debugging-port', '9223')
   }
+
+  // Dodaj skrót F12 do otwierania/zamykania DevTools
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F12') {
+      if (win.webContents.isDevToolsOpened()) {
+        win.webContents.closeDevTools()
+      } else {
+        win.webContents.openDevTools()
+      }
+      event.preventDefault()
+    }
+  })
 
   new AppControl(win)
 }
