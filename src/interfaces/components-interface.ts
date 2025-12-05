@@ -5,11 +5,13 @@ export interface ButtonProps {
   small?: boolean
   disabled?: boolean
   accent?: boolean
+  negative?: boolean
   submit?: boolean
   width?: string
   center?: boolean
   stick?: 'left' | 'right' | 'both'
   monospace?: boolean
+  active?: boolean
 }
 
 export interface IconProps {

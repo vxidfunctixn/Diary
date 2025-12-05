@@ -3,14 +3,19 @@ import OptionsBar from '@/components/layout/options-bar.vue'
 import InputDate from '@/components/inputs/input-date.vue'
 import Button from '@/components/button.vue'
 import Note from '@/components/note.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useDiaryStore } from '@/stores/diaryStore'
 import { useAppStore, VIEW } from '@/stores'
+import type { DBNote } from '@/interfaces/store-interface'
 
 const diaryStore = useDiaryStore()
 const appStore = useAppStore()
 const selectedDate = ref(new Date(Date.now()).valueOf())
-const notes = ref(diaryStore.getNotes())
+const notes = ref<DBNote[]>([])
+
+onMounted(async () => {
+  notes.value = await diaryStore.getNotes()
+})
 
 function onDateUpdate(event: { name: string; value: number }) {
   if (event.name === 'selected_day') {

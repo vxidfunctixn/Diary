@@ -21,8 +21,10 @@ const slots = useSlots()
     :class="{
       small,
       accent,
+      negative,
       center,
       monospace,
+      active,
       stickLeft: stick === 'left' || stick === 'both',
       stickRight: stick === 'right' || stick === 'both'
     }"
@@ -31,7 +33,13 @@ const slots = useSlots()
     :style="{ width }"
   >
     <div class="icon" v-if="icon">
-      <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.value : themeColor.F1.value" />
+      <Icon
+        :name="icon"
+        :size="16"
+        :color="
+          accent ? themeColor.HL3.value : negative ? themeColor.HL3.value : themeColor.F1.value
+        "
+      />
     </div>
     <div v-if="slots.default" class="text" :class="{ hasIcon: icon }">
       <slot></slot>
@@ -80,6 +88,20 @@ const slots = useSlots()
     border-color: var(--F2);
   }
 
+  &.active {
+    border-color: var(--A1);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--HL2);
+      border-color: var(--A2);
+    }
+
+    &:active {
+      border-color: var(--A3);
+    }
+  }
+
   &.small {
     min-height: 36px;
     padding: 2px 9px;
@@ -107,6 +129,27 @@ const slots = useSlots()
 
     &:active {
       border-color: var(--A1);
+    }
+  }
+
+  &.negative {
+    background-color: var(--F1);
+    border-color: var(--F2);
+    color: var(--HL3);
+
+    @include theme-dark() {
+      font-weight: 500;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--F2);
+      color: var(--F1);
+      border-color: var(--F2);
+    }
+
+    &:active {
+      border-color: var(--F1);
     }
   }
 

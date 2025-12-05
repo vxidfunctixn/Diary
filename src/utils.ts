@@ -146,6 +146,50 @@ export class DateTime {
   }
 }
 
+// Funkcja konwertująca HTML na Markdown
+export function htmlToMarkdown(html: string): string {
+  let markdown = html
+
+  // Linki
+  markdown = markdown.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+
+  // Pogrubienie
+  markdown = markdown.replace(/<(strong|b)>(.*?)<\/\1>/gi, '**$2**')
+
+  // Kursywa
+  markdown = markdown.replace(/<(em|i)>(.*?)<\/\1>/gi, '*$2*')
+
+  // Przekreślenie
+  markdown = markdown.replace(/<(strike|s|del)>(.*?)<\/\1>/gi, '~~$2~~')
+
+  // Podkreślenie (Markdown nie ma natywnego podkreślenia, używamy HTML)
+  markdown = markdown.replace(/<u>(.*?)<\/u>/gi, '<u>$1</u>')
+
+  // Paragrafy i div
+  markdown = markdown.replace(/<div>(.*?)<\/div>/gi, '$1\n')
+  markdown = markdown.replace(/<p>(.*?)<\/p>/gi, '$1\n\n')
+
+  // Łamanie linii
+  markdown = markdown.replace(/<br\s*\/?>/gi, '\n')
+
+  // Usuń pozostałe tagi HTML
+  markdown = markdown.replace(/<[^>]+>/g, '')
+
+  // Dekoduj encje HTML
+  markdown = markdown
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+
+  // Usuń nadmiar pustych linii
+  markdown = markdown.replace(/\n{3,}/g, '\n\n').trim()
+
+  return markdown
+}
+
 // Funkcja haszująca hasło
 export function hashPassword(password: string): string {
   const shaObj = new jsSHA('SHA-512', 'TEXT', { encoding: 'UTF8' })

@@ -1,29 +1,30 @@
 <script setup lang="ts">
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
-import type { Note } from '@/interfaces/store-interface'
+import type { DBNote } from '@/interfaces/store-interface'
+import { formatDate } from '@/utils'
 
 const props = defineProps<{
-  data?: Note[]
+  data?: DBNote
 }>()
 </script>
 
 <template>
-  <div class="note-group">
-    <div v-for="note in data" class="note">
+  <div class="note-group" v-if="data">
+    <div class="note">
       <div class="note-title-bar">
         <div class="note-title" tabindex="0">
           <div class="icon">
             <Icon name="note" :size="16" />
           </div>
-          {{ note.title }}
+          {{ formatDate(new Date(data.created_at)) }}
         </div>
         <div class="note-options">
           <Button icon="edit-note" small>Edytuj</Button>
           <Button icon="delete" small>Usuń</Button>
         </div>
       </div>
-      <div class="note-message">{{ note.content }}</div>
+      <div class="note-message">{{ data.content }}</div>
     </div>
   </div>
 </template>
