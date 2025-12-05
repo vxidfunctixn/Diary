@@ -8,4 +8,4 @@ export {
   type ViewType,
   type ThemeType,
   type RequirePasswordType
-} from '@/interfaces/store'
+} from '@/interfaces/store-interface'

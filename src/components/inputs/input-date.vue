@@ -5,7 +5,7 @@ import InputModal from '@/components/inputs/input-modal.vue'
 import Calendar from '@/components/inputs/calendar.vue'
 import { DateTime } from '@/utils'
 import { ref, watch, computed } from 'vue'
-import type { UpdateEvent } from '@/interfaces/components'
+import type { UpdateEvent } from '@/interfaces/components-interface'
 
 const emit = defineEmits<{
   update: [event: UpdateEvent]

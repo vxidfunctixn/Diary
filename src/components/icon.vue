@@ -2,7 +2,7 @@
 import { ref, watch, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores'
-import type { IconProps } from '@/interfaces/components'
+import type { IconProps } from '@/interfaces/components-interface'
 
 const props = withDefaults(defineProps<IconProps>(), {
   color: null,

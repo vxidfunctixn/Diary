@@ -9,7 +9,7 @@ import type {
   ExtendedCalendarDay,
   ExtendedCalendarMonth,
   ExtendedCalendarYear
-} from '@/interfaces/calendar'
+} from '@/interfaces/calendar-interface'
 
 const emit = defineEmits(['update'])
 

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { isEqualDate } from '@/utils'
-import type { Note } from '@/interfaces/store'
+import type { Note } from '@/interfaces/store-interface'
 
 export const useDiaryStore = defineStore('diary', {
   state: () => ({

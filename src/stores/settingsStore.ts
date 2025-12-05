@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { Theme } from '@/theme/theme'
-import type { ThemeColors } from '@/interfaces/theme'
-import { REQUIRE_PASSWORD, THEME, type Settings } from '@/interfaces/store'
+import type { ThemeColors } from '@/interfaces/theme-interface'
+import { REQUIRE_PASSWORD, THEME, type Settings } from '@/interfaces/store-interface'
 import { useAppStore } from './appStore'
 
 export const useSettingsStore = defineStore('settings', {

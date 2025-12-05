@@ -1,4 +1,4 @@
-import type { Settings } from '@/interfaces/store'
+import type { Settings } from '@/interfaces/store-interface'
 export interface ButtonProps {
   icon?: string
   title?: string

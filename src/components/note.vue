@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
-import type { Note } from '@/interfaces/store'
+import type { Note } from '@/interfaces/store-interface'
 
 const props = defineProps<{
   data?: Note[]

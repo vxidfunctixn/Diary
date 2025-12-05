@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { VIEW, THEME, type ViewType, type AppState } from '@/interfaces/store'
+import { VIEW, THEME, type ViewType, type AppState } from '@/interfaces/store-interface'
 
 const datenow = new Date(Date.now())
 const today = new Date(datenow.getFullYear(), datenow.getMonth(), datenow.getDate())

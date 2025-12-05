@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
 import { ref, watch } from 'vue'
-import type { Settings } from '@/interfaces/store'
+import type { Settings } from '@/interfaces/store-interface'
 
 const emit = defineEmits<{
   update: [event: { value: number; name: keyof Settings }]

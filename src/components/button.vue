@@ -3,7 +3,7 @@ import Icon from '@/components/icon.vue'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores'
 import { useSlots } from 'vue'
-import type { ButtonProps } from '@/interfaces/components'
+import type { ButtonProps } from '@/interfaces/components-interface'
 
 withDefaults(defineProps<ButtonProps>(), {
   width: 'auto'

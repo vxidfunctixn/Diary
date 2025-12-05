@@ -1,4 +1,4 @@
-import type { ThemeColors } from '@/interfaces/theme'
+import type { ThemeColors } from '@/interfaces/theme-interface'
 
 export class Color {
   h: number

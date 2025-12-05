@@ -5,7 +5,7 @@ import type {
   CalendarDay,
   CalendarMonth,
   CalendarYear
-} from '@/interfaces/calendar'
+} from '@/interfaces/calendar-interface'
 
 type CalendarCallback<T> = (this: T, column: T) => T
 
