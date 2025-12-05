@@ -12,11 +12,27 @@ const isAltPressed = ref(false)
 
 // Funkcja wykrywająca aktywne style
 const checkActiveStyles = () => {
+  const selection = window.getSelection()
+  let isLink = false
+
+  // Sprawdź czy kursor jest wewnątrz linka
+  if (selection && selection.anchorNode) {
+    let node = selection.anchorNode as Node | null
+    while (node && node !== editorElement.value) {
+      if (node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === 'A') {
+        isLink = true
+        break
+      }
+      node = node.parentNode
+    }
+  }
+
   const activeStyles = {
     bold: document.queryCommandState('bold'),
     italic: document.queryCommandState('italic'),
-    underline: document.queryCommandState('underline'),
-    strikethrough: document.queryCommandState('strikeThrough')
+    underline: !isLink && document.queryCommandState('underline'), // Ignoruj underline jeśli to link
+    strikethrough: document.queryCommandState('strikeThrough'),
+    link: isLink
   }
   emit('update:activeStyles', activeStyles)
 }

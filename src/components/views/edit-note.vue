@@ -19,7 +19,8 @@ const activeStyles = ref({
   bold: false,
   italic: false,
   underline: false,
-  strikethrough: false
+  strikethrough: false,
+  link: false
 })
 
 const showLinkModal = ref(false)
@@ -169,7 +170,7 @@ const saveNote = async () => {
             :active="activeStyles.strikethrough"
             @click="applyFormat('strikethrough')"
           />
-          <Button icon="link" stick="both" @click="insertLink" />
+          <Button icon="link" stick="both" :active="activeStyles.link" @click="insertLink" />
           <Button icon="mark" stick="left" disabled />
         </div>
       </template>
