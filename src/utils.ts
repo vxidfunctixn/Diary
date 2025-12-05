@@ -35,6 +35,15 @@ export function getMonthName(month: number): string {
   return months[month]
 }
 
+export function formatDate(date: Date): string {
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  const hours = date.getHours().toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const year = date.getFullYear()
+  return `${hours}:${minutes} ${day}.${month}.${year}`
+}
+
 // Klasa DateTime do zarządzania datami
 export class DateTime {
   timestamp: number

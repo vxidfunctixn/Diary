@@ -1,122 +1,84 @@
 import { defineStore } from 'pinia'
-import { isEqualDate } from '@/utils'
-import type { Note } from '@/interfaces/store-interface'
+import Dexie from 'dexie'
+import { v7 as uuidv7 } from 'uuid'
+import type { DBNote, DBNoteVersion } from '@/interfaces/store-interface'
+
+export class DiaryDB extends Dexie {
+  notes!: Dexie.Table<DBNote, string>
+  notes_versions!: Dexie.Table<DBNoteVersion, string>
+
+  constructor(dbName: string) {
+    super(dbName)
+    this.version(1).stores({
+      notes: 'uuid, created_at, modified_at',
+      notes_versions: 'uuid, note_id, timestamp'
+    })
+  }
+}
+
+const db = new DiaryDB('diary_db')
 
 export const useDiaryStore = defineStore('diary', {
   state: () => ({
-    notes: [
-      {
-        id: '1',
-        modify: new Date('2024-02-17T15:24:00').valueOf(),
-        created: new Date('2024-02-17T15:24:00').valueOf(),
-        content: 'Lorem ipsum dolor sit amet'
-      },
-      {
-        id: '2',
-        modify: new Date('2024-02-19T08:12:00').valueOf(),
-        created: new Date('2024-02-17T16:15:00').valueOf(),
-        content: 'Lorem ipsum dolor sit amet'
-      },
-      {
-        id: '3',
-        modify: new Date('2024-02-17T19:44:15').valueOf(),
-        created: new Date('2024-02-17T19:44:15').valueOf(),
-        content: 'Lorem ipsum dolor sit amet'
-      },
-      {
-        id: '4',
-        modify: new Date('2024-02-22T01:23:58').valueOf(),
-        created: new Date('2024-02-18T18:31:12').valueOf(),
-        content: 'Lorem ipsum dolor sit amet'
-      },
-      {
-        id: '5',
-        modify: new Date('2024-02-18T23:01:19').valueOf(),
-        created: new Date('2024-02-18T23:01:19').valueOf(),
-        content: 'Lorem ipsum dolor sit amet'
-      },
-      {
-        id: '6',
-        modify: new Date('2024-02-19T23:44:10').valueOf(),
-        created: new Date('2024-02-19T23:44:10').valueOf(),
-        content: 'Lorem ipsum dolor sit amet'
-      },
-      {
-        id: '7',
-        modify: new Date('2024-02-21T20:01:33').valueOf(),
-        created: new Date('2024-02-21T20:01:33').valueOf(),
-        content: 'Lorem ipsum dolor sit amet'
-      },
-      {
-        id: '8',
-        modify: new Date('2024-02-22T21:02:01').valueOf(),
-        created: new Date('2024-02-22T21:02:01').valueOf(),
-        content: 'Lorem ipsum dolor sit amet'
-      }
-    ] as Note[]
+    last_sync: 0
   }),
   getters: {
-    getNotes: state => {
-      return (): Note[][] => {
-        const notes = addNoteTitle(groupNotes([...state.notes]))
-        return notes
-      }
+    lastSyncDate: state => {
+      return state.last_sync > 0 ? new Date(state.last_sync) : null
     }
   },
-  actions: {}
-})
+  actions: {
+    async getNotes(): Promise<DBNote[]> {
+      return await db.notes.orderBy('created_at').reverse().toArray()
+    },
 
-// TODO: Do usunięcia, dexie zastąpi tą funkcjonalność
-function groupNotes(notes: Note[]): Note[][] {
-  const result: Note[][] = []
-  const day: Note[] = []
-  notes.map((note, index) => {
-    if (day.length === 0) {
-      day.push({ ...note })
-    } else {
-      if (isEqualDate(note.created, day[0].created)) {
-        day.push({ ...note })
-      } else {
-        result.push([...day])
-        day.splice(0, day.length)
-        day.push({ ...note })
+    async getNote(uuid: string): Promise<DBNote | undefined> {
+      return await db.notes.get(uuid)
+    },
+
+    async createNote(content: string): Promise<string> {
+      const now = Date.now()
+      const uuid = uuidv7()
+
+      await db.notes.add({
+        uuid,
+        content,
+        created_at: now,
+        modified_at: now
+      })
+
+      return uuid
+    },
+
+    async updateNote(uuid: string, content: string): Promise<void> {
+      const note = await db.notes.get(uuid)
+      if (!note) {
+        throw new Error(`Note with uuid ${uuid} not found`)
       }
+
+      await db.notes_versions.add({
+        uuid: uuidv7(),
+        note_id: uuid,
+        content: note.content,
+        timestamp: note.modified_at
+      })
+
+      const now = Date.now()
+      await db.notes.update(uuid, {
+        content,
+        modified_at: now
+      })
+    },
+
+    async deleteNote(uuid: string): Promise<void> {
+      await db.notes.delete(uuid)
+    },
+
+    async getNoteVersions(note_id: string): Promise<DBNoteVersion[]> {
+      return await db.notes_versions.where('note_id').equals(note_id).sortBy('timestamp')
     }
-
-    if (index === notes.length - 1 && day.length) {
-      result.push([...day])
-    }
-  })
-
-  return result
-}
-
-function addNoteTitle(notes: Note[][]): Note[][] {
-  const result = [...notes]
-
-  result.forEach(group => {
-    group.forEach((note, index) => {
-      const createdDate = new Date(note.created)
-      const modifyDate = new Date(note.modify)
-      const isModify = !isEqualDate(createdDate, modifyDate)
-      let title = `N${index + 1}`
-      if (isModify) title += 'M'
-      title += ` ${formatDate(createdDate)}`
-      if (isModify) title += ` U ${formatDate(modifyDate)}`
-
-      note.title = title
-    })
-  })
-
-  return result
-}
-
-// TODO: przenieść do utils
-function formatDate(date: Date): string {
-  const minutes = date.getMinutes().toString().padStart(2, '0')
-  const hours = date.getHours().toString().padStart(2, '0')
-  const day = date.getDate().toString().padStart(2, '0')
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const year = date.getFullYear()
-  return `${hours}:${minutes} ${day}.${month}.${year}`
-}
+  },
+  persist: {
+    paths: ['last_sync']
+  }
+})

@@ -66,4 +66,19 @@ export interface Settings {
 
 export interface DiaryState {
   notes: Note[]
+  last_sync: number
+}
+
+export interface DBNote {
+  uuid: string
+  content: string
+  created_at: number
+  modified_at: number
+}
+
+export interface DBNoteVersion {
+  uuid: string
+  note_id: string
+  content: string
+  timestamp: number
 }
