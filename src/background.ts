@@ -1,4 +1,4 @@
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { AppControl } from '@/app-control'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -56,7 +56,11 @@ async function createWindow(): Promise<void> {
     }
   })
 
-  new AppControl(win)
+  // Otwieraj zewnętrzne linki w domyślnej przeglądarce
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url)
+    return { action: 'deny' }
+  })
 }
 
 app.on('window-all-closed', () => {

@@ -50,6 +50,7 @@ export interface AppState {
   view: ViewType
   nativeTheme: ThemeType
   selected_day: number
+  draft: string
 }
 
 export interface Settings {

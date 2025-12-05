@@ -8,7 +8,8 @@ export const useAppStore = defineStore('app', {
   state: (): AppState => ({
     view: VIEW.HOME,
     nativeTheme: THEME.DARK,
-    selected_day: today.valueOf()
+    selected_day: today.valueOf(),
+    draft: ''
   }),
   actions: {
     setView(view: ViewType): void {
@@ -19,6 +20,10 @@ export const useAppStore = defineStore('app', {
     },
     setSelectedDay(date: number): void {
       this.selected_day = date
+    },
+    setDraft(content: string): void {
+      this.draft = content
     }
-  }
+  },
+  persist: true
 })

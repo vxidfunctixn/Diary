@@ -8,6 +8,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'update:activeStyles'])
 
 const editorElement = ref<HTMLDivElement | null>(null)
+const isAltPressed = ref(false)
 
 // Funkcja wykrywająca aktywne style
 const checkActiveStyles = () => {
@@ -29,6 +30,35 @@ const handleSelectionChange = () => {
   }
 }
 
+// Obsługa klawiszy Alt
+const handleKeyDown = (event: KeyboardEvent) => {
+  if (event.altKey) {
+    isAltPressed.value = true
+  }
+}
+
+const handleKeyUp = (event: KeyboardEvent) => {
+  if (!event.altKey) {
+    isAltPressed.value = false
+  }
+}
+
+// Obsługa kliknięć w linki
+const handleClick = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (target.tagName === 'A') {
+    event.preventDefault()
+
+    if (isAltPressed.value) {
+      // Otwórz link w przeglądarce
+      const href = target.getAttribute('href')
+      if (href) {
+        window.open(href, '_blank')
+      }
+    }
+  }
+}
+
 // Ustawienie początkowej zawartości
 onMounted(() => {
   if (editorElement.value && props.modelValue) {
@@ -36,11 +66,16 @@ onMounted(() => {
   }
   // Nasłuchuj zmian zaznaczenia
   document.addEventListener('selectionchange', handleSelectionChange)
+  // Nasłuchuj klawiszy Alt
+  window.addEventListener('keydown', handleKeyDown)
+  window.addEventListener('keyup', handleKeyUp)
 })
 
 // Usuń listener przy odmontowaniu
 onUnmounted(() => {
   document.removeEventListener('selectionchange', handleSelectionChange)
+  window.removeEventListener('keydown', handleKeyDown)
+  window.removeEventListener('keyup', handleKeyUp)
 })
 
 // Obsługa zmian w contenteditable
@@ -79,9 +114,11 @@ defineExpose({
   <div
     ref="editorElement"
     class="wrapper"
+    :class="{ 'alt-pressed': isAltPressed }"
     contenteditable
     @input="handleInput"
     @paste="handleInput"
+    @click="handleClick"
   />
 </template>
 
@@ -92,5 +129,17 @@ defineExpose({
   height: 100%;
   overflow: auto;
   outline: none;
+
+  :deep(a) {
+    color: var(--A1);
+    font-weight: 500;
+    pointer-events: none;
+    cursor: text;
+  }
+
+  &.alt-pressed :deep(a) {
+    pointer-events: auto;
+    cursor: pointer;
+  }
 }
 </style>
