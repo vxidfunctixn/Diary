@@ -1,4 +1,4 @@
-import type { Settings } from '@/interfaces/diary'
+import type { Settings } from '@/interfaces/store'
 export interface ButtonProps {
   icon?: string
   title?: string

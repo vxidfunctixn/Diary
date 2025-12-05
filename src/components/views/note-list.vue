@@ -5,7 +5,7 @@ import Button from '@/components/button.vue'
 import Note from '@/components/note.vue'
 import { ref } from 'vue'
 import { useDiaryStore } from '@/stores/diaryStore'
-import { useAppStore, VIEW } from '@/stores/appStore'
+import { useAppStore, VIEW } from '@/stores'
 
 const diaryStore = useDiaryStore()
 const appStore = useAppStore()

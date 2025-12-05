@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import OptionsBar from '@/components/layout/options-bar.vue'
 import Button from '@/components/button.vue'
-import { useAppStore, VIEW } from '@/stores/appStore'
+import { useAppStore, VIEW } from '@/stores'
 import InputContent from '@/components/inputs/input-content.vue'
 
 const appStore = useAppStore()

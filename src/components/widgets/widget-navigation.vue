@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Section from '@/components/layout/section.vue'
 import Button from '@/components/button.vue'
-import { useAppStore, VIEW } from '@/stores/appStore'
+import { useAppStore, VIEW } from '@/stores'
 import { useI18n } from 'vue-i18n'
 
 const appStore = useAppStore()

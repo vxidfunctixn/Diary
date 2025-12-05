@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useSettingsStore } from '@/stores/settingsStore'
-import { useAppStore } from '@/stores/appStore'
+import { useSettingsStore, useAppStore } from '@/stores'
 import { ref, onMounted, watch } from 'vue'
 
 const settingsStore = useSettingsStore()

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Icon from '@/components/icon.vue'
 import { storeToRefs } from 'pinia'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useSettingsStore } from '@/stores'
 import { computed, ref, getCurrentInstance } from 'vue'
 const settingsStore = useSettingsStore()
 const { themeColor } = storeToRefs(settingsStore)

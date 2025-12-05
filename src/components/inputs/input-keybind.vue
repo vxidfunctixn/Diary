@@ -2,7 +2,7 @@
 import InfoText from '@/components/inputs/info-text.vue'
 import Icon from '@/components/icon.vue'
 import { ref, watch, toRaw } from 'vue'
-import type { KeyBinding } from '@/interfaces/diary'
+import type { KeyBinding } from '@/interfaces/store'
 
 const emit = defineEmits(['update'])
 const props = defineProps({

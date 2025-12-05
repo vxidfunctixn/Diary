@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Button from '@/components/button.vue'
-import { useAppStore, VIEW } from '@/stores/appStore'
+import { useAppStore, VIEW } from '@/stores'
 const appStore = useAppStore()
 </script>
 

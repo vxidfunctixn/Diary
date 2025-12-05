@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import NavItem from '@/components/layout/nav-item.vue'
 import { storeToRefs } from 'pinia'
-import { useAppStore, VIEW } from '@/stores/appStore'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useAppStore, useSettingsStore, VIEW } from '@/stores'
 import { computed } from 'vue'
 const appStore = useAppStore()
 const settingsStore = useSettingsStore()

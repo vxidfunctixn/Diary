@@ -3,8 +3,7 @@ import { storeToRefs } from 'pinia'
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
 import Navigation from '@/components/layout/breadcrumbs.vue'
-import { useAppStore, VIEW } from '@/stores/appStore'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useAppStore, useSettingsStore, VIEW } from '@/stores'
 import { ref, onMounted } from 'vue'
 
 const appStore = useAppStore()

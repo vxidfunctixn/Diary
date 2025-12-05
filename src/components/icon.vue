@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useSettingsStore } from '@/stores'
 import type { IconProps } from '@/interfaces/components'
 
 const props = withDefaults(defineProps<IconProps>(), {
