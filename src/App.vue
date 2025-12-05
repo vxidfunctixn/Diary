@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import WindowTitleBar from '@/components/layout/window-title-bar.vue'
 import AppThemeProvider from '@/components/layout/app-theme-provider.vue'
-import { useAppStore, VIEW } from './stores/appStore'
+import { useAppStore } from './stores/appStore'
 import { storeToRefs } from 'pinia'
+import { VIEW } from '@/stores'
 
 import Cockpit from '@/components/views/dashboard.vue'
 import Lock from '@/components/views/lock.vue'
