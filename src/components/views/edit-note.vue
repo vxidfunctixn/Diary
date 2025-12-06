@@ -552,6 +552,23 @@ const clearFormat = () => {
   const range = selection.getRangeAt(0)
   if (range.collapsed) return
 
+  // Zapisz pozycję selection za pomocą markerów
+  const startMarker = document.createElement('span')
+  startMarker.setAttribute('data-selection-marker', 'start')
+  startMarker.style.display = 'none'
+
+  const endMarker = document.createElement('span')
+  endMarker.setAttribute('data-selection-marker', 'end')
+  endMarker.style.display = 'none'
+
+  const rangeClone = range.cloneRange()
+  rangeClone.collapse(true)
+  rangeClone.insertNode(startMarker)
+
+  const rangeClone2 = range.cloneRange()
+  rangeClone2.collapse(false)
+  rangeClone2.insertNode(endMarker)
+
   // Najpierw obsłuż marki w zaznaczeniu
   const findMarksInRange = (range: Range): HTMLElement[] => {
     const marks: HTMLElement[] = []
@@ -713,6 +730,30 @@ const clearFormat = () => {
 
     if (editorRef.value?.$el) {
       editorRef.value.$el.normalize()
+    }
+  }
+
+  // Przywróć selection PRZED removeFormat
+  const start = editorRef.value?.$el?.querySelector('[data-selection-marker="start"]')
+  const end = editorRef.value?.$el?.querySelector('[data-selection-marker="end"]')
+
+  if (start && end && document.contains(start) && document.contains(end)) {
+    const sel = window.getSelection()
+    if (sel) {
+      const restoredRange = document.createRange()
+      restoredRange.setStartAfter(start)
+      restoredRange.setEndBefore(end)
+
+      sel.removeAllRanges()
+      sel.addRange(restoredRange)
+    }
+
+    // Usuń markery
+    try {
+      start.remove()
+      end.remove()
+    } catch (e) {
+      // Ignoruj błędy
     }
   }
 
