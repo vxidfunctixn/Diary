@@ -255,44 +255,28 @@ watch(
 
 // Publiczna metoda do wykonywania komend edytora
 const execCommand = (command: string, value?: string) => {
-  const selection = window.getSelection()
-  if (!selection || selection.rangeCount === 0) return
-
-  const range = selection.getRangeAt(0)
-
+  // Użyj natywnych komend przeglądarki, które prawidłowo obsługują zagnieżdżone tagi
   switch (command) {
     case 'bold':
-      toggleInlineStyle('B')
+      document.execCommand('bold', false)
       break
     case 'italic':
-      toggleInlineStyle('I')
+      document.execCommand('italic', false)
       break
     case 'underline':
-      toggleInlineStyle('U')
+      document.execCommand('underline', false)
       break
     case 'strikeThrough':
-      toggleInlineStyle('S')
+      document.execCommand('strikeThrough', false)
       break
     case 'createLink':
       if (value) {
-        const link = document.createElement('a')
-        link.href = value
-        try {
-          range.surroundContents(link)
-        } catch (e) {
-          const fragment = range.extractContents()
-          link.appendChild(fragment)
-          range.insertNode(link)
-        }
+        document.execCommand('createLink', false, value)
       }
       break
     case 'insertText':
       if (value) {
-        range.deleteContents()
-        const textNode = document.createTextNode(value)
-        range.insertNode(textNode)
-        range.setStartAfter(textNode)
-        range.setEndAfter(textNode)
+        document.execCommand('insertText', false, value)
       }
       break
   }
@@ -304,67 +288,6 @@ const execCommand = (command: string, value?: string) => {
   setTimeout(() => {
     checkActiveStyles()
   }, 0)
-}
-
-// Funkcja do przełączania stylów inline (bold, italic, etc.)
-const toggleInlineStyle = (tagName: string) => {
-  const selection = window.getSelection()
-  if (!selection || selection.rangeCount === 0) return
-
-  const range = selection.getRangeAt(0)
-  const wasCollapsed = range.collapsed
-
-  // Sprawdź czy jesteśmy już wewnątrz tego tagu
-  let node = range.commonAncestorContainer as Node | null
-  let existingElement: HTMLElement | null = null
-
-  while (node && node !== editorElement.value) {
-    if (node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === tagName) {
-      existingElement = node as HTMLElement
-      break
-    }
-    node = node.parentNode
-  }
-
-  if (existingElement) {
-    // Usuń formatowanie - zastąp element jego zawartością
-    const parent = existingElement.parentNode
-    const firstChild = existingElement.firstChild
-    while (existingElement.firstChild) {
-      parent?.insertBefore(existingElement.firstChild, existingElement)
-    }
-    parent?.removeChild(existingElement)
-
-    // Przywróć zaznaczenie
-    if (!wasCollapsed && firstChild) {
-      const newRange = document.createRange()
-      newRange.selectNodeContents(firstChild)
-      selection.removeAllRanges()
-      selection.addRange(newRange)
-    }
-  } else {
-    // Dodaj formatowanie
-    if (!range.collapsed) {
-      const element = document.createElement(tagName.toLowerCase())
-      try {
-        range.surroundContents(element)
-        // Zaznacz zawartość nowego elementu
-        const newRange = document.createRange()
-        newRange.selectNodeContents(element)
-        selection.removeAllRanges()
-        selection.addRange(newRange)
-      } catch (e) {
-        const fragment = range.extractContents()
-        element.appendChild(fragment)
-        range.insertNode(element)
-        // Zaznacz zawartość nowego elementu
-        const newRange = document.createRange()
-        newRange.selectNodeContents(element)
-        selection.removeAllRanges()
-        selection.addRange(newRange)
-      }
-    }
-  }
 }
 
 // Expose do użycia przez parent component
