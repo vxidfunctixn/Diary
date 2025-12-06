@@ -5,8 +5,7 @@ import { useSettingsStore } from '@/stores'
 import type { IconProps } from '@/interfaces/components-interface'
 
 const props = withDefaults(defineProps<IconProps>(), {
-  color: null,
-  secondaryColor: 'transparent'
+  color: null
 })
 
 const settingsStore = useSettingsStore()
@@ -404,10 +403,25 @@ watch(themeColor, () => {
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <rect width="24" height="24" rx="4" :fill="secondaryColor" fill-opacity="0.25" />
+    <rect
+      x="0.5"
+      y="0.5"
+      width="23"
+      height="23"
+      rx="3.5"
+      :fill="settingsStore.themeColor.BG2.value"
+    />
+    <rect
+      x="0.5"
+      y="0.5"
+      width="23"
+      height="23"
+      rx="3.5"
+      :stroke="settingsStore.themeColor.A4.value"
+    />
     <path
       d="M12.6911 4.70361C12.5209 4.27859 12.1146 4 11.6667 4C11.2187 4 10.8124 4.27859 10.6422 4.70361L6.47499 14.9899L5.08591 18.4187C4.84976 19.0009 5.11716 19.6688 5.68321 19.9116C6.24926 20.1545 6.89866 19.8795 7.1348 19.2973L8.23912 16.5722H15.0942L16.1985 19.2973C16.4347 19.8795 17.0841 20.1545 17.6501 19.9116C18.2162 19.6688 18.4836 19.0009 18.2474 18.4187L16.8583 14.9899L12.6911 4.70361ZM14.167 14.2863H9.16633L11.6667 8.11453L14.167 14.2863Z"
-      :fill="currentColor"
+      fill="currentColor"
     />
   </svg>
 
@@ -660,6 +674,20 @@ watch(themeColor, () => {
       :fill="currentColor"
     />
     <path d="M0 19H1V22.5H23V19H24V23.5H0V19Z" :fill="currentColor" />
+  </svg>
+
+  <svg
+    v-if="name === 'clear-format'"
+    :width="size"
+    :height="size"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M18.5 8C19.33 8 20 7.33 20 6.5C20 5.67 19.33 5 18.5 5H6.38999L9.38999 8H11.22L10.67 9.28L12.76 11.37L14.21 8H18.5ZM17.44 18.88L4.11999 5.56C4.02741 5.46742 3.9175 5.39398 3.79653 5.34387C3.67557 5.29377 3.54592 5.26798 3.41499 5.26798C3.28406 5.26798 3.15441 5.29377 3.03345 5.34387C2.91248 5.39398 2.80257 5.46742 2.70999 5.56C2.61741 5.65258 2.54397 5.76249 2.49386 5.88346C2.44376 6.00442 2.41797 6.13407 2.41797 6.265C2.41797 6.39593 2.44376 6.52558 2.49386 6.64654C2.54397 6.76751 2.61741 6.87742 2.70999 6.97L8.96999 13.23L7.31999 17.07C6.92999 17.99 7.59999 19 8.58999 19C9.13999 19 9.63999 18.67 9.85999 18.16L11.07 15.33L16.02 20.28C16.41 20.67 17.04 20.67 17.43 20.28C17.83 19.9 17.83 19.27 17.44 18.88Z"
+      :fill="currentColor"
+    />
   </svg>
 </template>
 

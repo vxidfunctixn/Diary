@@ -153,6 +153,9 @@ export function htmlToMarkdown(html: string): string {
   // Linki
   markdown = markdown.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)')
 
+  // Mark (wyróżnienie)
+  markdown = markdown.replace(/<span[^>]*>(.*?)<\/span>/gi, '`$1`')
+
   // Pogrubienie
   markdown = markdown.replace(/<(strong|b)>(.*?)<\/\1>/gi, '**$2**')
 

@@ -6,7 +6,8 @@ import { useSlots } from 'vue'
 import type { ButtonProps } from '@/interfaces/components-interface'
 
 withDefaults(defineProps<ButtonProps>(), {
-  width: 'auto'
+  width: 'auto',
+  iconButton: false
 })
 
 const settingsStore = useSettingsStore()
@@ -25,6 +26,7 @@ const slots = useSlots()
       center,
       monospace,
       active,
+      iconButton,
       stickLeft: stick === 'left' || stick === 'both',
       stickRight: stick === 'right' || stick === 'both'
     }"
@@ -35,7 +37,7 @@ const slots = useSlots()
     <div class="icon" v-if="icon">
       <Icon
         :name="icon"
-        :size="16"
+        :size="iconButton ? 24 : 16"
         :color="
           accent ? themeColor.HL3.value : negative ? themeColor.HL3.value : themeColor.F1.value
         "
@@ -177,6 +179,14 @@ const slots = useSlots()
     .icon,
     .title {
       opacity: 0.7;
+    }
+  }
+
+  &.iconButton {
+    padding: 9px;
+    .icon {
+      width: 24px;
+      height: 24px;
     }
   }
 }

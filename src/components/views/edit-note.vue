@@ -20,7 +20,8 @@ const activeStyles = ref({
   italic: false,
   underline: false,
   strikethrough: false,
-  link: false
+  link: false,
+  mark: false
 })
 
 const showLinkModal = ref(false)
@@ -36,6 +37,47 @@ const updateActiveStyles = (styles: typeof activeStyles.value) => {
 
 const applyFormat = (command: string, value?: string) => {
   editorRef.value?.execCommand(command, value)
+}
+
+const insertMark = () => {
+  const selection = window.getSelection()
+  if (!selection || selection.rangeCount === 0) return
+
+  const range = selection.getRangeAt(0)
+  let node = range.commonAncestorContainer as Node | null
+
+  // Sprawdź czy kursor jest wewnątrz span (mark)
+  while (node && node !== editorRef.value?.$el) {
+    if (node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === 'SPAN') {
+      // Usuń span, zostaw tylko tekst
+      const spanElement = node as HTMLElement
+      const textNode = document.createTextNode(spanElement.textContent || '')
+      spanElement.parentNode?.replaceChild(textNode, spanElement)
+      return
+    }
+    node = node.parentNode
+  }
+
+  // Jeśli nie ma zaznaczenia, nie rób nic
+  if (selection.isCollapsed) return
+
+  // Owinięcie zaznaczonego tekstu w span
+  const span = document.createElement('span')
+
+  try {
+    range.surroundContents(span)
+  } catch (e) {
+    // Jeśli nie można użyć surroundContents (np. częściowe zaznaczenie elementów)
+    const fragment = range.extractContents()
+    span.appendChild(fragment)
+    range.insertNode(span)
+  }
+
+  // Aktualizuj zawartość
+  if (editorRef.value) {
+    const event = new Event('input', { bubbles: true })
+    editorRef.value.$el.dispatchEvent(event)
+  }
 }
 
 const insertLink = () => {
@@ -172,6 +214,36 @@ const closeLinkModal = () => {
   }
 }
 
+const clearFormat = () => {
+  const selection = window.getSelection()
+  if (!selection || selection.rangeCount === 0) return
+
+  const range = selection.getRangeAt(0)
+  if (range.collapsed) return
+
+  // Pobierz zaznaczony tekst
+  const selectedText = range.toString()
+
+  // Usuń zaznaczoną zawartość
+  range.deleteContents()
+
+  // Wstaw czysty tekst bez formatowania
+  const textNode = document.createTextNode(selectedText)
+  range.insertNode(textNode)
+
+  // Przesuń kursor na koniec wstawionego tekstu
+  range.setStartAfter(textNode)
+  range.setEndAfter(textNode)
+  selection.removeAllRanges()
+  selection.addRange(range)
+
+  // Aktualizuj zawartość
+  if (editorRef.value) {
+    const event = new Event('input', { bubbles: true })
+    editorRef.value.$el.dispatchEvent(event)
+  }
+}
+
 const saveNote = async () => {
   const markdownContent = htmlToMarkdown(content.value)
 
@@ -205,29 +277,46 @@ const saveNote = async () => {
           <Button
             icon="bold"
             stick="right"
+            :iconButton="true"
             :active="activeStyles.bold"
             @click="applyFormat('bold')"
           />
           <Button
             icon="italic"
             stick="both"
+            :iconButton="true"
             :active="activeStyles.italic"
             @click="applyFormat('italic')"
           />
           <Button
             icon="underline"
             stick="both"
+            :iconButton="true"
             :active="activeStyles.underline"
             @click="applyFormat('underline')"
           />
           <Button
             icon="strikethrough"
             stick="both"
+            :iconButton="true"
             :active="activeStyles.strikethrough"
-            @click="applyFormat('strikethrough')"
+            @click="applyFormat('strikeThrough')"
           />
-          <Button icon="link" stick="both" :active="activeStyles.link" @click="insertLink" />
-          <Button icon="mark" stick="left" disabled />
+          <Button
+            icon="link"
+            stick="both"
+            :active="activeStyles.link"
+            :iconButton="true"
+            @click="insertLink"
+          />
+          <Button
+            icon="mark"
+            stick="both"
+            :active="activeStyles.mark"
+            :iconButton="true"
+            @click="insertMark"
+          />
+          <Button icon="clear-format" stick="left" :iconButton="true" @click="clearFormat" />
         </div>
       </template>
       <template #right>

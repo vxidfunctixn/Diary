@@ -12,13 +12,13 @@ export interface ButtonProps {
   stick?: 'left' | 'right' | 'both'
   monospace?: boolean
   active?: boolean
+  iconButton?: boolean
 }
 
 export interface IconProps {
   name?: string
   size?: number
   color?: string | null
-  secondaryColor?: string
 }
 
 export interface InputUpdateEvent<K extends keyof Settings> {
