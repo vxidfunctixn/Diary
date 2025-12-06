@@ -39,18 +39,38 @@ const applyFormat = (command: string, value?: string) => {
 }
 
 const insertLink = () => {
-  // Pobierz zaznaczony tekst
   const selection = window.getSelection()
-  const selectedText = selection?.toString() || ''
+  let linkElement: HTMLAnchorElement | null = null
+  let selectedText = selection?.toString() || ''
+
+  // Sprawdź czy kursor jest wewnątrz linku
+  if (selection && selection.anchorNode) {
+    let node = selection.anchorNode as Node | null
+    while (node && node !== editorRef.value?.$el) {
+      if (node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === 'A') {
+        linkElement = node as HTMLAnchorElement
+        break
+      }
+      node = node.parentNode
+    }
+  }
 
   // Zapisz zaznaczenie przed otwarciem modala
   if (selection && selection.rangeCount > 0) {
     savedSelection.value = selection.getRangeAt(0).cloneRange()
   }
 
-  linkForm.value = {
-    text: selectedText,
-    url: ''
+  // Jeśli jesteśmy w linku, pobierz jego dane do edycji
+  if (linkElement) {
+    linkForm.value = {
+      text: linkElement.textContent || '',
+      url: linkElement.href
+    }
+  } else {
+    linkForm.value = {
+      text: selectedText,
+      url: ''
+    }
   }
 
   showLinkModal.value = true
@@ -61,11 +81,6 @@ const handleLinkFormUpdate = (event: any) => {
 }
 
 const confirmInsertLink = () => {
-  if (!linkForm.value.url) {
-    closeLinkModal()
-    return
-  }
-
   // Przywróć zapisane zaznaczenie
   if (savedSelection.value) {
     const selection = window.getSelection()
@@ -75,14 +90,55 @@ const confirmInsertLink = () => {
     }
   }
 
+  const selection = window.getSelection()
+  let linkElement: HTMLAnchorElement | null = null
+
+  // Sprawdź czy jesteśmy w linku
+  if (selection && selection.anchorNode) {
+    let node = selection.anchorNode as Node | null
+    while (node && node !== editorRef.value?.$el) {
+      if (node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === 'A') {
+        linkElement = node as HTMLAnchorElement
+        break
+      }
+      node = node.parentNode
+    }
+  }
+
+  // Jeśli URL jest pusty, usuń link (zostaw tylko tekst)
+  if (!linkForm.value.url) {
+    if (linkElement) {
+      // Zastąp element <a> jego tekstem
+      const textNode = document.createTextNode(linkElement.textContent || '')
+      linkElement.parentNode?.replaceChild(textNode, linkElement)
+    }
+    closeLinkModal()
+    return
+  }
+
+  // Normalizuj URL - dodaj https:// jeśli brakuje protokołu
+  let normalizedUrl = linkForm.value.url.trim()
+  if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
+    normalizedUrl = 'https://' + normalizedUrl
+  }
+
+  // Jeśli edytujemy istniejący link
+  if (linkElement) {
+    linkElement.href = normalizedUrl
+    linkElement.textContent = linkForm.value.text
+    closeLinkModal()
+    return
+  }
+
+  // Wstawianie nowego linku
   if (linkForm.value.text) {
     // Jeśli jest tekst, wstaw go najpierw
     applyFormat('insertText', linkForm.value.text)
 
     // Zaznacz wstawiony tekst
-    const selection = window.getSelection()
-    if (selection && selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0)
+    const newSelection = window.getSelection()
+    if (newSelection && newSelection.rangeCount > 0) {
+      const range = newSelection.getRangeAt(0)
       const textNode = range.startContainer
 
       if (textNode.nodeType === Node.TEXT_NODE && textNode.textContent) {
@@ -93,8 +149,8 @@ const confirmInsertLink = () => {
         try {
           newRange.setStart(textNode, startOffset)
           newRange.setEnd(textNode, endOffset)
-          selection.removeAllRanges()
-          selection.addRange(newRange)
+          newSelection.removeAllRanges()
+          newSelection.addRange(newRange)
         } catch (e) {
           console.error('Błąd podczas zaznaczania tekstu:', e)
         }
@@ -103,7 +159,7 @@ const confirmInsertLink = () => {
   }
 
   // Wstaw link
-  applyFormat('createLink', linkForm.value.url)
+  applyFormat('createLink', normalizedUrl)
 
   closeLinkModal()
 }
