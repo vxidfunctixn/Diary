@@ -546,7 +546,177 @@ const closeLinkModal = () => {
 }
 
 const clearFormat = () => {
-  // Użyj wbudowanej komendy removeFormat, która działa w contenteditable
+  const selection = window.getSelection()
+  if (!selection || selection.rangeCount === 0) return
+
+  const range = selection.getRangeAt(0)
+  if (range.collapsed) return
+
+  // Najpierw obsłuż marki w zaznaczeniu
+  const findMarksInRange = (range: Range): HTMLElement[] => {
+    const marks: HTMLElement[] = []
+    const iterator = document.createNodeIterator(
+      editorRef.value?.$el || document.body,
+      NodeFilter.SHOW_ELEMENT,
+      {
+        acceptNode: node => {
+          if ((node as HTMLElement).tagName === 'MARK' && range.intersectsNode(node)) {
+            return NodeFilter.FILTER_ACCEPT
+          }
+          return NodeFilter.FILTER_REJECT
+        }
+      }
+    )
+
+    let node
+    while ((node = iterator.nextNode())) {
+      marks.push(node as HTMLElement)
+    }
+    return marks
+  }
+
+  const existingMarks = findMarksInRange(range)
+
+  // Jeśli są marki w zaznaczeniu, obsłuż je
+  if (existingMarks.length > 0) {
+    existingMarks.forEach(mark => {
+      // Sprawdź czy zaznaczenie obejmuje cały mark
+      const markRange = document.createRange()
+      markRange.selectNodeContents(mark)
+
+      const isFullySelected =
+        range.compareBoundaryPoints(Range.START_TO_START, markRange) <= 0 &&
+        range.compareBoundaryPoints(Range.END_TO_END, markRange) >= 0
+
+      if (isFullySelected) {
+        // Całe mark jest zaznaczone - usuń całe
+        const parent = mark.parentNode
+        while (mark.firstChild) {
+          parent?.insertBefore(mark.firstChild, mark)
+        }
+        parent?.removeChild(mark)
+      } else if (mark.contains(range.startContainer) && mark.contains(range.endContainer)) {
+        // Zaznaczenie jest wewnątrz marka - podziel mark (jak substract)
+        const markParent = mark.parentNode
+        if (!markParent) return
+
+        const beforeRange = document.createRange()
+        beforeRange.setStart(mark, 0)
+        beforeRange.setEnd(range.startContainer, range.startOffset)
+
+        const afterRange = document.createRange()
+        afterRange.setStart(range.endContainer, range.endOffset)
+        afterRange.setEnd(mark, mark.childNodes.length)
+
+        const beforeContent = beforeRange.cloneContents()
+        const selectedContent = range.cloneContents()
+        const afterContent = afterRange.cloneContents()
+
+        const fragment = document.createDocumentFragment()
+
+        if (beforeContent.textContent?.trim()) {
+          const beforeMark = document.createElement('mark')
+          beforeMark.appendChild(beforeContent)
+          fragment.appendChild(beforeMark)
+        }
+
+        // Środek bez marka
+        const cleanSelected = document.createElement('div')
+        cleanSelected.appendChild(selectedContent)
+        while (cleanSelected.firstChild) {
+          fragment.appendChild(cleanSelected.firstChild)
+        }
+
+        if (afterContent.textContent?.trim()) {
+          const afterMark = document.createElement('mark')
+          afterMark.appendChild(afterContent)
+          fragment.appendChild(afterMark)
+        }
+
+        markParent.replaceChild(fragment, mark)
+      } else {
+        // Zaznaczenie częściowo nachodzi - skróć mark
+        const markParent = mark.parentNode
+        if (!markParent) return
+
+        const markRange = document.createRange()
+        markRange.selectNodeContents(mark)
+
+        // Sprawdź czy zaznaczenie nachodzi od początku czy od końca
+        const selectionStartsInMark = mark.contains(range.startContainer)
+        const selectionEndsInMark = mark.contains(range.endContainer)
+
+        if (selectionStartsInMark && !selectionEndsInMark) {
+          // Zaznaczenie zaczyna się w marku i wychodzi poza - zachowaj początek marka przed zaznaczeniem
+          const beforeRange = document.createRange()
+          beforeRange.setStart(mark, 0)
+          beforeRange.setEnd(range.startContainer, range.startOffset)
+
+          const beforeContent = beforeRange.cloneContents()
+
+          if (beforeContent.textContent?.trim()) {
+            const newMark = document.createElement('mark')
+            newMark.appendChild(beforeContent)
+            markParent.insertBefore(newMark, mark)
+          }
+
+          // Dodaj resztę bez formatowania
+          const afterRange = document.createRange()
+          afterRange.setStart(range.startContainer, range.startOffset)
+          afterRange.setEnd(mark, mark.childNodes.length)
+          const afterContent = afterRange.cloneContents()
+
+          const cleanDiv = document.createElement('div')
+          cleanDiv.appendChild(afterContent)
+          while (cleanDiv.firstChild) {
+            markParent.insertBefore(cleanDiv.firstChild, mark)
+          }
+
+          markParent.removeChild(mark)
+        } else if (!selectionStartsInMark && selectionEndsInMark) {
+          // Zaznaczenie zaczyna się przed markiem i kończy w środku - zachowaj koniec marka po zaznaczeniu
+          const afterRange = document.createRange()
+          afterRange.setStart(range.endContainer, range.endOffset)
+          afterRange.setEnd(mark, mark.childNodes.length)
+
+          const afterContent = afterRange.cloneContents()
+
+          // Dodaj początek bez formatowania
+          const beforeRange = document.createRange()
+          beforeRange.setStart(mark, 0)
+          beforeRange.setEnd(range.endContainer, range.endOffset)
+          const beforeContent = beforeRange.cloneContents()
+
+          const cleanDiv = document.createElement('div')
+          cleanDiv.appendChild(beforeContent)
+          while (cleanDiv.firstChild) {
+            markParent.insertBefore(cleanDiv.firstChild, mark)
+          }
+
+          if (afterContent.textContent?.trim()) {
+            const newMark = document.createElement('mark')
+            newMark.appendChild(afterContent)
+            markParent.insertBefore(newMark, mark)
+          }
+
+          markParent.removeChild(mark)
+        } else {
+          // Zaznaczenie w ogóle nie nachodzi na zawartość marka - usuń cały mark
+          const parent = mark.parentNode
+          while (mark.firstChild) {
+            parent?.insertBefore(mark.firstChild, mark)
+          }
+          parent?.removeChild(mark)
+        }
+      }
+    })
+
+    if (editorRef.value?.$el) {
+      editorRef.value.$el.normalize()
+    }
+  }
+
+  // Użyj wbudowanej komendy removeFormat dla pozostałych formatowań
   document.execCommand('removeFormat', false)
 
   // Wymuś sprawdzenie aktywnych stylów po wyczyszczeniu formatowania
