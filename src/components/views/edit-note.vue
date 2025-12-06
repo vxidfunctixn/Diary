@@ -258,35 +258,10 @@ const closeLinkModal = () => {
 }
 
 const clearFormat = () => {
-  const selection = window.getSelection()
-  if (!selection || selection.rangeCount === 0) return
+  // Użyj wbudowanej komendy removeFormat, która działa w contenteditable
+  document.execCommand('removeFormat', false)
 
-  const range = selection.getRangeAt(0)
-  if (range.collapsed) return
-
-  // Pobierz zaznaczony tekst
-  const selectedText = range.toString()
-
-  // Usuń zaznaczoną zawartość
-  range.deleteContents()
-
-  // Wstaw czysty tekst bez formatowania
-  const textNode = document.createTextNode(selectedText)
-  range.insertNode(textNode)
-
-  // Przesuń kursor na koniec wstawionego tekstu
-  range.setStartAfter(textNode)
-  range.setEndAfter(textNode)
-  selection.removeAllRanges()
-  selection.addRange(range)
-
-  // Aktualizuj zawartość
-  if (editorRef.value) {
-    const event = new Event('input', { bubbles: true })
-    editorRef.value.$el.dispatchEvent(event)
-  }
-
-  // Wymuś sprawdzenie aktywnych stylów po zmianie DOM
+  // Wymuś sprawdzenie aktywnych stylów po wyczyszczeniu formatowania
   setTimeout(() => {
     if (editorRef.value) {
       editorRef.value.checkActiveStyles()
