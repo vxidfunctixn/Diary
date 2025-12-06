@@ -23,6 +23,11 @@ async function createWindow(): Promise<void> {
     height: 800,
     minHeight: 320,
     titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#00000000',
+      symbolColor: '#ffffff',
+      height: 42
+    },
     webPreferences: {
       preload: path.join(app.getAppPath(), 'preload.js'),
       nodeIntegration: false,
@@ -42,7 +47,7 @@ async function createWindow(): Promise<void> {
   // Enable remote debugging
   if (isDevelopment) {
     app.commandLine.appendSwitch('remote-debugging-port', '9223')
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   }
 
   // Dodaj skrót F12 do otwierania/zamykania DevTools
@@ -62,6 +67,9 @@ async function createWindow(): Promise<void> {
     shell.openExternal(url)
     return { action: 'deny' }
   })
+
+  // Inicjalizacja kontroli okna aplikacji
+  new AppControl(win)
 }
 
 app.on('window-all-closed', () => {

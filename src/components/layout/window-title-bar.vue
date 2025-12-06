@@ -77,7 +77,7 @@ onMounted(() => {
     </div>
     <div class="separator"></div>
     <div class="window-options">
-      <button class="window-button" @click="minimize">
+      <!-- <button class="window-button" @click="minimize">
         <div class="icon">
           <Icon name="minimize" :size="16" :color="themeColor.F1.value" />
         </div>
@@ -91,7 +91,8 @@ onMounted(() => {
         <div class="icon">
           <Icon name="cancel" :size="16" :color="themeColor.F1.value" />
         </div>
-      </button>
+      </button> -->
+      <div class="native-options-spacer"></div>
     </div>
   </div>
 </template>
@@ -150,6 +151,10 @@ onMounted(() => {
         background-color: var(--red);
       }
     }
+  }
+
+  .native-options-spacer {
+    width: 135px;
   }
 }
 

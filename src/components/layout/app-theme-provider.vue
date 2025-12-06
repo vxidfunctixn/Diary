@@ -28,9 +28,22 @@ function updateTheme() {
   }
   classes.value.light = settingsStore.theme === 'light'
   classes.value.dark = settingsStore.theme === 'dark'
+
+  // Aktualizuj kolor ikon titleBar
+  if (window.electron) {
+    const theme = settingsStore.currentTheme
+    console.log('Sending titlebar color update:', theme)
+    window.electron.send('update-titlebar-color', theme)
+  }
 }
 
 onMounted(() => {
+  // Aktualizuj kolor titleBar po zamontowaniu
+  setTimeout(() => {
+    const theme = settingsStore.currentTheme
+    window.electron.send('update-titlebar-color', theme)
+  }, 100)
+
   window.electron.receive('window-maximized', () => {
     classes.value.maximized = true
   })
@@ -49,9 +62,11 @@ onMounted(() => {
 
   window.electron.receive('native-theme-dark', () => {
     appStore.setNativeTheme('dark')
+    updateTheme()
   })
   window.electron.receive('native-theme-light', () => {
     appStore.setNativeTheme('light')
+    updateTheme()
   })
 })
 </script>
