@@ -8,7 +8,6 @@ import InputText from '@/components/inputs/input-text.vue'
 import InputRow from '@/components/inputs/input-row.vue'
 import { htmlToMarkdown } from '@/utils'
 import { ref } from 'vue'
-import type { InputUpdateEvent } from '@/interfaces'
 
 const appStore = useAppStore()
 const diaryStore = useDiaryStore()
