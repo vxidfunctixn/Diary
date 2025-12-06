@@ -44,70 +44,287 @@ const insertMark = () => {
   if (!selection || selection.rangeCount === 0) return
 
   const range = selection.getRangeAt(0)
-  let node = range.commonAncestorContainer as Node | null
+  if (range.collapsed) return
 
-  // Sprawdź czy kursor jest wewnątrz span (mark)
-  while (node && node !== editorRef.value?.$el) {
-    if (node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === 'SPAN') {
-      // Usuń span, zostaw tylko tekst
-      const spanElement = node as HTMLElement
-      const parent = spanElement.parentNode
-      const firstChild = spanElement.firstChild
+  // Użyj elementów SPAN jako markerów (przetrwają operacje na MARK)
+  const startMarker = document.createElement('span')
+  startMarker.setAttribute('data-selection-marker', 'start')
+  startMarker.style.display = 'none'
 
-      while (spanElement.firstChild) {
-        parent?.insertBefore(spanElement.firstChild, spanElement)
-      }
-      parent?.removeChild(spanElement)
+  const endMarker = document.createElement('span')
+  endMarker.setAttribute('data-selection-marker', 'end')
+  endMarker.style.display = 'none'
 
-      // Przywróć zaznaczenie na zawartości
-      if (firstChild) {
-        const newRange = document.createRange()
-        newRange.selectNodeContents(firstChild)
-        selection.removeAllRanges()
-        selection.addRange(newRange)
-      }
+  const rangeClone = range.cloneRange()
+  rangeClone.collapse(false) // Na końcu
+  rangeClone.insertNode(endMarker)
 
-      // Aktualizuj zawartość
-      if (editorRef.value) {
-        const event = new Event('input', { bubbles: true })
-        editorRef.value.$el.dispatchEvent(event)
-      }
+  const rangeStart = range.cloneRange()
+  rangeStart.collapse(true) // Na początku
+  rangeStart.insertNode(startMarker)
 
-      // Wymuś sprawdzenie aktywnych stylów
-      setTimeout(() => {
-        if (editorRef.value) {
-          editorRef.value.checkActiveStyles()
-        }
-      }, 0)
+  // Funkcja do przywracania zaznaczenia używając markerów
+  const restoreSelection = () => {
+    // Sprawdź czy markery nadal istnieją w DOM
+    if (!startMarker.parentNode || !endMarker.parentNode) {
+      console.warn('Markery zostały usunięte z DOM')
       return
     }
-    node = node.parentNode
+
+    try {
+      const newRange = document.createRange()
+      newRange.setStartAfter(startMarker)
+      newRange.setEndBefore(endMarker)
+
+      // Usuń markery
+      startMarker.parentNode.removeChild(startMarker)
+      endMarker.parentNode.removeChild(endMarker)
+
+      selection.removeAllRanges()
+      selection.addRange(newRange)
+
+      // Normalizuj po usunięciu markerów
+      if (editorRef.value?.$el) {
+        editorRef.value.$el.normalize()
+      }
+    } catch (e) {
+      console.error('Błąd przy przywracaniu zaznaczenia:', e)
+      // Usuń markery jeśli nadal istnieją
+      if (startMarker.parentNode) {
+        startMarker.parentNode.removeChild(startMarker)
+      }
+      if (endMarker.parentNode) {
+        endMarker.parentNode.removeChild(endMarker)
+      }
+    }
   }
 
-  // Jeśli nie ma zaznaczenia, nie rób nic
-  if (selection.isCollapsed) return
+  // Funkcja do znalezienia wszystkich węzłów mark w zakresie
+  const findMarksInRange = (range: Range): HTMLElement[] => {
+    const marks: HTMLElement[] = []
+    const iterator = document.createNodeIterator(
+      editorRef.value?.$el || document.body,
+      NodeFilter.SHOW_ELEMENT,
+      {
+        acceptNode: node => {
+          if ((node as HTMLElement).tagName === 'MARK' && range.intersectsNode(node)) {
+            return NodeFilter.FILTER_ACCEPT
+          }
+          return NodeFilter.FILTER_REJECT
+        }
+      }
+    )
 
-  // Owinięcie zaznaczonego tekstu w span
-  const span = document.createElement('span')
-
-  try {
-    range.surroundContents(span)
-    // Zaznacz zawartość nowego span
-    const newRange = document.createRange()
-    newRange.selectNodeContents(span)
-    selection.removeAllRanges()
-    selection.addRange(newRange)
-  } catch (e) {
-    // Jeśli nie można użyć surroundContents (np. częściowe zaznaczenie elementów)
-    const fragment = range.extractContents()
-    span.appendChild(fragment)
-    range.insertNode(span)
-    // Zaznacz zawartość nowego span
-    const newRange = document.createRange()
-    newRange.selectNodeContents(span)
-    selection.removeAllRanges()
-    selection.addRange(newRange)
+    let node
+    while ((node = iterator.nextNode())) {
+      marks.push(node as HTMLElement)
+    }
+    return marks
   }
+
+  // Pobierz świeży range po wstawieniu markerów
+  const newRange = document.createRange()
+  newRange.setStartAfter(startMarker)
+  newRange.setEndBefore(endMarker)
+
+  const existingMarks = findMarksInRange(newRange)
+
+  if (existingMarks.length === 0) {
+    // Brak marków - po prostu dodaj nowy
+    const extractedContent = newRange.extractContents()
+    const mark = document.createElement('mark')
+    mark.appendChild(extractedContent)
+    newRange.insertNode(mark)
+
+    restoreSelection()
+    return
+  }
+
+  // WARUNEK 1: Czy zaznaczenie całkowicie pokrywa się z jednym markiem
+  if (existingMarks.length === 1) {
+    const mark = existingMarks[0]
+    const markRange = document.createRange()
+    markRange.selectNodeContents(mark)
+
+    if (
+      newRange.compareBoundaryPoints(Range.START_TO_START, markRange) === 0 &&
+      newRange.compareBoundaryPoints(Range.END_TO_END, markRange) === 0
+    ) {
+      // Zaznaczenie = cały mark → usuń mark
+      const parent = mark.parentNode
+      const fragment = document.createDocumentFragment()
+      while (mark.firstChild) {
+        fragment.appendChild(mark.firstChild)
+      }
+      parent?.replaceChild(fragment, mark)
+
+      if (editorRef.value?.$el) {
+        editorRef.value.$el.normalize()
+      }
+
+      restoreSelection()
+      return
+    }
+  }
+
+  // WARUNEK 2: Czy zaznaczenie jest całkowicie wewnątrz jednego marka
+  let isCompletelyInside = false
+  let containingMark: HTMLElement | null = null
+
+  for (const mark of existingMarks) {
+    if (mark.contains(newRange.startContainer) && mark.contains(newRange.endContainer)) {
+      isCompletelyInside = true
+      containingMark = mark
+      break
+    }
+  }
+
+  if (isCompletelyInside && containingMark) {
+    // Zaznaczenie wewnątrz marka → podziel mark (substract)
+    const markParent = containingMark.parentNode
+    if (!markParent) return
+
+    // Stwórz trzy zakresy: przed, zaznaczenie, po
+    const beforeRange = document.createRange()
+    beforeRange.setStart(containingMark, 0)
+    beforeRange.setEnd(newRange.startContainer, newRange.startOffset)
+
+    const afterRange = document.createRange()
+    afterRange.setStart(newRange.endContainer, newRange.endOffset)
+    afterRange.setEnd(containingMark, containingMark.childNodes.length)
+
+    const beforeContent = beforeRange.cloneContents()
+    const selectedContent = newRange.cloneContents()
+    const afterContent = afterRange.cloneContents()
+
+    // Usuń stary mark
+    const fragment = document.createDocumentFragment()
+
+    // Dodaj przed (w mark jeśli nie puste)
+    if (beforeContent.textContent?.trim()) {
+      const beforeMark = document.createElement('mark')
+      beforeMark.appendChild(beforeContent)
+      fragment.appendChild(beforeMark)
+    }
+
+    // Dodaj zaznaczenie (BEZ mark) - ale usuń z niego markery
+    const cleanSelected = document.createElement('div')
+    cleanSelected.appendChild(selectedContent)
+    // Usuń markery z zaznaczonej zawartości
+    const markers = cleanSelected.querySelectorAll('[data-selection-marker]')
+    markers.forEach(m => m.parentNode?.removeChild(m))
+    while (cleanSelected.firstChild) {
+      fragment.appendChild(cleanSelected.firstChild)
+    }
+
+    // Dodaj po (w mark jeśli nie puste)
+    if (afterContent.textContent?.trim()) {
+      const afterMark = document.createElement('mark')
+      afterMark.appendChild(afterContent)
+      fragment.appendChild(afterMark)
+    }
+
+    markParent.replaceChild(fragment, containingMark)
+
+    if (editorRef.value?.$el) {
+      editorRef.value.$el.normalize()
+    }
+
+    restoreSelection()
+    return
+  }
+
+  // WARUNEK 3: Zaznaczenie zawiera marki lub przecina się z nimi → scal wszystko
+
+  // Dodaj markery na początku i końcu każdego istniejącego marka, aby rozszerzyć zakres
+  const markBoundaries: HTMLElement[] = []
+
+  existingMarks.forEach(mark => {
+    // Dodaj marker przed markiem
+    const beforeMarker = document.createElement('span')
+    beforeMarker.setAttribute('data-mark-boundary', 'before')
+    beforeMarker.style.display = 'none'
+    mark.parentNode?.insertBefore(beforeMarker, mark)
+    markBoundaries.push(beforeMarker)
+
+    // Dodaj marker po marku
+    const afterMarker = document.createElement('span')
+    afterMarker.setAttribute('data-mark-boundary', 'after')
+    afterMarker.style.display = 'none'
+    if (mark.nextSibling) {
+      mark.parentNode?.insertBefore(afterMarker, mark.nextSibling)
+    } else {
+      mark.parentNode?.appendChild(afterMarker)
+    }
+    markBoundaries.push(afterMarker)
+  })
+
+  // Znajdź najbardziej skrajne pozycje
+  let leftmostMarker = startMarker
+  let rightmostMarker = endMarker
+
+  markBoundaries.forEach(boundary => {
+    const compareStart = boundary.compareDocumentPosition(startMarker)
+    if (compareStart & Node.DOCUMENT_POSITION_FOLLOWING) {
+      // boundary jest przed startMarker
+      leftmostMarker = boundary
+    }
+
+    const compareEnd = boundary.compareDocumentPosition(endMarker)
+    if (compareEnd & Node.DOCUMENT_POSITION_PRECEDING) {
+      // boundary jest po endMarker
+      rightmostMarker = boundary
+    }
+  })
+
+  // Usuń wszystkie istniejące marki (markery-spany przetrwają)
+  existingMarks.forEach(mark => {
+    const parent = mark.parentNode
+    while (mark.firstChild) {
+      parent?.insertBefore(mark.firstChild, mark)
+    }
+    parent?.removeChild(mark)
+  })
+
+  if (editorRef.value?.$el) {
+    editorRef.value.$el.normalize()
+  }
+
+  // Sprawdź czy markery przetrwały
+  if (!leftmostMarker.parentNode || !rightmostMarker.parentNode) {
+    console.warn('Markery zostały usunięte podczas usuwania marków, pomijam operację')
+    // Usuń wszystkie markery
+    if (startMarker.parentNode) startMarker.parentNode.removeChild(startMarker)
+    if (endMarker.parentNode) endMarker.parentNode.removeChild(endMarker)
+    markBoundaries.forEach(m => {
+      if (m.parentNode) m.parentNode.removeChild(m)
+    })
+    return
+  }
+
+  // Utwórz zakres od najbardziej lewej do najbardziej prawej pozycji
+  const finalRange = document.createRange()
+  finalRange.setStartAfter(leftmostMarker)
+  finalRange.setEndBefore(rightmostMarker)
+
+  // Wyciągnij zawartość i owrap w mark
+  const extractedContent = finalRange.extractContents()
+  const mark = document.createElement('mark')
+  mark.appendChild(extractedContent)
+  finalRange.insertNode(mark)
+
+  // Usuń markery granic
+  markBoundaries.forEach(boundary => {
+    if (boundary.parentNode) {
+      boundary.parentNode.removeChild(boundary)
+    }
+  })
+
+  if (editorRef.value?.$el) {
+    editorRef.value.$el.normalize()
+  }
+
+  restoreSelection()
 
   // Aktualizuj zawartość
   if (editorRef.value) {
@@ -115,7 +332,7 @@ const insertMark = () => {
     editorRef.value.$el.dispatchEvent(event)
   }
 
-  // Wymuś sprawdzenie aktywnych stylów po zmianie DOM
+  // Wymuś sprawdzenie aktywnych stylów
   setTimeout(() => {
     if (editorRef.value) {
       editorRef.value.checkActiveStyles()

@@ -40,7 +40,7 @@ const checkActiveStyles = () => {
         const tagName = element.tagName
 
         if (tagName === 'A') isLink = true
-        if (tagName === 'SPAN') isMark = true
+        if (tagName === 'MARK') isMark = true
         if (tagName === 'B' || tagName === 'STRONG') isBold = true
         if (tagName === 'I' || tagName === 'EM') isItalic = true
         if (tagName === 'U') isUnderline = true
@@ -325,12 +325,12 @@ defineExpose({
     cursor: text;
   }
 
-  :deep(span) {
+  :deep(mark) {
     background-color: var(--BG2);
     border: 1px solid var(--A4);
     padding: 2px 4px;
-    border-radius: 2px;
     border-radius: 8px;
+    color: var(--F1);
   }
 
   &.alt-pressed :deep(a) {
