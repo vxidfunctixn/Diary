@@ -65,9 +65,23 @@ const insertMark = () => {
 
   // Funkcja do przywracania zaznaczenia używając markerów
   const restoreSelection = () => {
-    // Sprawdź czy markery nadal istnieją w DOM
-    if (!startMarker.parentNode || !endMarker.parentNode) {
-      console.warn('Markery zostały usunięte z DOM')
+    // Sprawdź czy markery nadal istnieją w DOM i czy są w dokumencie
+    const isStartInDoc = startMarker.parentNode && document.contains(startMarker)
+    const isEndInDoc = endMarker.parentNode && document.contains(endMarker)
+
+    if (!isStartInDoc || !isEndInDoc) {
+      console.warn('Markery zostały usunięte z DOM lub nie są w dokumencie')
+      // Usuń markery jeśli nadal gdzieś istnieją
+      if (startMarker.parentNode) {
+        try {
+          startMarker.parentNode.removeChild(startMarker)
+        } catch (e) {}
+      }
+      if (endMarker.parentNode) {
+        try {
+          endMarker.parentNode.removeChild(endMarker)
+        } catch (e) {}
+      }
       return
     }
 
@@ -91,10 +105,14 @@ const insertMark = () => {
       console.error('Błąd przy przywracaniu zaznaczenia:', e)
       // Usuń markery jeśli nadal istnieją
       if (startMarker.parentNode) {
-        startMarker.parentNode.removeChild(startMarker)
+        try {
+          startMarker.parentNode.removeChild(startMarker)
+        } catch (e) {}
       }
       if (endMarker.parentNode) {
-        endMarker.parentNode.removeChild(endMarker)
+        try {
+          endMarker.parentNode.removeChild(endMarker)
+        } catch (e) {}
       }
     }
   }
@@ -184,18 +202,62 @@ const insertMark = () => {
     const markParent = containingMark.parentNode
     if (!markParent) return
 
+    // Przenieś markery na zewnątrz marka, aby nie zostały usunięte
+    const markerPlaceholderStart = document.createElement('span')
+    markerPlaceholderStart.style.display = 'none'
+    const markerPlaceholderEnd = document.createElement('span')
+    markerPlaceholderEnd.style.display = 'none'
+
+    if (startMarker.parentNode) {
+      startMarker.parentNode.insertBefore(markerPlaceholderStart, startMarker)
+      markParent.insertBefore(startMarker, containingMark)
+    }
+    if (endMarker.parentNode) {
+      endMarker.parentNode.insertBefore(markerPlaceholderEnd, endMarker)
+      if (containingMark.nextSibling) {
+        markParent.insertBefore(endMarker, containingMark.nextSibling)
+      } else {
+        markParent.appendChild(endMarker)
+      }
+    }
+
     // Stwórz trzy zakresy: przed, zaznaczenie, po
     const beforeRange = document.createRange()
     beforeRange.setStart(containingMark, 0)
-    beforeRange.setEnd(newRange.startContainer, newRange.startOffset)
+
+    // Znajdź placeholder w zawartości marka i użyj jako punktu końcowego
+    const startPlaceholder = containingMark.querySelector('span')
+    if (startPlaceholder && startPlaceholder === markerPlaceholderStart.nextSibling) {
+      beforeRange.setEndBefore(markerPlaceholderStart)
+    } else {
+      beforeRange.setEnd(newRange.startContainer, newRange.startOffset)
+    }
 
     const afterRange = document.createRange()
-    afterRange.setStart(newRange.endContainer, newRange.endOffset)
+    if (
+      markerPlaceholderEnd.previousSibling &&
+      containingMark.contains(markerPlaceholderEnd.previousSibling)
+    ) {
+      afterRange.setStartAfter(markerPlaceholderEnd)
+    } else {
+      afterRange.setStart(newRange.endContainer, newRange.endOffset)
+    }
     afterRange.setEnd(containingMark, containingMark.childNodes.length)
 
     const beforeContent = beforeRange.cloneContents()
-    const selectedContent = newRange.cloneContents()
+    const selectedRange = document.createRange()
+    selectedRange.setStartAfter(markerPlaceholderStart)
+    selectedRange.setEndBefore(markerPlaceholderEnd)
+    const selectedContent = selectedRange.cloneContents()
     const afterContent = afterRange.cloneContents()
+
+    // Usuń placeholdery
+    if (markerPlaceholderStart.parentNode) {
+      markerPlaceholderStart.parentNode.removeChild(markerPlaceholderStart)
+    }
+    if (markerPlaceholderEnd.parentNode) {
+      markerPlaceholderEnd.parentNode.removeChild(markerPlaceholderEnd)
+    }
 
     // Usuń stary mark
     const fragment = document.createDocumentFragment()
@@ -207,15 +269,24 @@ const insertMark = () => {
       fragment.appendChild(beforeMark)
     }
 
-    // Dodaj zaznaczenie (BEZ mark) - ale usuń z niego markery
+    // Przenieś startMarker do fragmentu (przed zaznaczeniem)
+    if (startMarker.parentNode) {
+      startMarker.parentNode.removeChild(startMarker)
+    }
+    fragment.appendChild(startMarker)
+
+    // Dodaj zaznaczenie (BEZ mark)
     const cleanSelected = document.createElement('div')
     cleanSelected.appendChild(selectedContent)
-    // Usuń markery z zaznaczonej zawartości
-    const markers = cleanSelected.querySelectorAll('[data-selection-marker]')
-    markers.forEach(m => m.parentNode?.removeChild(m))
     while (cleanSelected.firstChild) {
       fragment.appendChild(cleanSelected.firstChild)
     }
+
+    // Przenieś endMarker do fragmentu (po zaznaczeniu)
+    if (endMarker.parentNode) {
+      endMarker.parentNode.removeChild(endMarker)
+    }
+    fragment.appendChild(endMarker)
 
     // Dodaj po (w mark jeśli nie puste)
     if (afterContent.textContent?.trim()) {
