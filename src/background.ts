@@ -81,7 +81,6 @@ app.on('ready', async () => {
       await installExtension(VUEJS_DEVTOOLS, {
         loadExtensionOptions: { allowFileAccess: true }
       })
-      console.log('Vue Devtools zostały zainstalowane')
     } catch (e) {
       console.error('Nie udało się zainstalować Vue Devtools:', e)
     }
