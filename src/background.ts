@@ -42,6 +42,7 @@ async function createWindow(): Promise<void> {
   // Enable remote debugging
   if (isDevelopment) {
     app.commandLine.appendSwitch('remote-debugging-port', '9223')
+    win.webContents.openDevTools()
   }
 
   // Dodaj skrót F12 do otwierania/zamykania DevTools

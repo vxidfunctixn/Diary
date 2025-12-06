@@ -168,7 +168,8 @@ const handlePaste = (event: ClipboardEvent) => {
           s: 's',
           strike: 's',
           del: 's',
-          a: 'a'
+          a: 'a',
+          mark: 'mark'
         }
 
         // Jeśli tag jest dozwolony

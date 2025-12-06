@@ -16,21 +16,26 @@ module.exports = defineConfig({
     }
   },
 
-  configureWebpack: {
-    devtool: 'inline-source-map',
-    plugins: [
+  configureWebpack: config => {
+    // Włącz inline-source-map w development dla debugowania
+    if (process.env.NODE_ENV === 'development') {
+      config.devtool = 'inline-source-map'
+    }
+
+    config.plugins = config.plugins || []
+    config.plugins.push(
       new webpack.DefinePlugin({
-        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false',
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false'
       }),
       new CopyWebpackPlugin({
         patterns: [
           {
             from: path.join(__dirname, 'dist_electron', 'preload.js'),
-            to: 'preload.js',
-          },
-        ],
-      }),
-    ],
+            to: 'preload.js'
+          }
+        ]
+      })
+    )
   },
 
   pluginOptions: {

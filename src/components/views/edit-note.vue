@@ -154,6 +154,13 @@ const insertMark = () => {
     newRange.insertNode(mark)
 
     restoreSelection()
+
+    // Aktualizuj zawartość
+    if (editorRef.value) {
+      const event = new Event('input', { bubbles: true })
+      editorRef.value.$el.dispatchEvent(event)
+    }
+
     return
   }
 
@@ -180,6 +187,13 @@ const insertMark = () => {
       }
 
       restoreSelection()
+
+      // Aktualizuj zawartość
+      if (editorRef.value) {
+        const event = new Event('input', { bubbles: true })
+        editorRef.value.$el.dispatchEvent(event)
+      }
+
       return
     }
   }
@@ -301,6 +315,13 @@ const insertMark = () => {
     }
 
     restoreSelection()
+
+    // Aktualizuj zawartość
+    if (editorRef.value) {
+      const event = new Event('input', { bubbles: true })
+      editorRef.value.$el.dispatchEvent(event)
+    }
+
     return
   }
 
@@ -758,6 +779,12 @@ const clearFormat = () => {
 
   // Użyj wbudowanej komendy removeFormat dla pozostałych formatowań
   document.execCommand('removeFormat', false)
+
+  // Aktualizuj zawartość
+  if (editorRef.value) {
+    const event = new Event('input', { bubbles: true })
+    editorRef.value.$el.dispatchEvent(event)
+  }
 
   // Wymuś sprawdzenie aktywnych stylów po wyczyszczeniu formatowania
   setTimeout(() => {
