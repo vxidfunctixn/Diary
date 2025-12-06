@@ -2,11 +2,40 @@
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
 import type { DBNote } from '@/interfaces/store-interface'
-import { formatDate } from '@/utils'
+import { formatDate, markdownToHtml } from '@/utils'
+import { computed } from 'vue'
 
 const props = defineProps<{
   data?: DBNote
 }>()
+
+const htmlContent = computed(() => {
+  return props.data ? markdownToHtml(props.data.content) : ''
+})
+
+// Obsługa kliknięć w linki
+const handleClick = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (target.tagName === 'A') {
+    event.preventDefault()
+
+    const href = target.getAttribute('href')
+    if (href) {
+      // Walidacja URL - sprawdź czy jest bezpieczny
+      const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:']
+      try {
+        const url = new URL(href)
+        if (allowedProtocols.includes(url.protocol)) {
+          // Bezpieczne otwarcie w domyślnej przeglądarce
+          window.open(href, '_blank', 'noopener,noreferrer')
+        }
+      } catch {
+        // Jeśli URL jest relatywny lub nieprawidłowy, zignoruj
+        console.warn('Invalid URL:', href)
+      }
+    }
+  }
+}
 </script>
 
 <template>
@@ -24,7 +53,7 @@ const props = defineProps<{
           <Button icon="delete" small>Usuń</Button>
         </div>
       </div>
-      <div class="note-message">{{ data.content }}</div>
+      <div class="note-message" v-html="htmlContent" @click="handleClick"></div>
     </div>
   </div>
 </template>
@@ -88,6 +117,21 @@ const props = defineProps<{
 
     .note-message {
       padding: 12px;
+
+      :deep(a) {
+        color: var(--A1);
+        font-weight: 500;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      :deep(mark) {
+        background-color: var(--BG2);
+        border: 1px solid var(--A4);
+        padding: 2px 4px;
+        border-radius: 8px;
+        color: var(--F1);
+      }
     }
 
     &:nth-child(1) {

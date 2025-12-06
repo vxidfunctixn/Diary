@@ -75,6 +75,17 @@ const handleKeyDown = (event: KeyboardEvent) => {
   if (event.altKey) {
     isAltPressed.value = true
   }
+
+  // Obsługa Enter - wstaw <br> zamiast tworzyć <div>
+  if (event.key === 'Enter') {
+    event.preventDefault()
+
+    // Użyj execCommand do wstawienia <br> - najprostsze i najbardziej niezawodne rozwiązanie
+    document.execCommand('insertHTML', false, '<br><br>')
+
+    // Aktualizuj model
+    handleInput()
+  }
 }
 
 const handleKeyUp = (event: KeyboardEvent) => {

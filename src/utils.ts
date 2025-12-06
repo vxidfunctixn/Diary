@@ -146,37 +146,96 @@ export class DateTime {
   }
 }
 
+// Funkcja sanityzująca zawartość z tagów HTML
+function sanitizeContent(content: string): string {
+  // Usuń wszystkie tagi HTML z zawartości
+  let sanitized = content.replace(/<[^>]+>/g, '')
+
+  // Usuń potencjalnie niebezpieczne sekwencje
+  sanitized = sanitized
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+
+  return sanitized
+}
+
+// Funkcja sanityzująca URL
+function sanitizeUrl(url: string): string {
+  // Usuń białe znaki
+  url = url.trim()
+
+  // Dozwolone protokoły
+  const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:']
+
+  try {
+    const urlObj = new URL(url)
+    if (!allowedProtocols.includes(urlObj.protocol)) {
+      return '' // Odrzuć niedozwolone protokoły (javascript:, data:, itp.)
+    }
+  } catch {
+    // Jeśli URL jest relatywny lub nieprawidłowy, sprawdź czy nie zawiera javascript:
+    if (url.toLowerCase().includes('javascript:') || url.toLowerCase().includes('data:')) {
+      return ''
+    }
+  }
+
+  return url
+}
+
 // Funkcja konwertująca HTML na Markdown
 export function htmlToMarkdown(html: string): string {
   let markdown = html
 
-  // Linki
-  markdown = markdown.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+  // Linki - z sanityzacją URL
+  markdown = markdown.replace(
+    /<a\s+(?:[^>]*?\s+)?href="([^"]*)"[^>]*>(.*?)<\/a>/gi,
+    (match, url, text) => {
+      const sanitizedUrl = sanitizeUrl(url)
+      const sanitizedText = sanitizeContent(text)
+      return sanitizedUrl ? `[${sanitizedText}](${sanitizedUrl})` : sanitizedText
+    }
+  )
 
-  // Mark (wyróżnienie)
-  markdown = markdown.replace(/<span[^>]*>(.*?)<\/span>/gi, '`$1`')
+  // Mark (wyróżnienie) - z sanityzacją zawartości
+  markdown = markdown.replace(/<mark[^>]*>(.*?)<\/mark>/gi, (match, content) => {
+    return '`' + sanitizeContent(content) + '`'
+  })
 
-  // Pogrubienie
-  markdown = markdown.replace(/<(strong|b)>(.*?)<\/\1>/gi, '**$2**')
+  // Pogrubienie - z sanityzacją zawartości
+  markdown = markdown.replace(/<(strong|b)>(.*?)<\/\1>/gi, (match, tag, content) => {
+    return '**' + sanitizeContent(content) + '**'
+  })
 
-  // Kursywa
-  markdown = markdown.replace(/<(em|i)>(.*?)<\/\1>/gi, '*$2*')
+  // Kursywa - z sanityzacją zawartości
+  markdown = markdown.replace(/<(em|i)>(.*?)<\/\1>/gi, (match, tag, content) => {
+    return '*' + sanitizeContent(content) + '*'
+  })
 
-  // Przekreślenie
-  markdown = markdown.replace(/<(strike|s|del)>(.*?)<\/\1>/gi, '~~$2~~')
+  // Przekreślenie - z sanityzacją zawartości
+  markdown = markdown.replace(/<(strike|s|del)>(.*?)<\/\1>/gi, (match, tag, content) => {
+    return '~~' + sanitizeContent(content) + '~~'
+  })
 
-  // Podkreślenie (Markdown nie ma natywnego podkreślenia, używamy HTML)
-  markdown = markdown.replace(/<u>(.*?)<\/u>/gi, '<u>$1</u>')
-
-  // Paragrafy i div
-  markdown = markdown.replace(/<div>(.*?)<\/div>/gi, '$1\n')
-  markdown = markdown.replace(/<p>(.*?)<\/p>/gi, '$1\n\n')
+  // Podkreślenie - usuwamy obsługę HTML, zamieniamy na zwykły tekst
+  markdown = markdown.replace(/<u>(.*?)<\/u>/gi, (match, content) => {
+    return sanitizeContent(content)
+  })
 
   // Łamanie linii
   markdown = markdown.replace(/<br\s*\/?>/gi, '\n')
 
-  // Usuń pozostałe tagi HTML
+  // Usuń wszystkie pozostałe tagi HTML i potencjalnie niebezpieczny kod
+  markdown = markdown.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+  markdown = markdown.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+  markdown = markdown.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+  markdown = markdown.replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+  markdown = markdown.replace(/<embed[^>]*>/gi, '')
   markdown = markdown.replace(/<[^>]+>/g, '')
+
+  // Usuń atrybuty event handlerów
+  markdown = markdown.replace(/on\w+\s*=\s*"[^"]*"/gi, '')
+  markdown = markdown.replace(/on\w+\s*=\s*'[^']*'/gi, '')
 
   // Dekoduj encje HTML
   markdown = markdown
@@ -188,9 +247,52 @@ export function htmlToMarkdown(html: string): string {
     .replace(/&#39;/g, "'")
 
   // Usuń nadmiar pustych linii
-  markdown = markdown.replace(/\n{3,}/g, '\n\n').trim()
+  markdown = markdown.replace(/\n{3,}/g, '\n\n')
 
-  return markdown
+  return markdown.trim()
+}
+
+// Funkcja konwertująca Markdown na HTML
+export function markdownToHtml(markdown: string): string {
+  let html = markdown
+
+  // Escape HTML entities na początku
+  html = html
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+
+  // Linki [text](url) - z sanityzacją URL
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+    const sanitizedUrl = sanitizeUrl(url)
+    // Decode HTML entities w tekście
+    const decodedText = text
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+    return sanitizedUrl ? `<a href="${sanitizedUrl}">${decodedText}</a>` : decodedText
+  })
+
+  // Pogrubienie **text**
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+
+  // Kursywa *text* (ale nie w środku słowa i nie podwójne *)
+  html = html.replace(/(?<!\*)\*(?!\*)([^*]+)\*(?!\*)/g, '<em>$1</em>')
+
+  // Przekreślenie ~~text~~
+  html = html.replace(/~~([^~]+)~~/g, '<del>$1</del>')
+
+  // Mark `text` (wyróżnienie)
+  html = html.replace(/`([^`]+)`/g, '<mark>$1</mark>')
+
+  // Łamanie linii - pojedyncze \n na <br>
+  html = html.replace(/\n/g, '<br>')
+
+  return html
 }
 
 // Funkcja haszująca hasło
