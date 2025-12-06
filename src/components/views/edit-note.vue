@@ -51,8 +51,34 @@ const insertMark = () => {
     if (node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === 'SPAN') {
       // Usuń span, zostaw tylko tekst
       const spanElement = node as HTMLElement
-      const textNode = document.createTextNode(spanElement.textContent || '')
-      spanElement.parentNode?.replaceChild(textNode, spanElement)
+      const parent = spanElement.parentNode
+      const firstChild = spanElement.firstChild
+
+      while (spanElement.firstChild) {
+        parent?.insertBefore(spanElement.firstChild, spanElement)
+      }
+      parent?.removeChild(spanElement)
+
+      // Przywróć zaznaczenie na zawartości
+      if (firstChild) {
+        const newRange = document.createRange()
+        newRange.selectNodeContents(firstChild)
+        selection.removeAllRanges()
+        selection.addRange(newRange)
+      }
+
+      // Aktualizuj zawartość
+      if (editorRef.value) {
+        const event = new Event('input', { bubbles: true })
+        editorRef.value.$el.dispatchEvent(event)
+      }
+
+      // Wymuś sprawdzenie aktywnych stylów
+      setTimeout(() => {
+        if (editorRef.value) {
+          editorRef.value.checkActiveStyles()
+        }
+      }, 0)
       return
     }
     node = node.parentNode
@@ -66,11 +92,21 @@ const insertMark = () => {
 
   try {
     range.surroundContents(span)
+    // Zaznacz zawartość nowego span
+    const newRange = document.createRange()
+    newRange.selectNodeContents(span)
+    selection.removeAllRanges()
+    selection.addRange(newRange)
   } catch (e) {
     // Jeśli nie można użyć surroundContents (np. częściowe zaznaczenie elementów)
     const fragment = range.extractContents()
     span.appendChild(fragment)
     range.insertNode(span)
+    // Zaznacz zawartość nowego span
+    const newRange = document.createRange()
+    newRange.selectNodeContents(span)
+    selection.removeAllRanges()
+    selection.addRange(newRange)
   }
 
   // Aktualizuj zawartość
@@ -78,6 +114,13 @@ const insertMark = () => {
     const event = new Event('input', { bubbles: true })
     editorRef.value.$el.dispatchEvent(event)
   }
+
+  // Wymuś sprawdzenie aktywnych stylów po zmianie DOM
+  setTimeout(() => {
+    if (editorRef.value) {
+      editorRef.value.checkActiveStyles()
+    }
+  }, 0)
 }
 
 const insertLink = () => {
@@ -242,6 +285,13 @@ const clearFormat = () => {
     const event = new Event('input', { bubbles: true })
     editorRef.value.$el.dispatchEvent(event)
   }
+
+  // Wymuś sprawdzenie aktywnych stylów po zmianie DOM
+  setTimeout(() => {
+    if (editorRef.value) {
+      editorRef.value.checkActiveStyles()
+    }
+  }, 0)
 }
 
 const saveNote = async () => {

@@ -299,7 +299,11 @@ const execCommand = (command: string, value?: string) => {
 
   editorElement.value?.focus()
   handleInput()
-  checkActiveStyles()
+
+  // Opóźnij sprawdzenie stylów, aby dać przeglądarce czas na aktualizację DOM
+  setTimeout(() => {
+    checkActiveStyles()
+  }, 0)
 }
 
 // Funkcja do przełączania stylów inline (bold, italic, etc.)
@@ -308,6 +312,7 @@ const toggleInlineStyle = (tagName: string) => {
   if (!selection || selection.rangeCount === 0) return
 
   const range = selection.getRangeAt(0)
+  const wasCollapsed = range.collapsed
 
   // Sprawdź czy jesteśmy już wewnątrz tego tagu
   let node = range.commonAncestorContainer as Node | null
@@ -324,20 +329,39 @@ const toggleInlineStyle = (tagName: string) => {
   if (existingElement) {
     // Usuń formatowanie - zastąp element jego zawartością
     const parent = existingElement.parentNode
+    const firstChild = existingElement.firstChild
     while (existingElement.firstChild) {
       parent?.insertBefore(existingElement.firstChild, existingElement)
     }
     parent?.removeChild(existingElement)
+
+    // Przywróć zaznaczenie
+    if (!wasCollapsed && firstChild) {
+      const newRange = document.createRange()
+      newRange.selectNodeContents(firstChild)
+      selection.removeAllRanges()
+      selection.addRange(newRange)
+    }
   } else {
     // Dodaj formatowanie
     if (!range.collapsed) {
       const element = document.createElement(tagName.toLowerCase())
       try {
         range.surroundContents(element)
+        // Zaznacz zawartość nowego elementu
+        const newRange = document.createRange()
+        newRange.selectNodeContents(element)
+        selection.removeAllRanges()
+        selection.addRange(newRange)
       } catch (e) {
         const fragment = range.extractContents()
         element.appendChild(fragment)
         range.insertNode(element)
+        // Zaznacz zawartość nowego elementu
+        const newRange = document.createRange()
+        newRange.selectNodeContents(element)
+        selection.removeAllRanges()
+        selection.addRange(newRange)
       }
     }
   }
@@ -345,7 +369,8 @@ const toggleInlineStyle = (tagName: string) => {
 
 // Expose do użycia przez parent component
 defineExpose({
-  execCommand
+  execCommand,
+  checkActiveStyles
 })
 </script>
 
