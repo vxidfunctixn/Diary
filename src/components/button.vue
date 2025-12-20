@@ -22,6 +22,7 @@ const slots = useSlots()
     :class="{
       small,
       accent,
+      danger,
       negative,
       center,
       monospace,
@@ -38,9 +39,7 @@ const slots = useSlots()
       <Icon
         :name="icon"
         :size="iconButton ? 24 : 16"
-        :color="
-          accent ? themeColor.HL3.value : negative ? themeColor.HL3.value : themeColor.F1.value
-        "
+        :color="accent || danger || negative ? themeColor.HL3.value : themeColor.F1.value"
       />
     </div>
     <div v-if="slots.default" class="text" :class="{ hasIcon: icon }">
@@ -131,6 +130,38 @@ const slots = useSlots()
 
     &:active {
       border-color: var(--A1);
+    }
+  }
+
+  &.danger {
+    background-color: var(--D1);
+    border-color: var(--D2);
+    color: var(--HL4);
+    position: relative;
+
+    @include theme-dark() {
+      font-weight: 500;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--D2);
+      border-color: var(--D3);
+    }
+
+    &:active {
+      border-color: var(--D1);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: calc(100% - 2px);
+      height: calc(100% - 2px);
+      border: 2px solid var(--HL4);
+      border-radius: 6px;
     }
   }
 

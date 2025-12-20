@@ -5,6 +5,7 @@ export interface ButtonProps {
   small?: boolean
   disabled?: boolean
   accent?: boolean
+  danger?: boolean
   negative?: boolean
   submit?: boolean
   width?: string

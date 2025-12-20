@@ -25,7 +25,21 @@ export class Theme {
     this.hue = hue
   }
 
+  private getDHue(): number {
+    const defaultDHue = 0
+
+    const normalizedHue = this.hue % 360
+    const threshold = 15
+
+    if (normalizedHue <= threshold || normalizedHue >= 360 - threshold) {
+      return defaultDHue + 25
+    }
+
+    return defaultDHue
+  }
+
   dark(): ThemeColors {
+    const dHue = this.getDHue()
     return {
       hue: { value: this.hue },
       F1: new Color(this.hue, '10%', '85%'),
@@ -45,11 +59,15 @@ export class Theme {
       A3: new Color(this.hue, '73%', '36%'),
       A4: new Color(this.hue, '68%', '26%'),
       yellow: new Color(54, '100%', '51%'),
-      red: new Color(0, '95%', '40%')
+      red: new Color(0, '95%', '40%'),
+      D1: new Color(dHue, '70%', '52%'),
+      D2: new Color(dHue, '70%', '47%'),
+      D3: new Color(dHue, '70%', '40%')
     }
   }
 
   light(): ThemeColors {
+    const dHue = this.getDHue()
     return {
       hue: { value: this.hue },
       F1: new Color(this.hue, '10%', '15%'),
@@ -69,7 +87,10 @@ export class Theme {
       A3: new Color(this.hue, '73%', '50%'),
       A4: new Color(this.hue, '68%', '61%'),
       yellow: new Color(54, '100%', '25%'),
-      red: new Color(0, '95%', '62%')
+      red: new Color(0, '95%', '62%'),
+      D1: new Color(dHue, '70%', '50%'),
+      D2: new Color(dHue, '70%', '60%'),
+      D3: new Color(dHue, '70%', '70%')
     }
   }
 }

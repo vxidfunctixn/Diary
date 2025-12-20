@@ -96,7 +96,7 @@ const handleClick = (event: MouseEvent) => {
         {{ t('notes.delete.dialogInfo') }}
       </template>
       <template #buttons>
-        <Button icon="delete" accent @click="confirmDelete">{{
+        <Button icon="delete" danger @click="confirmDelete">{{
           t('notes.delete.confirmButton')
         }}</Button>
         <Button icon="cancel" @click="cancelDelete">{{ t('common.actions.cancel') }}</Button>
