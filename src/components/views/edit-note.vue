@@ -9,9 +9,11 @@ import InputRow from '@/components/inputs/input-row.vue'
 import { htmlToMarkdown, markdownToHtml } from '@/utils'
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 
+const router = useRouter()
 const appStore = useAppStore()
 const diaryStore = useDiaryStore()
 const content = ref('')
@@ -773,7 +775,7 @@ const saveNote = async () => {
 
     content.value = ''
     noteUuid.value = null
-    appStore.setView('note_list')
+    router.push({ name: 'note_list' })
   } catch (error) {
     console.error('Błąd podczas zapisywania notatki:', error)
   }

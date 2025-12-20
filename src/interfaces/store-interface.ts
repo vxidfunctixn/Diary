@@ -1,17 +1,3 @@
-export const VIEW = {
-  HOME: 'home',
-  NOTE_LIST: 'note_list',
-  SEARCH: 'search',
-  MONTH: 'month',
-  YEAR: 'year',
-  SETTINGS: 'settings',
-  LOCK: 'lock',
-  EDIT_NOTE: 'edit_note',
-  ABOUT: 'about'
-} as const
-
-export type ViewType = (typeof VIEW)[keyof typeof VIEW]
-
 export const THEME = {
   DARK: 'dark',
   LIGHT: 'light',
@@ -43,7 +29,6 @@ export interface Note {
 }
 
 export interface AppState {
-  view: ViewType
   nativeTheme: ThemeType
   selected_day: number
   draft: string

@@ -5,12 +5,14 @@ import Button from '@/components/button.vue'
 import Note from '@/components/note.vue'
 import { ref, onMounted } from 'vue'
 import { useDiaryStore } from '@/stores/diaryStore'
-import { useAppStore, VIEW } from '@/stores'
+import { useAppStore } from '@/stores'
 import type { DBNote } from '@/interfaces/store-interface'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 
+const router = useRouter()
 const diaryStore = useDiaryStore()
 const appStore = useAppStore()
 const selectedDate = ref(new Date(Date.now()).valueOf())
@@ -38,7 +40,7 @@ async function handleDeleteNote(uuid: string) {
 
 function handleEditNote(uuid: string) {
   appStore.setEditingNoteUuid(uuid)
-  appStore.setView(VIEW.EDIT_NOTE)
+  router.push({ name: 'edit_note' })
 }
 </script>
 
@@ -56,9 +58,9 @@ function handleEditNote(uuid: string) {
         <Button icon="date">{{ t('common.calendar.today') }}</Button>
       </template>
       <template #right>
-        <Button icon="add-note" accent @click="appStore.setView(VIEW.EDIT_NOTE)">{{
-          t('notes.actions.addNote')
-        }}</Button>
+        <Button icon="add-note" accent @click="router.push({ name: 'edit_note' })">
+          {{ t('notes.actions.addNote') }}
+        </Button>
       </template>
     </OptionsBar>
     <Note

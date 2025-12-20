@@ -3,16 +3,17 @@ import { storeToRefs } from 'pinia'
 import Icon from '@/components/icon/index.vue'
 import Button from '@/components/button.vue'
 import Navigation from '@/components/layout/breadcrumbs.vue'
-import { useAppStore, useSettingsStore, VIEW } from '@/stores'
-import { ref, onMounted } from 'vue'
+import { useSettingsStore } from '@/stores'
+import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 
-const appStore = useAppStore()
+const router = useRouter()
 const settingsStore = useSettingsStore()
 const { themeColor } = storeToRefs(settingsStore)
-const { view } = storeToRefs(appStore)
+const view = computed(() => router.currentRoute.value.name)
 const maximizeIcon = ref('maximize')
 const isWindowActive = ref(true)
 
@@ -48,34 +49,34 @@ onMounted(() => {
 <template>
   <div class="window-title-bar">
     <Navigation />
-    <div v-if="view !== VIEW.LOCK" class="app-options">
+    <div v-if="view !== 'lock'" class="app-options">
       <Button
         small
         icon="search"
         :title="t('common.actions.search')"
         :disabled="!isWindowActive"
-        @click="appStore.setView(VIEW.SEARCH)"
+        @click="router.push({ name: 'search' })"
       />
       <Button
         small
         icon="add-note"
         :title="t('notes.actions.addNote')"
         :disabled="!isWindowActive"
-        @click="appStore.setView(VIEW.EDIT_NOTE)"
+        @click="router.push({ name: 'edit_note' })"
       />
       <Button
         small
         icon="settings"
         :title="t('views.settings.title')"
         :disabled="!isWindowActive"
-        @click="appStore.setView(VIEW.SETTINGS)"
+        @click="router.push({ name: 'settings' })"
       />
       <Button
         small
         icon="lock"
         :title="t('common.actions.lock')"
         :disabled="!isWindowActive"
-        @click="appStore.setView(VIEW.LOCK)"
+        @click="router.push({ name: 'lock' })"
       />
     </div>
     <div class="separator"></div>
