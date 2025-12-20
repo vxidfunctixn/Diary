@@ -1,3 +1,9 @@
-export { useAppStore, VIEW, THEME, type ViewType, type ThemeType } from './appStore'
-export { useSettingsStore, REQUIRE_PASSWORD, type RequirePasswordType } from './settingsStore'
+export { useAppStore } from './appStore'
+export { useSettingsStore } from './settingsStore'
 export { useDiaryStore } from './diaryStore'
+export {
+  THEME,
+  REQUIRE_PASSWORD,
+  type ThemeType,
+  type RequirePasswordType
+} from '@/interfaces/store-interface'

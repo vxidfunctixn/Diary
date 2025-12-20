@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import Button from '@/components/button.vue'
-import { useAppStore, VIEW } from '@/stores/appStore'
-const appStore = useAppStore()
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const router = useRouter()
 </script>
 
 <template>
   <div class="lock">
-    <Button icon="unlock" @click="appStore.setView(VIEW.HOME)">Login</Button>
+    <Button icon="unlock" @click="router.push({ name: 'home' })">{{
+      t('views.lock.login')
+    }}</Button>
   </div>
 </template>
 

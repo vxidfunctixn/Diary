@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import Icon from '@/components/icon.vue'
+import Icon from '@/components/icon/index.vue'
 import Button from '@/components/button.vue'
 import Navigation from '@/components/layout/breadcrumbs.vue'
-import { useAppStore, VIEW } from '@/stores/appStore'
-import { useSettingsStore } from '@/stores/settingsStore'
-import { ref, onMounted } from 'vue'
+import { useSettingsStore } from '@/stores'
+import { ref, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
-const appStore = useAppStore()
+const { t } = useI18n()
+
+const router = useRouter()
 const settingsStore = useSettingsStore()
 const { themeColor } = storeToRefs(settingsStore)
-const { view } = storeToRefs(appStore)
+const view = computed(() => router.currentRoute.value.name)
 const maximizeIcon = ref('maximize')
 const isWindowActive = ref(true)
 
@@ -46,39 +49,39 @@ onMounted(() => {
 <template>
   <div class="window-title-bar">
     <Navigation />
-    <div v-if="view !== VIEW.LOCK" class="app-options">
+    <div v-if="view !== 'lock'" class="app-options">
       <Button
         small
         icon="search"
-        title="Szukaj"
+        :title="t('common.actions.search')"
         :disabled="!isWindowActive"
-        @click="appStore.setView(VIEW.SEARCH)"
+        @click="router.push({ name: 'search' })"
       />
       <Button
         small
         icon="add-note"
-        title="Dodaj notatkę"
+        :title="t('notes.actions.addNote')"
         :disabled="!isWindowActive"
-        @click="appStore.setView(VIEW.EDIT_NOTE)"
+        @click="router.push({ name: 'add_note' })"
       />
       <Button
         small
         icon="settings"
-        title="Ustawienia"
+        :title="t('views.settings.title')"
         :disabled="!isWindowActive"
-        @click="appStore.setView(VIEW.SETTINGS)"
+        @click="router.push({ name: 'settings' })"
       />
       <Button
         small
         icon="lock"
-        title="Zablokuj"
+        :title="t('common.actions.lock')"
         :disabled="!isWindowActive"
-        @click="appStore.setView(VIEW.LOCK)"
+        @click="router.push({ name: 'lock' })"
       />
     </div>
     <div class="separator"></div>
     <div class="window-options">
-      <button class="window-button" @click="minimize">
+      <!-- <button class="window-button" @click="minimize">
         <div class="icon">
           <Icon name="minimize" :size="16" :color="themeColor.F1.value" />
         </div>
@@ -92,7 +95,8 @@ onMounted(() => {
         <div class="icon">
           <Icon name="cancel" :size="16" :color="themeColor.F1.value" />
         </div>
-      </button>
+      </button> -->
+      <div class="native-options-spacer"></div>
     </div>
   </div>
 </template>
@@ -151,6 +155,10 @@ onMounted(() => {
         background-color: var(--red);
       }
     }
+  }
+
+  .native-options-spacer {
+    width: 135px;
   }
 }
 

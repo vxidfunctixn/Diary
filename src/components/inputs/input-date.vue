@@ -5,7 +5,10 @@ import InputModal from '@/components/inputs/input-modal.vue'
 import Calendar from '@/components/inputs/calendar.vue'
 import { DateTime } from '@/utils'
 import { ref, watch, computed } from 'vue'
-import type { UpdateEvent } from '@/interfaces/components'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+import type { UpdateEvent } from '@/interfaces/components-interface'
 
 const emit = defineEmits<{
   update: [event: UpdateEvent]
@@ -83,8 +86,8 @@ const isNewDate = computed(() => {
         <Calendar :date="dateTime.timestamp" @update="update($event)" />
       </template>
       <template #buttons>
-        <Button icon="check" accent @click="save()">Ustaw</Button>
-        <Button icon="cancel" @click="modalOpen = false">Anuluj</Button>
+        <Button icon="check" accent @click="save()">{{ t('common.actions.set') }}</Button>
+        <Button icon="cancel" @click="modalOpen = false">{{ t('common.actions.cancel') }}</Button>
       </template>
     </InputModal>
   </div>

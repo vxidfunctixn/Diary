@@ -18,6 +18,9 @@ function close() {
       <div class="overlay" @click="close()"></div>
       <div class="input-modal-container">
         <div class="input-modal" :style="{ width }">
+          <div class="header" v-if="$slots.header">
+            <slot name="header"></slot>
+          </div>
           <div class="content">
             <slot name="content"></slot>
           </div>
@@ -68,18 +71,30 @@ function close() {
     background-color: var(--BG2);
     border: 1px solid var(--HL1);
     box-shadow: 0 4px 16px -4px rgba(black, 0.25);
-    padding: 12px;
     border-radius: 8px;
     position: relative;
     z-index: 1;
     width: auto;
     max-width: calc(100vw - 48px);
 
+    .header {
+      font-size: 16px;
+      font-weight: 400;
+      background-color: var(--HL2);
+      padding: 12px;
+      border-top-left-radius: 7px;
+      border-top-right-radius: 7px;
+    }
+
+    .content {
+      padding: 12px;
+    }
+
     .buttons {
-      margin-top: 12px;
       display: inline-grid;
       grid-auto-flow: column;
       grid-column-gap: 12px;
+      padding: 0 12px 12px 12px;
     }
   }
 }

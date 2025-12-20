@@ -2,6 +2,9 @@
 import Button from '@/components/button.vue'
 import { Calendar, DateTime, isEqualDate } from '@/utils'
 import { ref, watch, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import type {
   CalendarDay,
   CalendarMonth,
@@ -9,7 +12,7 @@ import type {
   ExtendedCalendarDay,
   ExtendedCalendarMonth,
   ExtendedCalendarYear
-} from '@/interfaces/calendar'
+} from '@/interfaces/calendar-interface'
 
 const emit = defineEmits(['update'])
 
@@ -93,13 +96,13 @@ function selectYear(date: Date): void {
       <Button icon="arrow-right" stick="left" @click="dateValue.nextMonth()"></Button>
     </div>
     <div class="grid month">
-      <div class="dayName">PN</div>
-      <div class="dayName">WT</div>
-      <div class="dayName">ŚR</div>
-      <div class="dayName">CZ</div>
-      <div class="dayName">PT</div>
-      <div class="dayName">SB</div>
-      <div class="dayName">ND</div>
+      <div class="dayName">{{ t('calendar.weekDays.mon') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.tue') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.wed') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.thu') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.fri') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.sat') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.sun') }}</div>
       <template v-for="row in month">
         <div
           v-for="day in row"

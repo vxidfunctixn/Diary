@@ -5,6 +5,9 @@ import InputModal from '@/components/inputs/input-modal.vue'
 import Clock from '@/components/inputs/clock.vue'
 import { DateTime } from '@/utils'
 import { ref, watch, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const emit = defineEmits(['update'])
 const props = defineProps({
   name: String,
@@ -53,8 +56,8 @@ const isNewTime = computed(() => {
         <Clock :time="time" @update="update($event)" />
       </template>
       <template #buttons>
-        <Button icon="check" accent @click="save()">Ustaw</Button>
-        <Button icon="cancel" @click="modalOpen = false">Anuluj</Button>
+        <Button icon="check" accent @click="save()">{{ t('common.actions.set') }}</Button>
+        <Button icon="cancel" @click="modalOpen = false">{{ t('common.actions.cancel') }}</Button>
       </template>
     </InputModal>
   </div>

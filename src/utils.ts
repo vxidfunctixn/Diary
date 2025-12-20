@@ -5,18 +5,16 @@ import type {
   CalendarDay,
   CalendarMonth,
   CalendarYear
-} from '@/interfaces/calendar'
+} from '@/interfaces/calendar-interface'
 
 type CalendarCallback<T> = (this: T, column: T) => T
 
-// Funkcja porównująca Vue proxy
 export function isProxyDifferent(proxy1: any, proxy2: any): boolean {
   const obj1 = toRaw(proxy1)
   const obj2 = toRaw(proxy2)
   return JSON.stringify(obj1) !== JSON.stringify(obj2)
 }
 
-// Funkcja zwracająca nazwę miesiąca
 export function getMonthName(month: number): string {
   const months: string[] = [
     'Styczeń',
@@ -35,7 +33,15 @@ export function getMonthName(month: number): string {
   return months[month]
 }
 
-// Klasa DateTime do zarządzania datami
+export function formatDate(date: Date): string {
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  const hours = date.getHours().toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const year = date.getFullYear()
+  return `${hours}:${minutes} ${day}.${month}.${year}`
+}
+
 export class DateTime {
   timestamp: number
   date: Date
@@ -137,15 +143,134 @@ export class DateTime {
   }
 }
 
-// Funkcja haszująca hasło
+function sanitizeContent(content: string): string {
+  let sanitized = content.replace(/<[^>]+>/g, '')
+
+  sanitized = sanitized
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+
+  return sanitized
+}
+
+function sanitizeUrl(url: string): string {
+  url = url.trim()
+
+  const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:']
+
+  try {
+    const urlObj = new URL(url)
+    if (!allowedProtocols.includes(urlObj.protocol)) {
+      return ''
+    }
+  } catch {
+    if (url.toLowerCase().includes('javascript:') || url.toLowerCase().includes('data:')) {
+      return ''
+    }
+  }
+
+  return url
+}
+
+export function htmlToMarkdown(html: string): string {
+  let markdown = html
+
+  markdown = markdown.replace(
+    /<a\s+(?:[^>]*?\s+)?href="([^"]*)"[^>]*>(.*?)<\/a>/gi,
+    (match, url, text) => {
+      const sanitizedUrl = sanitizeUrl(url)
+      const sanitizedText = sanitizeContent(text)
+      return sanitizedUrl ? `[${sanitizedText}](${sanitizedUrl})` : sanitizedText
+    }
+  )
+
+  markdown = markdown.replace(/<mark[^>]*>(.*?)<\/mark>/gi, (match, content) => {
+    return '`' + sanitizeContent(content) + '`'
+  })
+
+  markdown = markdown.replace(/<(strong|b)>(.*?)<\/\1>/gi, (match, tag, content) => {
+    return '**' + sanitizeContent(content) + '**'
+  })
+
+  markdown = markdown.replace(/<(em|i)>(.*?)<\/\1>/gi, (match, tag, content) => {
+    return '*' + sanitizeContent(content) + '*'
+  })
+
+  markdown = markdown.replace(/<(strike|s|del)>(.*?)<\/\1>/gi, (match, tag, content) => {
+    return '~~' + sanitizeContent(content) + '~~'
+  })
+
+  markdown = markdown.replace(/<u>(.*?)<\/u>/gi, (match, content) => {
+    return sanitizeContent(content)
+  })
+
+  markdown = markdown.replace(/<br\s*\/?>/gi, '\n')
+
+  markdown = markdown.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+  markdown = markdown.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+  markdown = markdown.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+  markdown = markdown.replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+  markdown = markdown.replace(/<embed[^>]*>/gi, '')
+  markdown = markdown.replace(/<[^>]+>/g, '')
+
+  markdown = markdown.replace(/on\w+\s*=\s*"[^"]*"/gi, '')
+  markdown = markdown.replace(/on\w+\s*=\s*'[^']*'/gi, '')
+
+  markdown = markdown
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+
+  markdown = markdown.replace(/\n{3,}/g, '\n\n')
+
+  return markdown.trim()
+}
+
+export function markdownToHtml(markdown: string): string {
+  let html = markdown
+
+  html = html
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+    const sanitizedUrl = sanitizeUrl(url)
+    const decodedText = text
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+    return sanitizedUrl ? `<a href="${sanitizedUrl}">${decodedText}</a>` : decodedText
+  })
+
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+
+  html = html.replace(/(?<!\*)\*(?!\*)([^*]+)\*(?!\*)/g, '<em>$1</em>')
+
+  html = html.replace(/~~([^~]+)~~/g, '<del>$1</del>')
+
+  html = html.replace(/`([^`]+)`/g, '<mark>$1</mark>')
+
+  html = html.replace(/\n/g, '<br>')
+
+  return html
+}
+
 export function hashPassword(password: string): string {
   const shaObj = new jsSHA('SHA-512', 'TEXT', { encoding: 'UTF8' })
   shaObj.update(password)
   return shaObj.getHash('HEX')
-  // Change to Argon2
+  // TODO: Change to Argon2
 }
 
-// Funkcja porównująca daty
 export function isEqualDate(
   dateA: number | Date,
   dateB: number | Date,
@@ -191,12 +316,10 @@ export function isEqualDate(
   return true
 }
 
-// Funkcja sprawdzająca czy data jest dzisiaj
 export function isToday(date: number | Date, options?: DateCompareOptions): boolean {
   return isEqualDate(date, Date.now(), options)
 }
 
-// Klasa Calendar
 export class Calendar {
   private date: Date
 

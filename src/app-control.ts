@@ -47,6 +47,19 @@ export class AppControl {
           break
       }
     })
+
+    ipcMain.on('update-titlebar-color', (_event: IpcMainEvent, theme: 'light' | 'dark') => {
+      const symbolColor = theme === 'dark' ? '#ffffff' : '#000000'
+      try {
+        this.win.setTitleBarOverlay({
+          color: '#00000000',
+          symbolColor: symbolColor,
+          height: 42
+        })
+      } catch (error) {
+        console.error('Failed to update titleBar color:', error)
+      }
+    })
   }
 
   private sendNativeTheme(): void {

@@ -1,4 +1,4 @@
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { AppControl } from '@/app-control'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -23,13 +23,17 @@ async function createWindow(): Promise<void> {
     height: 800,
     minHeight: 320,
     titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#00000000',
+      symbolColor: '#ffffff',
+      height: 42
+    },
     webPreferences: {
       preload: path.join(app.getAppPath(), 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true
     }
   })
-  // win.removeMenu()
   win.setBackgroundColor('#00000000')
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -39,12 +43,11 @@ async function createWindow(): Promise<void> {
     win.loadURL('app://./index.html')
   }
 
-  // Enable remote debugging
   if (isDevelopment) {
     app.commandLine.appendSwitch('remote-debugging-port', '9223')
+    // win.webContents.openDevTools()
   }
 
-  // Dodaj skrót F12 do otwierania/zamykania DevTools
   win.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'F12') {
       if (win.webContents.isDevToolsOpened()) {
@@ -54,6 +57,11 @@ async function createWindow(): Promise<void> {
       }
       event.preventDefault()
     }
+  })
+
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url)
+    return { action: 'deny' }
   })
 
   new AppControl(win)
@@ -72,11 +80,9 @@ app.on('activate', () => {
 app.on('ready', async () => {
   if (isDevelopment) {
     try {
-      // Instalacja Vue Devtools dla Vue 3 (wspiera także Pinia)
       await installExtension(VUEJS_DEVTOOLS, {
         loadExtensionOptions: { allowFileAccess: true }
       })
-      console.log('Vue Devtools zostały zainstalowane')
     } catch (e) {
       console.error('Nie udało się zainstalować Vue Devtools:', e)
     }

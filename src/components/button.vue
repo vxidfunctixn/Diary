@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import Icon from '@/components/icon.vue'
+import Icon from '@/components/icon/index.vue'
 import { storeToRefs } from 'pinia'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useSettingsStore } from '@/stores'
 import { useSlots } from 'vue'
-import type { ButtonProps } from '@/interfaces/components'
+import type { ButtonProps } from '@/interfaces/components-interface'
 
 withDefaults(defineProps<ButtonProps>(), {
-  width: 'auto'
+  width: 'auto',
+  iconButton: false
 })
 
 const settingsStore = useSettingsStore()
@@ -21,8 +22,12 @@ const slots = useSlots()
     :class="{
       small,
       accent,
+      danger,
+      negative,
       center,
       monospace,
+      active,
+      iconButton,
       stickLeft: stick === 'left' || stick === 'both',
       stickRight: stick === 'right' || stick === 'both'
     }"
@@ -31,7 +36,11 @@ const slots = useSlots()
     :style="{ width }"
   >
     <div class="icon" v-if="icon">
-      <Icon :name="icon" :size="16" :color="accent ? themeColor.HL3.value : themeColor.F1.value" />
+      <Icon
+        :name="icon"
+        :size="iconButton ? 24 : 16"
+        :color="accent || danger || negative ? themeColor.HL3.value : themeColor.F1.value"
+      />
     </div>
     <div v-if="slots.default" class="text" :class="{ hasIcon: icon }">
       <slot></slot>
@@ -80,6 +89,20 @@ const slots = useSlots()
     border-color: var(--F2);
   }
 
+  &.active {
+    border-color: var(--A1);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--HL2);
+      border-color: var(--A2);
+    }
+
+    &:active {
+      border-color: var(--A3);
+    }
+  }
+
   &.small {
     min-height: 36px;
     padding: 2px 9px;
@@ -110,6 +133,59 @@ const slots = useSlots()
     }
   }
 
+  &.danger {
+    background-color: var(--D1);
+    border-color: var(--D2);
+    color: var(--HL4);
+    position: relative;
+
+    @include theme-dark() {
+      font-weight: 500;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--D2);
+      border-color: var(--D3);
+    }
+
+    &:active {
+      border-color: var(--D1);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: calc(100% - 2px);
+      height: calc(100% - 2px);
+      border: 2px solid var(--HL4);
+      border-radius: 6px;
+    }
+  }
+
+  &.negative {
+    background-color: var(--F1);
+    border-color: var(--F2);
+    color: var(--HL3);
+
+    @include theme-dark() {
+      font-weight: 500;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--F2);
+      color: var(--F1);
+      border-color: var(--F2);
+    }
+
+    &:active {
+      border-color: var(--F1);
+    }
+  }
+
   &.center {
     justify-content: center;
   }
@@ -134,6 +210,14 @@ const slots = useSlots()
     .icon,
     .title {
       opacity: 0.7;
+    }
+  }
+
+  &.iconButton {
+    padding: 9px;
+    .icon {
+      width: 24px;
+      height: 24px;
     }
   }
 }

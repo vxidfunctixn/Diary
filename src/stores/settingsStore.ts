@@ -1,17 +1,8 @@
 import { defineStore } from 'pinia'
 import { Theme } from '@/theme/theme'
-import type { ThemeColors } from '@/interfaces/theme'
-import type { Settings } from '@/interfaces/diary'
-import { useAppStore, THEME, type ThemeType } from './appStore'
-
-export const REQUIRE_PASSWORD = {
-  EVERY_LAUNCH: 'every_launch',
-  EVERY_DAY: 'every_day',
-  ON_STARTUP: 'on_startup',
-  AFTER_LOCK: 'after_lock'
-} as const
-
-export type RequirePasswordType = (typeof REQUIRE_PASSWORD)[keyof typeof REQUIRE_PASSWORD]
+import type { ThemeColors } from '@/interfaces/theme-interface'
+import { REQUIRE_PASSWORD, THEME, type Settings } from '@/interfaces/store-interface'
+import { useAppStore } from './appStore'
 
 export const useSettingsStore = defineStore('settings', {
   state: (): Settings => ({
@@ -40,7 +31,6 @@ export const useSettingsStore = defineStore('settings', {
       }
     },
     themeColor(state): ThemeColors {
-      // @ts-ignore - this.resolvedTheme odnosi się do gettera powyżej
       const mode = this.currentTheme
       const theme = new Theme(state.theme_hue)
 

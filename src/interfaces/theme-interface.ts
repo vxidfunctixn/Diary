@@ -24,4 +24,7 @@ export interface ThemeColors {
   A4: Color
   yellow: Color
   red: Color
+  D1: Color
+  D2: Color
+  D3: Color
 }

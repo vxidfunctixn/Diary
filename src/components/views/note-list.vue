@@ -3,20 +3,43 @@ import OptionsBar from '@/components/layout/options-bar.vue'
 import InputDate from '@/components/inputs/input-date.vue'
 import Button from '@/components/button.vue'
 import Note from '@/components/note.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useDiaryStore } from '@/stores/diaryStore'
-import { useAppStore, VIEW } from '@/stores/appStore'
+import { useAppStore } from '@/stores'
+import type { DBNote } from '@/interfaces/store-interface'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
+const { t } = useI18n()
+
+const router = useRouter()
 const diaryStore = useDiaryStore()
 const appStore = useAppStore()
 const selectedDate = ref(new Date(Date.now()).valueOf())
-const notes = ref(diaryStore.getNotes())
+const notes = ref<DBNote[]>([])
+
+onMounted(async () => {
+  notes.value = await diaryStore.getNotes()
+})
 
 function onDateUpdate(event: { name: string; value: number }) {
   if (event.name === 'selected_day') {
     selectedDate.value = event.value
     appStore.setSelectedDay(event.value)
   }
+}
+
+async function handleDeleteNote(uuid: string) {
+  try {
+    await diaryStore.deleteNote(uuid)
+    notes.value = await diaryStore.getNotes()
+  } catch (error) {
+    console.error('Błąd podczas usuwania notatki:', error)
+  }
+}
+
+function handleEditNote(uuid: string) {
+  router.push({ name: 'edit_note', params: { uuid } })
 }
 </script>
 
@@ -30,14 +53,22 @@ function onDateUpdate(event: { name: string; value: number }) {
           controls
           @update="onDateUpdate($event)"
         />
-        <Button icon="date">Miesiąc</Button>
-        <Button icon="date">Dzisiaj</Button>
+        <Button icon="date">{{ t('common.calendar.month') }}</Button>
+        <Button icon="date">{{ t('common.calendar.today') }}</Button>
       </template>
       <template #right>
-        <Button icon="add-note" @click="appStore.setView(VIEW.EDIT_NOTE)">Dodaj notatkę</Button>
+        <Button icon="add-note" accent @click="router.push({ name: 'add_note' })">
+          {{ t('notes.actions.addNote') }}
+        </Button>
       </template>
     </OptionsBar>
-    <Note v-for="note in notes" :data="note" />
+    <Note
+      v-for="note in notes"
+      :key="note.uuid"
+      :data="note"
+      @delete="handleDeleteNote"
+      @edit="handleEditNote"
+    />
   </div>
 </template>
 

@@ -3,6 +3,9 @@ import Section from '@/components/layout/section.vue'
 import Row from '@/components/layout/section-row.vue'
 import Button from '@/components/button.vue'
 import { Calendar, getMonthName } from '@/utils'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const today = new Date(Date.now())
 const calendar = new Calendar(today)
@@ -15,16 +18,16 @@ function getTitle() {
 </script>
 
 <template>
-  <Section title="Uzupełnij notatki">
+  <Section :title="t('widgets.completeNotes.title')">
     <div class="calendar-title">{{ getTitle() }}</div>
     <div class="calendar">
-      <div class="dayName">PN</div>
-      <div class="dayName">WT</div>
-      <div class="dayName">ŚR</div>
-      <div class="dayName">CZ</div>
-      <div class="dayName">PT</div>
-      <div class="dayName">SB</div>
-      <div class="dayName">ND</div>
+      <div class="dayName">{{ t('calendar.weekDays.mon') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.tue') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.wed') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.thu') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.fri') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.sat') }}</div>
+      <div class="dayName">{{ t('calendar.weekDays.sun') }}</div>
       <template v-for="row in month">
         <div
           v-for="day in row"
@@ -39,20 +42,20 @@ function getTitle() {
       </template>
     </div>
     <Row>
-      <div>Dzisiaj</div>
-      <Button icon="add-note" small>Dodaj notatkę</Button>
+      <div>{{ t('common.calendar.today') }}</div>
+      <Button icon="add-note" small>{{ t('notes.actions.addNote') }}</Button>
     </Row>
     <Row>
       <div>23.05.2024</div>
-      <Button icon="add-note" small>Dodaj notatkę</Button>
+      <Button icon="add-note" small>{{ t('notes.actions.addNote') }}</Button>
     </Row>
     <Row>
       <div>24.05.2024</div>
-      <Button icon="add-note" small>Dodaj notatkę</Button>
+      <Button icon="add-note" small>{{ t('notes.actions.addNote') }}</Button>
     </Row>
     <Row>
       <div>24.05.2024</div>
-      <Button icon="add-note" small>Dodaj notatkę</Button>
+      <Button icon="add-note" small>{{ t('notes.actions.addNote') }}</Button>
     </Row>
   </Section>
 </template>

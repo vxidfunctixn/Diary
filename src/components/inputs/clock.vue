@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import Icon from '@/components/icon.vue'
-import type { Time } from '@/interfaces/calendar'
+import Icon from '@/components/icon/index.vue'
+import type { Time } from '@/interfaces/calendar-interface'
 
 type TimeType = 'hours' | 'minutes'
 

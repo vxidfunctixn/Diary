@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import NavItem from '@/components/layout/nav-item.vue'
 import { storeToRefs } from 'pinia'
-import { useAppStore, VIEW } from '@/stores/appStore'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useAppStore, useSettingsStore } from '@/stores'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+
+const { t } = useI18n()
+const router = useRouter()
 const appStore = useAppStore()
 const settingsStore = useSettingsStore()
-const { view, selected_day } = storeToRefs(appStore)
+const { selected_day } = storeToRefs(appStore)
+const view = computed(() => router.currentRoute.value.name)
 
 const noteListDate = computed(() => {
   const date = new Date(selected_day.value)
@@ -19,31 +24,41 @@ const noteListDate = computed(() => {
 
 <template>
   <div class="breadcrumbs">
-    <NavItem v-if="view === VIEW.LOCK" :level="1" icon="lock" :title="settingsStore.diary_name" />
-    <NavItem v-if="view === VIEW.HOME" :level="1" icon="diary" :title="settingsStore.diary_name" />
+    <NavItem v-if="view === 'lock'" :level="1" icon="lock" :title="settingsStore.diary_name" />
+    <NavItem v-if="view === 'home'" :level="1" icon="diary" :title="settingsStore.diary_name" />
     <NavItem
-      v-if="view !== VIEW.HOME && view !== VIEW.LOCK"
+      v-if="view !== 'home' && view !== 'lock'"
       :level="1"
       icon="diary"
       :title="settingsStore.diary_name"
-      @click="appStore.setView(VIEW.HOME)"
+      @click="router.push({ name: 'home' })"
     />
 
-    <NavItem v-if="view === VIEW.SETTINGS" :level="2" icon="settings" title="Ustawienia" />
-    <NavItem v-if="view === VIEW.ABOUT" :level="2" icon="info" title="O aplikacji" />
-    <NavItem v-if="view === VIEW.MONTH" :level="2" icon="date" title="06.2024" />
-    <NavItem v-if="view === VIEW.YEAR" :level="2" icon="date" title="2024" />
-    <NavItem v-if="view === VIEW.SEARCH" :level="2" icon="search" title="Szukaj" />
-    <NavItem v-if="view === VIEW.NOTE_LIST" :level="2" icon="note-list" :title="noteListDate" />
     <NavItem
-      v-if="view === VIEW.EDIT_NOTE"
+      v-if="view === 'settings'"
+      :level="2"
+      icon="settings"
+      :title="t('views.settings.title')"
+    />
+    <NavItem v-if="view === 'about'" :level="2" icon="info" :title="t('views.about.title')" />
+    <NavItem v-if="view === 'month'" :level="2" icon="date" title="06.2024" />
+    <NavItem v-if="view === 'year'" :level="2" icon="date" title="2024" />
+    <NavItem v-if="view === 'search'" :level="2" icon="search" :title="t('views.search.title')" />
+    <NavItem v-if="view === 'note_list'" :level="2" icon="note-list" :title="noteListDate" />
+    <NavItem
+      v-if="view === 'edit_note' || view === 'add_note'"
       :level="2"
       icon="note-list"
       title="21.06.2024"
-      @click="appStore.setView(VIEW.NOTE_LIST)"
+      @click="router.push({ name: 'note_list' })"
     />
 
-    <NavItem v-if="view === VIEW.EDIT_NOTE" :level="3" icon="note" title="N2 21:35" />
+    <NavItem
+      v-if="view === 'edit_note' || view === 'add_note'"
+      :level="3"
+      icon="note"
+      title="N2 21:35"
+    />
   </div>
 </template>
 
