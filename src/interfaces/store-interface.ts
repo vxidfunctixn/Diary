@@ -1,4 +1,3 @@
-// View types
 export const VIEW = {
   HOME: 'home',
   NOTE_LIST: 'note_list',
@@ -13,7 +12,6 @@ export const VIEW = {
 
 export type ViewType = (typeof VIEW)[keyof typeof VIEW]
 
-// Theme types
 export const THEME = {
   DARK: 'dark',
   LIGHT: 'light',
@@ -22,7 +20,6 @@ export const THEME = {
 
 export type ThemeType = (typeof THEME)[keyof typeof THEME]
 
-// Password requirement types
 export const REQUIRE_PASSWORD = {
   EVERY_LAUNCH: 'every_launch',
   EVERY_DAY: 'every_day',
@@ -32,7 +29,6 @@ export const REQUIRE_PASSWORD = {
 
 export type RequirePasswordType = (typeof REQUIRE_PASSWORD)[keyof typeof REQUIRE_PASSWORD]
 
-// Interfaces
 export interface KeyBinding {
   code: number
   key: string

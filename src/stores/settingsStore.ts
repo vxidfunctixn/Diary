@@ -31,7 +31,6 @@ export const useSettingsStore = defineStore('settings', {
       }
     },
     themeColor(state): ThemeColors {
-      // @ts-ignore - this.resolvedTheme odnosi się do gettera powyżej
       const mode = this.currentTheme
       const theme = new Theme(state.theme_hue)
 

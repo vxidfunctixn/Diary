@@ -166,7 +166,6 @@ const currentTitle = computed(() => {
 
   &:focus,
   &:focus-within {
-    // padding-bottom: 1px;
     z-index: 2;
 
     .select-input {

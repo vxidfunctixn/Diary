@@ -34,7 +34,6 @@ async function createWindow(): Promise<void> {
       contextIsolation: true
     }
   })
-  // win.removeMenu()
   win.setBackgroundColor('#00000000')
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -44,13 +43,11 @@ async function createWindow(): Promise<void> {
     win.loadURL('app://./index.html')
   }
 
-  // Enable remote debugging
   if (isDevelopment) {
     app.commandLine.appendSwitch('remote-debugging-port', '9223')
     // win.webContents.openDevTools()
   }
 
-  // Dodaj skrót F12 do otwierania/zamykania DevTools
   win.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'F12') {
       if (win.webContents.isDevToolsOpened()) {
@@ -62,13 +59,11 @@ async function createWindow(): Promise<void> {
     }
   })
 
-  // Otwieraj zewnętrzne linki w domyślnej przeglądarce
   win.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url)
     return { action: 'deny' }
   })
 
-  // Inicjalizacja kontroli okna aplikacji
   new AppControl(win)
 }
 
@@ -85,7 +80,6 @@ app.on('activate', () => {
 app.on('ready', async () => {
   if (isDevelopment) {
     try {
-      // Instalacja Vue Devtools dla Vue 3 (wspiera także Pinia)
       await installExtension(VUEJS_DEVTOOLS, {
         loadExtensionOptions: { allowFileAccess: true }
       })

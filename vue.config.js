@@ -17,7 +17,6 @@ module.exports = defineConfig({
   },
 
   configureWebpack: config => {
-    // Włącz inline-source-map w development dla debugowania
     if (process.env.NODE_ENV === 'development') {
       config.devtool = 'inline-source-map'
     }

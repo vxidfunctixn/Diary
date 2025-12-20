@@ -30,7 +30,6 @@ function onDateUpdate(event: { name: string; value: number }) {
 async function handleDeleteNote(uuid: string) {
   try {
     await diaryStore.deleteNote(uuid)
-    // Odśwież listę notatek po usunięciu
     notes.value = await diaryStore.getNotes()
   } catch (error) {
     console.error('Błąd podczas usuwania notatki:', error)

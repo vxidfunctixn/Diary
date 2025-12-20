@@ -17,7 +17,6 @@ watch(themeColor, () => {
   currentColor.value = props.color ? props.color : settingsStore.themeColor.F1.value
 })
 
-// Dynamicznie ładuj komponent ikony na podstawie nazwy
 const IconComponent = shallowRef()
 
 watch(

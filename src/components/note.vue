@@ -45,7 +45,6 @@ const handleEdit = () => {
   }
 }
 
-// Obsługa kliknięć w linki
 const handleClick = (event: MouseEvent) => {
   const target = event.target as HTMLElement
   if (target.tagName === 'A') {
@@ -53,16 +52,13 @@ const handleClick = (event: MouseEvent) => {
 
     const href = target.getAttribute('href')
     if (href) {
-      // Walidacja URL - sprawdź czy jest bezpieczny
       const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:']
       try {
         const url = new URL(href)
         if (allowedProtocols.includes(url.protocol)) {
-          // Bezpieczne otwarcie w domyślnej przeglądarce
           window.open(href, '_blank', 'noopener,noreferrer')
         }
       } catch {
-        // Jeśli URL jest relatywny lub nieprawidłowy, zignoruj
         console.warn('Invalid URL:', href)
       }
     }

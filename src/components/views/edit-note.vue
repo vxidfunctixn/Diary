@@ -20,14 +20,12 @@ const noteUuid = ref<string | null>(null)
 const isEditingExisting = ref(false)
 
 onMounted(async () => {
-  // Sprawdź czy edytujemy istniejącą notatkę
   if (appStore.editing_note_uuid) {
     isEditingExisting.value = true
     noteUuid.value = appStore.editing_note_uuid
     try {
       const note = await diaryStore.getNote(appStore.editing_note_uuid)
       if (note) {
-        // Konwertuj markdown na HTML i ustaw w edytorze
         content.value = markdownToHtml(note.content)
         appStore.setEditedContent(content.value)
       }
@@ -36,22 +34,19 @@ onMounted(async () => {
     }
     appStore.setEditingNoteUuid(null)
   } else {
-    // Nowa notatka - użyj draft
     isEditingExisting.value = false
     content.value = appStore.draft
   }
 
-  // Ustaw focus na edytorze i przenieś kursor na koniec
   setTimeout(() => {
     const editor = editorRef.value?.$el
     if (editor) {
       editor.focus()
 
-      // Ustaw kursor na końcu zawartości
       const range = document.createRange()
       const selection = window.getSelection()
       range.selectNodeContents(editor)
-      range.collapse(false) // false = koniec zakresu
+      range.collapse(false)
       selection?.removeAllRanges()
       selection?.addRange(range)
     }
@@ -88,7 +83,6 @@ const insertMark = () => {
   const range = selection.getRangeAt(0)
   if (range.collapsed) return
 
-  // Użyj elementów SPAN jako markerów (przetrwają operacje na MARK)
   const startMarker = document.createElement('span')
   startMarker.setAttribute('data-selection-marker', 'start')
   startMarker.style.display = 'none'
@@ -98,22 +92,19 @@ const insertMark = () => {
   endMarker.style.display = 'none'
 
   const rangeClone = range.cloneRange()
-  rangeClone.collapse(false) // Na końcu
+  rangeClone.collapse(false)
   rangeClone.insertNode(endMarker)
 
   const rangeStart = range.cloneRange()
-  rangeStart.collapse(true) // Na początku
+  rangeStart.collapse(true)
   rangeStart.insertNode(startMarker)
 
-  // Funkcja do przywracania zaznaczenia używając markerów
   const restoreSelection = () => {
-    // Sprawdź czy markery nadal istnieją w DOM i czy są w dokumencie
     const isStartInDoc = startMarker.parentNode && document.contains(startMarker)
     const isEndInDoc = endMarker.parentNode && document.contains(endMarker)
 
     if (!isStartInDoc || !isEndInDoc) {
       console.warn('Markery zostały usunięte z DOM lub nie są w dokumencie')
-      // Usuń markery jeśli nadal gdzieś istnieją
       if (startMarker.parentNode) {
         try {
           startMarker.parentNode.removeChild(startMarker)
@@ -132,20 +123,17 @@ const insertMark = () => {
       newRange.setStartAfter(startMarker)
       newRange.setEndBefore(endMarker)
 
-      // Usuń markery
       startMarker.parentNode.removeChild(startMarker)
       endMarker.parentNode.removeChild(endMarker)
 
       selection.removeAllRanges()
       selection.addRange(newRange)
 
-      // Normalizuj po usunięciu markerów
       if (editorRef.value?.$el) {
         editorRef.value.$el.normalize()
       }
     } catch (e) {
       console.error('Błąd przy przywracaniu zaznaczenia:', e)
-      // Usuń markery jeśli nadal istnieją
       if (startMarker.parentNode) {
         try {
           startMarker.parentNode.removeChild(startMarker)
@@ -159,7 +147,6 @@ const insertMark = () => {
     }
   }
 
-  // Funkcja do znalezienia wszystkich węzłów mark w zakresie
   const findMarksInRange = (range: Range): HTMLElement[] => {
     const marks: HTMLElement[] = []
     const iterator = document.createNodeIterator(
@@ -182,7 +169,6 @@ const insertMark = () => {
     return marks
   }
 
-  // Pobierz świeży range po wstawieniu markerów
   const newRange = document.createRange()
   newRange.setStartAfter(startMarker)
   newRange.setEndBefore(endMarker)
@@ -190,7 +176,6 @@ const insertMark = () => {
   const existingMarks = findMarksInRange(newRange)
 
   if (existingMarks.length === 0) {
-    // Brak marków - po prostu dodaj nowy
     const extractedContent = newRange.extractContents()
     const mark = document.createElement('mark')
     mark.appendChild(extractedContent)
@@ -198,7 +183,6 @@ const insertMark = () => {
 
     restoreSelection()
 
-    // Aktualizuj zawartość
     if (editorRef.value) {
       const event = new Event('input', { bubbles: true })
       editorRef.value.$el.dispatchEvent(event)
@@ -207,7 +191,6 @@ const insertMark = () => {
     return
   }
 
-  // WARUNEK 1: Czy zaznaczenie całkowicie pokrywa się z jednym markiem
   if (existingMarks.length === 1) {
     const mark = existingMarks[0]
     const markRange = document.createRange()
@@ -217,7 +200,6 @@ const insertMark = () => {
       newRange.compareBoundaryPoints(Range.START_TO_START, markRange) === 0 &&
       newRange.compareBoundaryPoints(Range.END_TO_END, markRange) === 0
     ) {
-      // Zaznaczenie = cały mark → usuń mark
       const parent = mark.parentNode
       const fragment = document.createDocumentFragment()
       while (mark.firstChild) {
@@ -231,7 +213,6 @@ const insertMark = () => {
 
       restoreSelection()
 
-      // Aktualizuj zawartość
       if (editorRef.value) {
         const event = new Event('input', { bubbles: true })
         editorRef.value.$el.dispatchEvent(event)
@@ -241,7 +222,6 @@ const insertMark = () => {
     }
   }
 
-  // WARUNEK 2: Czy zaznaczenie jest całkowicie wewnątrz jednego marka
   let isCompletelyInside = false
   let containingMark: HTMLElement | null = null
 
@@ -254,11 +234,9 @@ const insertMark = () => {
   }
 
   if (isCompletelyInside && containingMark) {
-    // Zaznaczenie wewnątrz marka → podziel mark (substract)
     const markParent = containingMark.parentNode
     if (!markParent) return
 
-    // Przenieś markery na zewnątrz marka, aby nie zostały usunięte
     const markerPlaceholderStart = document.createElement('span')
     markerPlaceholderStart.style.display = 'none'
     const markerPlaceholderEnd = document.createElement('span')
@@ -277,11 +255,9 @@ const insertMark = () => {
       }
     }
 
-    // Stwórz trzy zakresy: przed, zaznaczenie, po
     const beforeRange = document.createRange()
     beforeRange.setStart(containingMark, 0)
 
-    // Znajdź placeholder w zawartości marka i użyj jako punktu końcowego
     const startPlaceholder = containingMark.querySelector('span')
     if (startPlaceholder && startPlaceholder === markerPlaceholderStart.nextSibling) {
       beforeRange.setEndBefore(markerPlaceholderStart)
@@ -307,7 +283,6 @@ const insertMark = () => {
     const selectedContent = selectedRange.cloneContents()
     const afterContent = afterRange.cloneContents()
 
-    // Usuń placeholdery
     if (markerPlaceholderStart.parentNode) {
       markerPlaceholderStart.parentNode.removeChild(markerPlaceholderStart)
     }
@@ -315,36 +290,29 @@ const insertMark = () => {
       markerPlaceholderEnd.parentNode.removeChild(markerPlaceholderEnd)
     }
 
-    // Usuń stary mark
     const fragment = document.createDocumentFragment()
-
-    // Dodaj przed (w mark jeśli nie puste)
     if (beforeContent.textContent?.trim()) {
       const beforeMark = document.createElement('mark')
       beforeMark.appendChild(beforeContent)
       fragment.appendChild(beforeMark)
     }
 
-    // Przenieś startMarker do fragmentu (przed zaznaczeniem)
     if (startMarker.parentNode) {
       startMarker.parentNode.removeChild(startMarker)
     }
     fragment.appendChild(startMarker)
 
-    // Dodaj zaznaczenie (BEZ mark)
     const cleanSelected = document.createElement('div')
     cleanSelected.appendChild(selectedContent)
     while (cleanSelected.firstChild) {
       fragment.appendChild(cleanSelected.firstChild)
     }
 
-    // Przenieś endMarker do fragmentu (po zaznaczeniu)
     if (endMarker.parentNode) {
       endMarker.parentNode.removeChild(endMarker)
     }
     fragment.appendChild(endMarker)
 
-    // Dodaj po (w mark jeśli nie puste)
     if (afterContent.textContent?.trim()) {
       const afterMark = document.createElement('mark')
       afterMark.appendChild(afterContent)
@@ -359,7 +327,6 @@ const insertMark = () => {
 
     restoreSelection()
 
-    // Aktualizuj zawartość
     if (editorRef.value) {
       const event = new Event('input', { bubbles: true })
       editorRef.value.$el.dispatchEvent(event)
@@ -368,20 +335,15 @@ const insertMark = () => {
     return
   }
 
-  // WARUNEK 3: Zaznaczenie zawiera marki lub przecina się z nimi → scal wszystko
-
-  // Dodaj markery na początku i końcu każdego istniejącego marka, aby rozszerzyć zakres
   const markBoundaries: HTMLElement[] = []
 
   existingMarks.forEach(mark => {
-    // Dodaj marker przed markiem
     const beforeMarker = document.createElement('span')
     beforeMarker.setAttribute('data-mark-boundary', 'before')
     beforeMarker.style.display = 'none'
     mark.parentNode?.insertBefore(beforeMarker, mark)
     markBoundaries.push(beforeMarker)
 
-    // Dodaj marker po marku
     const afterMarker = document.createElement('span')
     afterMarker.setAttribute('data-mark-boundary', 'after')
     afterMarker.style.display = 'none'
@@ -393,25 +355,21 @@ const insertMark = () => {
     markBoundaries.push(afterMarker)
   })
 
-  // Znajdź najbardziej skrajne pozycje
   let leftmostMarker = startMarker
   let rightmostMarker = endMarker
 
   markBoundaries.forEach(boundary => {
     const compareStart = boundary.compareDocumentPosition(startMarker)
     if (compareStart & Node.DOCUMENT_POSITION_FOLLOWING) {
-      // boundary jest przed startMarker
       leftmostMarker = boundary
     }
 
     const compareEnd = boundary.compareDocumentPosition(endMarker)
     if (compareEnd & Node.DOCUMENT_POSITION_PRECEDING) {
-      // boundary jest po endMarker
       rightmostMarker = boundary
     }
   })
 
-  // Usuń wszystkie istniejące marki (markery-spany przetrwają)
   existingMarks.forEach(mark => {
     const parent = mark.parentNode
     while (mark.firstChild) {
@@ -424,10 +382,8 @@ const insertMark = () => {
     editorRef.value.$el.normalize()
   }
 
-  // Sprawdź czy markery przetrwały
   if (!leftmostMarker.parentNode || !rightmostMarker.parentNode) {
     console.warn('Markery zostały usunięte podczas usuwania marków, pomijam operację')
-    // Usuń wszystkie markery
     if (startMarker.parentNode) startMarker.parentNode.removeChild(startMarker)
     if (endMarker.parentNode) endMarker.parentNode.removeChild(endMarker)
     markBoundaries.forEach(m => {
@@ -436,18 +392,15 @@ const insertMark = () => {
     return
   }
 
-  // Utwórz zakres od najbardziej lewej do najbardziej prawej pozycji
   const finalRange = document.createRange()
   finalRange.setStartAfter(leftmostMarker)
   finalRange.setEndBefore(rightmostMarker)
 
-  // Wyciągnij zawartość i owrap w mark
   const extractedContent = finalRange.extractContents()
   const mark = document.createElement('mark')
   mark.appendChild(extractedContent)
   finalRange.insertNode(mark)
 
-  // Usuń markery granic
   markBoundaries.forEach(boundary => {
     if (boundary.parentNode) {
       boundary.parentNode.removeChild(boundary)
@@ -460,13 +413,11 @@ const insertMark = () => {
 
   restoreSelection()
 
-  // Aktualizuj zawartość
   if (editorRef.value) {
     const event = new Event('input', { bubbles: true })
     editorRef.value.$el.dispatchEvent(event)
   }
 
-  // Wymuś sprawdzenie aktywnych stylów
   setTimeout(() => {
     if (editorRef.value) {
       editorRef.value.checkActiveStyles()
@@ -479,7 +430,6 @@ const insertLink = () => {
   let linkElement: HTMLAnchorElement | null = null
   let selectedText = selection?.toString() || ''
 
-  // Sprawdź czy kursor jest wewnątrz linku
   if (selection && selection.anchorNode) {
     let node = selection.anchorNode as Node | null
     while (node && node !== editorRef.value?.$el) {
@@ -491,12 +441,10 @@ const insertLink = () => {
     }
   }
 
-  // Zapisz zaznaczenie przed otwarciem modala
   if (selection && selection.rangeCount > 0) {
     savedSelection.value = selection.getRangeAt(0).cloneRange()
   }
 
-  // Jeśli jesteśmy w linku, pobierz jego dane do edycji
   if (linkElement) {
     linkForm.value = {
       text: linkElement.textContent || '',
@@ -517,7 +465,6 @@ const handleLinkFormUpdate = (event: any) => {
 }
 
 const confirmInsertLink = () => {
-  // Przywróć zapisane zaznaczenie
   if (savedSelection.value) {
     const selection = window.getSelection()
     if (selection) {
@@ -529,7 +476,6 @@ const confirmInsertLink = () => {
   const selection = window.getSelection()
   let linkElement: HTMLAnchorElement | null = null
 
-  // Sprawdź czy jesteśmy w linku
   if (selection && selection.anchorNode) {
     let node = selection.anchorNode as Node | null
     while (node && node !== editorRef.value?.$el) {
@@ -541,10 +487,8 @@ const confirmInsertLink = () => {
     }
   }
 
-  // Jeśli URL jest pusty, usuń link (zostaw tylko tekst)
   if (!linkForm.value.url) {
     if (linkElement) {
-      // Zastąp element <a> jego tekstem
       const textNode = document.createTextNode(linkElement.textContent || '')
       linkElement.parentNode?.replaceChild(textNode, linkElement)
     }
@@ -552,13 +496,11 @@ const confirmInsertLink = () => {
     return
   }
 
-  // Normalizuj URL - dodaj https:// jeśli brakuje protokołu
   let normalizedUrl = linkForm.value.url.trim()
   if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
     normalizedUrl = 'https://' + normalizedUrl
   }
 
-  // Jeśli edytujemy istniejący link
   if (linkElement) {
     linkElement.href = normalizedUrl
     linkElement.textContent = linkForm.value.text
@@ -566,12 +508,10 @@ const confirmInsertLink = () => {
     return
   }
 
-  // Wstawianie nowego linku
   if (linkForm.value.text) {
-    // Jeśli jest tekst, wstaw go najpierw
+    applyFormat('insertText', linkForm.value.text)
     applyFormat('insertText', linkForm.value.text)
 
-    // Zaznacz wstawiony tekst
     const newSelection = window.getSelection()
     if (newSelection && newSelection.rangeCount > 0) {
       const range = newSelection.getRangeAt(0)
@@ -594,7 +534,6 @@ const confirmInsertLink = () => {
     }
   }
 
-  // Wstaw link
   applyFormat('createLink', normalizedUrl)
 
   closeLinkModal()
@@ -615,7 +554,6 @@ const clearFormat = () => {
   const range = selection.getRangeAt(0)
   if (range.collapsed) return
 
-  // Zapisz pozycję selection za pomocą markerów
   const startMarker = document.createElement('span')
   startMarker.setAttribute('data-selection-marker', 'start')
   startMarker.style.display = 'none'
@@ -632,7 +570,6 @@ const clearFormat = () => {
   rangeClone2.collapse(false)
   rangeClone2.insertNode(endMarker)
 
-  // Najpierw obsłuż marki w zaznaczeniu
   const findMarksInRange = (range: Range): HTMLElement[] => {
     const marks: HTMLElement[] = []
     const iterator = document.createNodeIterator(
@@ -657,10 +594,8 @@ const clearFormat = () => {
 
   const existingMarks = findMarksInRange(range)
 
-  // Jeśli są marki w zaznaczeniu, obsłuż je
   if (existingMarks.length > 0) {
     existingMarks.forEach(mark => {
-      // Sprawdź czy zaznaczenie obejmuje cały mark
       const markRange = document.createRange()
       markRange.selectNodeContents(mark)
 
@@ -669,14 +604,12 @@ const clearFormat = () => {
         range.compareBoundaryPoints(Range.END_TO_END, markRange) >= 0
 
       if (isFullySelected) {
-        // Całe mark jest zaznaczone - usuń całe
         const parent = mark.parentNode
         while (mark.firstChild) {
           parent?.insertBefore(mark.firstChild, mark)
         }
         parent?.removeChild(mark)
       } else if (mark.contains(range.startContainer) && mark.contains(range.endContainer)) {
-        // Zaznaczenie jest wewnątrz marka - podziel mark (jak substract)
         const markParent = mark.parentNode
         if (!markParent) return
 
@@ -700,7 +633,6 @@ const clearFormat = () => {
           fragment.appendChild(beforeMark)
         }
 
-        // Środek bez marka
         const cleanSelected = document.createElement('div')
         cleanSelected.appendChild(selectedContent)
         while (cleanSelected.firstChild) {
@@ -715,19 +647,16 @@ const clearFormat = () => {
 
         markParent.replaceChild(fragment, mark)
       } else {
-        // Zaznaczenie częściowo nachodzi - skróć mark
         const markParent = mark.parentNode
         if (!markParent) return
 
         const markRange = document.createRange()
         markRange.selectNodeContents(mark)
 
-        // Sprawdź czy zaznaczenie nachodzi od początku czy od końca
         const selectionStartsInMark = mark.contains(range.startContainer)
         const selectionEndsInMark = mark.contains(range.endContainer)
 
         if (selectionStartsInMark && !selectionEndsInMark) {
-          // Zaznaczenie zaczyna się w marku i wychodzi poza - zachowaj początek marka przed zaznaczeniem
           const beforeRange = document.createRange()
           beforeRange.setStart(mark, 0)
           beforeRange.setEnd(range.startContainer, range.startOffset)
@@ -740,7 +669,6 @@ const clearFormat = () => {
             markParent.insertBefore(newMark, mark)
           }
 
-          // Dodaj resztę bez formatowania
           const afterRange = document.createRange()
           afterRange.setStart(range.startContainer, range.startOffset)
           afterRange.setEnd(mark, mark.childNodes.length)
@@ -754,14 +682,12 @@ const clearFormat = () => {
 
           markParent.removeChild(mark)
         } else if (!selectionStartsInMark && selectionEndsInMark) {
-          // Zaznaczenie zaczyna się przed markiem i kończy w środku - zachowaj koniec marka po zaznaczeniu
           const afterRange = document.createRange()
           afterRange.setStart(range.endContainer, range.endOffset)
           afterRange.setEnd(mark, mark.childNodes.length)
 
           const afterContent = afterRange.cloneContents()
 
-          // Dodaj początek bez formatowania
           const beforeRange = document.createRange()
           beforeRange.setStart(mark, 0)
           beforeRange.setEnd(range.endContainer, range.endOffset)
@@ -781,7 +707,6 @@ const clearFormat = () => {
 
           markParent.removeChild(mark)
         } else {
-          // Zaznaczenie w ogóle nie nachodzi na zawartość marka - usuń cały mark
           const parent = mark.parentNode
           while (mark.firstChild) {
             parent?.insertBefore(mark.firstChild, mark)
@@ -796,7 +721,6 @@ const clearFormat = () => {
     }
   }
 
-  // Przywróć selection PRZED removeFormat
   const start = editorRef.value?.$el?.querySelector('[data-selection-marker="start"]')
   const end = editorRef.value?.$el?.querySelector('[data-selection-marker="end"]')
 
@@ -811,25 +735,19 @@ const clearFormat = () => {
       sel.addRange(restoredRange)
     }
 
-    // Usuń markery
     try {
       start.remove()
       end.remove()
-    } catch (e) {
-      // Ignoruj błędy
-    }
+    } catch (e) {}
   }
 
-  // Użyj wbudowanej komendy removeFormat dla pozostałych formatowań
   document.execCommand('removeFormat', false)
 
-  // Aktualizuj zawartość
   if (editorRef.value) {
     const event = new Event('input', { bubbles: true })
     editorRef.value.$el.dispatchEvent(event)
   }
 
-  // Wymuś sprawdzenie aktywnych stylów po wyczyszczeniu formatowania
   setTimeout(() => {
     if (editorRef.value) {
       editorRef.value.checkActiveStyles()
@@ -843,21 +761,16 @@ const saveNote = async () => {
 
   try {
     if (noteUuid.value) {
-      // Aktualizuj istniejącą notatkę
       await diaryStore.updateNote(noteUuid.value, markdownContent)
       console.log('Notatka zaktualizowana:', noteUuid.value)
-      // Wyczyść editedContent
       appStore.setEditedContent('')
     } else {
-      // Utwórz nową notatkę
       const uuid = await diaryStore.createNote(markdownContent)
       noteUuid.value = uuid
       console.log('Nowa notatka utworzona:', uuid)
-      // Wyczyść draft
       appStore.setDraft('')
     }
 
-    // Wyczyść lokalny stan i przejdź do listy wpisów
     content.value = ''
     noteUuid.value = null
     appStore.setView('note_list')
