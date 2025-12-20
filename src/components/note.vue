@@ -9,9 +9,19 @@ const props = defineProps<{
   data?: DBNote
 }>()
 
+const emit = defineEmits<{
+  delete: [uuid: string]
+}>()
+
 const htmlContent = computed(() => {
   return props.data ? markdownToHtml(props.data.content) : ''
 })
+
+const handleDelete = () => {
+  if (props.data) {
+    emit('delete', props.data.uuid)
+  }
+}
 
 // Obsługa kliknięć w linki
 const handleClick = (event: MouseEvent) => {
@@ -50,7 +60,7 @@ const handleClick = (event: MouseEvent) => {
         </div>
         <div class="note-options">
           <Button icon="edit-note" small>Edytuj</Button>
-          <Button icon="delete" small>Usuń</Button>
+          <Button icon="delete" small @click="handleDelete">Usuń</Button>
         </div>
       </div>
       <div class="note-message" v-html="htmlContent" @click="handleClick"></div>

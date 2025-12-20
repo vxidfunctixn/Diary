@@ -23,6 +23,16 @@ function onDateUpdate(event: { name: string; value: number }) {
     appStore.setSelectedDay(event.value)
   }
 }
+
+async function handleDeleteNote(uuid: string) {
+  try {
+    await diaryStore.deleteNote(uuid)
+    // Odśwież listę notatek po usunięciu
+    notes.value = await diaryStore.getNotes()
+  } catch (error) {
+    console.error('Błąd podczas usuwania notatki:', error)
+  }
+}
 </script>
 
 <template>
@@ -42,7 +52,7 @@ function onDateUpdate(event: { name: string; value: number }) {
         <Button icon="add-note" @click="appStore.setView(VIEW.EDIT_NOTE)">Dodaj notatkę</Button>
       </template>
     </OptionsBar>
-    <Note v-for="note in notes" :data="note" />
+    <Note v-for="note in notes" :key="note.uuid" :data="note" @delete="handleDeleteNote" />
   </div>
 </template>
 
