@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import Icon from '@/components/icon.vue'
+import Icon from '@/components/icon/index.vue'
 import Button from '@/components/button.vue'
 import Navigation from '@/components/layout/breadcrumbs.vue'
 import { useAppStore, useSettingsStore, VIEW } from '@/stores'

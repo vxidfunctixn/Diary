@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Icon from '@/components/icon.vue'
+import Icon from '@/components/icon/index.vue'
 import Button from '@/components/button.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
 import type { DBNote } from '@/interfaces/store-interface'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
-import Icon from '@/components/icon.vue'
+import Icon from '@/components/icon/index.vue'
 import { ref, watch, computed } from 'vue'
 
 interface SelectOption {
