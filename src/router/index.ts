@@ -27,7 +27,12 @@ const routes: Array<RouteRecordRaw> = [
     component: NoteList
   },
   {
-    path: '/note/edit',
+    path: '/add-note',
+    name: 'add_note',
+    component: EditNote
+  },
+  {
+    path: '/edit-note/:uuid',
     name: 'edit_note',
     component: EditNote
   },

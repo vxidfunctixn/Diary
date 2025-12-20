@@ -14,7 +14,7 @@ const { t } = useI18n()
       <Button icon="note-list" @click="router.push({ name: 'note_list' })">{{
         t('widgets.navigation.noteList')
       }}</Button>
-      <Button icon="add-note" @click="router.push({ name: 'edit_note' })">{{
+      <Button icon="add-note" @click="router.push({ name: 'add_note' })">{{
         t('widgets.navigation.addNote')
       }}</Button>
       <Button icon="date" @click="router.push({ name: 'month' })">{{

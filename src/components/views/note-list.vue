@@ -39,8 +39,7 @@ async function handleDeleteNote(uuid: string) {
 }
 
 function handleEditNote(uuid: string) {
-  appStore.setEditingNoteUuid(uuid)
-  router.push({ name: 'edit_note' })
+  router.push({ name: 'edit_note', params: { uuid } })
 }
 </script>
 
@@ -58,7 +57,7 @@ function handleEditNote(uuid: string) {
         <Button icon="date">{{ t('common.calendar.today') }}</Button>
       </template>
       <template #right>
-        <Button icon="add-note" accent @click="router.push({ name: 'edit_note' })">
+        <Button icon="add-note" accent @click="router.push({ name: 'add_note' })">
           {{ t('notes.actions.addNote') }}
         </Button>
       </template>

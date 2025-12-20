@@ -62,7 +62,7 @@ onMounted(() => {
         icon="add-note"
         :title="t('notes.actions.addNote')"
         :disabled="!isWindowActive"
-        @click="router.push({ name: 'edit_note' })"
+        @click="router.push({ name: 'add_note' })"
       />
       <Button
         small

@@ -46,14 +46,19 @@ const noteListDate = computed(() => {
     <NavItem v-if="view === 'search'" :level="2" icon="search" :title="t('views.search.title')" />
     <NavItem v-if="view === 'note_list'" :level="2" icon="note-list" :title="noteListDate" />
     <NavItem
-      v-if="view === 'edit_note'"
+      v-if="view === 'edit_note' || view === 'add_note'"
       :level="2"
       icon="note-list"
       title="21.06.2024"
       @click="router.push({ name: 'note_list' })"
     />
 
-    <NavItem v-if="view === 'edit_note'" :level="3" icon="note" title="N2 21:35" />
+    <NavItem
+      v-if="view === 'edit_note' || view === 'add_note'"
+      :level="3"
+      icon="note"
+      title="N2 21:35"
+    />
   </div>
 </template>
 

@@ -14,6 +14,7 @@ import { useRouter } from 'vue-router'
 const { t } = useI18n()
 
 const router = useRouter()
+const route = router.currentRoute
 const appStore = useAppStore()
 const diaryStore = useDiaryStore()
 const content = ref('')
@@ -22,11 +23,13 @@ const noteUuid = ref<string | null>(null)
 const isEditingExisting = ref(false)
 
 onMounted(async () => {
-  if (appStore.editing_note_uuid) {
+  const uuid = route.value.params.uuid as string | undefined
+
+  if (uuid) {
     isEditingExisting.value = true
-    noteUuid.value = appStore.editing_note_uuid
+    noteUuid.value = uuid
     try {
-      const note = await diaryStore.getNote(appStore.editing_note_uuid)
+      const note = await diaryStore.getNote(uuid)
       if (note) {
         content.value = markdownToHtml(note.content)
         appStore.setEditedContent(content.value)
@@ -34,7 +37,6 @@ onMounted(async () => {
     } catch (error) {
       console.error('Błąd podczas ładowania notatki:', error)
     }
-    appStore.setEditingNoteUuid(null)
   } else {
     isEditingExisting.value = false
     content.value = appStore.draft
