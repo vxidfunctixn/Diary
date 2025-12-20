@@ -1,0 +1,29 @@
+import type { StorybookConfig } from '@storybook/vue3-vite'
+import { mergeConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const config: StorybookConfig = {
+  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  addons: [],
+  framework: {
+    name: '@storybook/vue3-vite',
+    options: {}
+  },
+  async viteFinal(config: any) {
+    return mergeConfig(config, {
+      plugins: [vue()],
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, '../src')
+        }
+      }
+    })
+  }
+}
+export default config
