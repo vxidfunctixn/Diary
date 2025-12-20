@@ -51,6 +51,7 @@ export interface AppState {
   nativeTheme: ThemeType
   selected_day: number
   draft: string
+  editing_note_uuid: string | null
 }
 
 export interface Settings {

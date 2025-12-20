@@ -6,14 +6,33 @@ import InputContent from '@/components/inputs/input-content.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
 import InputText from '@/components/inputs/input-text.vue'
 import InputRow from '@/components/inputs/input-row.vue'
-import { htmlToMarkdown } from '@/utils'
-import { ref } from 'vue'
+import { htmlToMarkdown, markdownToHtml } from '@/utils'
+import { ref, onMounted } from 'vue'
 
 const appStore = useAppStore()
 const diaryStore = useDiaryStore()
 const content = ref(appStore.draft)
 const editorRef = ref<InstanceType<typeof InputContent>>()
 const noteUuid = ref<string | null>(null)
+
+onMounted(async () => {
+  // Sprawdź czy edytujemy istniejącą notatkę
+  if (appStore.editing_note_uuid) {
+    noteUuid.value = appStore.editing_note_uuid
+    try {
+      const note = await diaryStore.getNote(appStore.editing_note_uuid)
+      if (note) {
+        // Konwertuj markdown na HTML i ustaw w edytorze
+        content.value = markdownToHtml(note.content)
+        appStore.setDraft(content.value)
+      }
+    } catch (error) {
+      console.error('Błąd podczas ładowania notatki:', error)
+    }
+    // Wyczyść UUID z store po załadowaniu
+    appStore.setEditingNoteUuid(null)
+  }
+})
 const activeStyles = ref({
   bold: false,
   italic: false,
@@ -796,6 +815,7 @@ const clearFormat = () => {
 
 const saveNote = async () => {
   const markdownContent = htmlToMarkdown(content.value)
+  if (!markdownContent.trim()) return
 
   try {
     if (noteUuid.value) {
@@ -809,9 +829,10 @@ const saveNote = async () => {
       console.log('Nowa notatka utworzona:', uuid)
     }
 
-    // Wyczyść draft i przejdź do listy wpisów
+    // Wyczyść draft, noteUuid i przejdź do listy wpisów
     appStore.setDraft('')
     content.value = ''
+    noteUuid.value = null
     appStore.setView('note_list')
   } catch (error) {
     console.error('Błąd podczas zapisywania notatki:', error)

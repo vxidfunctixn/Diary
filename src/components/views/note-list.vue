@@ -33,6 +33,11 @@ async function handleDeleteNote(uuid: string) {
     console.error('Błąd podczas usuwania notatki:', error)
   }
 }
+
+function handleEditNote(uuid: string) {
+  appStore.setEditingNoteUuid(uuid)
+  appStore.setView(VIEW.EDIT_NOTE)
+}
 </script>
 
 <template>
@@ -52,7 +57,13 @@ async function handleDeleteNote(uuid: string) {
         <Button icon="add-note" @click="appStore.setView(VIEW.EDIT_NOTE)">Dodaj notatkę</Button>
       </template>
     </OptionsBar>
-    <Note v-for="note in notes" :key="note.uuid" :data="note" @delete="handleDeleteNote" />
+    <Note
+      v-for="note in notes"
+      :key="note.uuid"
+      :data="note"
+      @delete="handleDeleteNote"
+      @edit="handleEditNote"
+    />
   </div>
 </template>
 

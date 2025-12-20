@@ -9,7 +9,8 @@ export const useAppStore = defineStore('app', {
     view: VIEW.HOME,
     nativeTheme: THEME.DARK,
     selected_day: today.valueOf(),
-    draft: ''
+    draft: '',
+    editing_note_uuid: null
   }),
   actions: {
     setView(view: ViewType): void {
@@ -23,6 +24,9 @@ export const useAppStore = defineStore('app', {
     },
     setDraft(content: string): void {
       this.draft = content
+    },
+    setEditingNoteUuid(uuid: string | null): void {
+      this.editing_note_uuid = uuid
     }
   },
   persist: true

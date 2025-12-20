@@ -11,6 +11,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   delete: [uuid: string]
+  edit: [uuid: string]
 }>()
 
 const htmlContent = computed(() => {
@@ -20,6 +21,12 @@ const htmlContent = computed(() => {
 const handleDelete = () => {
   if (props.data) {
     emit('delete', props.data.uuid)
+  }
+}
+
+const handleEdit = () => {
+  if (props.data) {
+    emit('edit', props.data.uuid)
   }
 }
 
@@ -59,7 +66,7 @@ const handleClick = (event: MouseEvent) => {
           {{ formatDate(new Date(data.created_at)) }}
         </div>
         <div class="note-options">
-          <Button icon="edit-note" small>Edytuj</Button>
+          <Button icon="edit-note" small @click="handleEdit">Edytuj</Button>
           <Button icon="delete" small @click="handleDelete">Usuń</Button>
         </div>
       </div>
