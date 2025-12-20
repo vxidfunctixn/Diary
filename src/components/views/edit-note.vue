@@ -14,27 +14,48 @@ const { t } = useI18n()
 
 const appStore = useAppStore()
 const diaryStore = useDiaryStore()
-const content = ref(appStore.draft)
+const content = ref('')
 const editorRef = ref<InstanceType<typeof InputContent>>()
 const noteUuid = ref<string | null>(null)
+const isEditingExisting = ref(false)
 
 onMounted(async () => {
   // Sprawdź czy edytujemy istniejącą notatkę
   if (appStore.editing_note_uuid) {
+    isEditingExisting.value = true
     noteUuid.value = appStore.editing_note_uuid
     try {
       const note = await diaryStore.getNote(appStore.editing_note_uuid)
       if (note) {
         // Konwertuj markdown na HTML i ustaw w edytorze
         content.value = markdownToHtml(note.content)
-        appStore.setDraft(content.value)
+        appStore.setEditedContent(content.value)
       }
     } catch (error) {
       console.error('Błąd podczas ładowania notatki:', error)
     }
-    // Wyczyść UUID z store po załadowaniu
     appStore.setEditingNoteUuid(null)
+  } else {
+    // Nowa notatka - użyj draft
+    isEditingExisting.value = false
+    content.value = appStore.draft
   }
+
+  // Ustaw focus na edytorze i przenieś kursor na koniec
+  setTimeout(() => {
+    const editor = editorRef.value?.$el
+    if (editor) {
+      editor.focus()
+
+      // Ustaw kursor na końcu zawartości
+      const range = document.createRange()
+      const selection = window.getSelection()
+      range.selectNodeContents(editor)
+      range.collapse(false) // false = koniec zakresu
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+    }
+  }, 100)
 })
 const activeStyles = ref({
   bold: false,
@@ -825,15 +846,18 @@ const saveNote = async () => {
       // Aktualizuj istniejącą notatkę
       await diaryStore.updateNote(noteUuid.value, markdownContent)
       console.log('Notatka zaktualizowana:', noteUuid.value)
+      // Wyczyść editedContent
+      appStore.setEditedContent('')
     } else {
       // Utwórz nową notatkę
       const uuid = await diaryStore.createNote(markdownContent)
       noteUuid.value = uuid
       console.log('Nowa notatka utworzona:', uuid)
+      // Wyczyść draft
+      appStore.setDraft('')
     }
 
-    // Wyczyść draft, noteUuid i przejdź do listy wpisów
-    appStore.setDraft('')
+    // Wyczyść lokalny stan i przejdź do listy wpisów
     content.value = ''
     noteUuid.value = null
     appStore.setView('note_list')
@@ -901,7 +925,9 @@ const saveNote = async () => {
       ref="editorRef"
       v-model="content"
       @update:active-styles="updateActiveStyles"
-      @update:model-value="appStore.setDraft($event)"
+      @update:model-value="
+        isEditingExisting ? appStore.setEditedContent($event) : appStore.setDraft($event)
+      "
     />
 
     <InputModal v-if="showLinkModal" width="500px" @close="closeLinkModal">
