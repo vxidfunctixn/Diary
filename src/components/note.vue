@@ -136,16 +136,6 @@ const handleClick = (event: MouseEvent) => {
           left: 12px;
           transform: tra;
         }
-
-        &:hover,
-        &:focus-visible {
-          background-color: var(--HL2);
-          border-color: var(--HL1);
-        }
-
-        &:active {
-          border-color: var(--F2);
-        }
       }
 
       .note-options {
