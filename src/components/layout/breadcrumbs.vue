@@ -3,6 +3,9 @@ import NavItem from '@/components/layout/nav-item.vue'
 import { storeToRefs } from 'pinia'
 import { useAppStore, useSettingsStore, VIEW } from '@/stores'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const appStore = useAppStore()
 const settingsStore = useSettingsStore()
 const { view, selected_day } = storeToRefs(appStore)
@@ -28,11 +31,21 @@ const noteListDate = computed(() => {
       @click="appStore.setView(VIEW.HOME)"
     />
 
-    <NavItem v-if="view === VIEW.SETTINGS" :level="2" icon="settings" title="Ustawienia" />
-    <NavItem v-if="view === VIEW.ABOUT" :level="2" icon="info" title="O aplikacji" />
+    <NavItem
+      v-if="view === VIEW.SETTINGS"
+      :level="2"
+      icon="settings"
+      :title="t('views.settings.title')"
+    />
+    <NavItem v-if="view === VIEW.ABOUT" :level="2" icon="info" :title="t('views.about.title')" />
     <NavItem v-if="view === VIEW.MONTH" :level="2" icon="date" title="06.2024" />
     <NavItem v-if="view === VIEW.YEAR" :level="2" icon="date" title="2024" />
-    <NavItem v-if="view === VIEW.SEARCH" :level="2" icon="search" title="Szukaj" />
+    <NavItem
+      v-if="view === VIEW.SEARCH"
+      :level="2"
+      icon="search"
+      :title="t('views.search.title')"
+    />
     <NavItem v-if="view === VIEW.NOTE_LIST" :level="2" icon="note-list" :title="noteListDate" />
     <NavItem
       v-if="view === VIEW.EDIT_NOTE"

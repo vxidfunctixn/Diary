@@ -1,4 +1,98 @@
 {
+  "common": {
+    "actions": {
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "set": "Ustaw",
+      "cancelChanges": "Anuluj zmiany",
+      "search": "Szukaj",
+      "lock": "Zablokuj"
+    },
+    "calendar": {
+      "month": "Miesiąc",
+      "today": "Dzisiaj"
+    }
+  },
+  "calendar": {
+    "weekDays": {
+      "mon": "PN",
+      "tue": "WT",
+      "wed": "ŚR",
+      "thu": "CZ",
+      "fri": "PT",
+      "sat": "SB",
+      "sun": "ND"
+    }
+  },
+  "notes": {
+    "actions": {
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "addNote": "Dodaj notatkę"
+    }
+  },
+  "inputs": {
+    "keybind": {
+      "pressCombo": "Wciśnij kombinację"
+    },
+    "password": {
+      "changePassword": "Zmień hasło",
+      "enterNew": "Wprowadź nowe hasło",
+      "repeat": "Powtórz hasło",
+      "errors": {
+        "minLength": "Hasło musi się składać z conajmniej 4 znaków.",
+        "maxLength": "Hasło nie może zawierać więcej niż 24 znaki.",
+        "mustMatch": "Podane hasła muszą być identyczne."
+      }
+    }
+  },
+  "editor": {
+    "link": {
+      "text": "Tekst linku",
+      "textPlaceholder": "Wpisz tekst linku",
+      "url": "Adres URL",
+      "urlPlaceholder": "https://example.com",
+      "insert": "Wstaw link"
+    }
+  },
+  "views": {
+    "settings": {
+      "title": "Ustawienia"
+    },
+    "about": {
+      "title": "O aplikacji"
+    },
+    "search": {
+      "title": "Szukaj"
+    },
+    "lock": {
+      "login": "Login"
+    }
+  },
+  "settings": {
+    "fields": {
+      "diaryName": "Nazwa dziennika",
+      "reminder": "Przypominaj jeśli zapomnę o napisaniu notatki",
+      "remindTime": "Godzina przypomnienia",
+      "password": "Hasło do dziennika",
+      "requirePassword": "Wymagaj hasła gdy",
+      "theme": "Motyw",
+      "themeHue": "Barwa motywu",
+      "standby": "Czuwaj od startu systemu",
+      "quickNoteShortcut": "Skrót szybkiej notatki"
+    },
+    "requirePassword": {
+      "everyLaunch": "Przy każdym otwarciu",
+      "everyDay": "Każdego dnia",
+      "onStartup": "Przy uruchomieniu systemu",
+      "afterLock": "Tylko po zablokowaniu"
+    },
+    "theme": {
+      "dark": "Ciemny",
+      "light": "Jasny",
+      "system": "Jak w systemie"
+    }
+  },
   "widgets": {
     "navigation": {
       "title": "Nawigacja",
@@ -10,6 +104,9 @@
       "settings": "Ustawienia",
       "lock": "Zablokuj",
       "about": "O aplikacji"
+    },
+    "completeNotes": {
+      "title": "Uzupełnij notatki"
     }
   }
 }

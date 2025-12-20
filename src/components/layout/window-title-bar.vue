@@ -5,6 +5,9 @@ import Button from '@/components/button.vue'
 import Navigation from '@/components/layout/breadcrumbs.vue'
 import { useAppStore, useSettingsStore, VIEW } from '@/stores'
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const appStore = useAppStore()
 const settingsStore = useSettingsStore()
@@ -49,28 +52,28 @@ onMounted(() => {
       <Button
         small
         icon="search"
-        title="Szukaj"
+        :title="t('common.actions.search')"
         :disabled="!isWindowActive"
         @click="appStore.setView(VIEW.SEARCH)"
       />
       <Button
         small
         icon="add-note"
-        title="Dodaj notatkę"
+        :title="t('notes.actions.addNote')"
         :disabled="!isWindowActive"
         @click="appStore.setView(VIEW.EDIT_NOTE)"
       />
       <Button
         small
         icon="settings"
-        title="Ustawienia"
+        :title="t('views.settings.title')"
         :disabled="!isWindowActive"
         @click="appStore.setView(VIEW.SETTINGS)"
       />
       <Button
         small
         icon="lock"
-        title="Zablokuj"
+        :title="t('common.actions.lock')"
         :disabled="!isWindowActive"
         @click="appStore.setView(VIEW.LOCK)"
       />

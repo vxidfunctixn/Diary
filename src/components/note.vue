@@ -4,6 +4,9 @@ import Button from '@/components/button.vue'
 import type { DBNote } from '@/interfaces/store-interface'
 import { formatDate, markdownToHtml } from '@/utils'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   data?: DBNote
@@ -66,8 +69,8 @@ const handleClick = (event: MouseEvent) => {
           {{ formatDate(new Date(data.created_at)) }}
         </div>
         <div class="note-options">
-          <Button icon="edit-note" small @click="handleEdit">Edytuj</Button>
-          <Button icon="delete" small @click="handleDelete">Usuń</Button>
+          <Button icon="edit-note" small @click="handleEdit">{{ t('notes.actions.edit') }}</Button>
+          <Button icon="delete" small @click="handleDelete">{{ t('notes.actions.delete') }}</Button>
         </div>
       </div>
       <div class="note-message" v-html="htmlContent" @click="handleClick"></div>

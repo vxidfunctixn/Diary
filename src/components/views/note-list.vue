@@ -7,6 +7,9 @@ import { ref, onMounted } from 'vue'
 import { useDiaryStore } from '@/stores/diaryStore'
 import { useAppStore, VIEW } from '@/stores'
 import type { DBNote } from '@/interfaces/store-interface'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const diaryStore = useDiaryStore()
 const appStore = useAppStore()
@@ -50,11 +53,13 @@ function handleEditNote(uuid: string) {
           controls
           @update="onDateUpdate($event)"
         />
-        <Button icon="date">Miesiąc</Button>
-        <Button icon="date">Dzisiaj</Button>
+        <Button icon="date">{{ t('common.calendar.month') }}</Button>
+        <Button icon="date">{{ t('common.calendar.today') }}</Button>
       </template>
       <template #right>
-        <Button icon="add-note" @click="appStore.setView(VIEW.EDIT_NOTE)">Dodaj notatkę</Button>
+        <Button icon="add-note" @click="appStore.setView(VIEW.EDIT_NOTE)">{{
+          t('notes.actions.addNote')
+        }}</Button>
       </template>
     </OptionsBar>
     <Note

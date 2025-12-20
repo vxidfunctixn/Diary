@@ -8,10 +8,13 @@ import InputPassword from '@/components/inputs/input-password.vue'
 import InputSelect from '@/components/inputs/input-select.vue'
 import InputHue from '@/components/inputs/input-hue.vue'
 import InputKeybind from '@/components/inputs/input-keybind.vue'
-import { ref, toRaw } from 'vue'
+import { ref, toRaw, computed } from 'vue'
 import { useSettingsStore, REQUIRE_PASSWORD, THEME } from '@/stores'
 import { isProxyDifferent } from '@/utils'
 import type { InputUpdateEvent, Settings } from '@/interfaces'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const settingsStore = useSettingsStore()
 
@@ -35,51 +38,51 @@ function resetForm() {
   hasChangedData.value = false
 }
 
-const require_password_options = [
+const require_password_options = computed(() => [
   {
-    title: 'Przy każdym otwarciu',
+    title: t('settings.requirePassword.everyLaunch'),
     value: REQUIRE_PASSWORD.EVERY_LAUNCH
   },
   {
-    title: 'Każdego dnia',
+    title: t('settings.requirePassword.everyDay'),
     value: REQUIRE_PASSWORD.EVERY_DAY
   },
   {
-    title: 'Przy uruchomieniu systemu',
+    title: t('settings.requirePassword.onStartup'),
     value: REQUIRE_PASSWORD.ON_STARTUP
   },
   {
-    title: 'Tylko po zablokowaniu',
+    title: t('settings.requirePassword.afterLock'),
     value: REQUIRE_PASSWORD.AFTER_LOCK
   }
-]
+])
 
-const theme_options = [
+const theme_options = computed(() => [
   {
-    title: 'Ciemny',
+    title: t('settings.theme.dark'),
     value: THEME.DARK
   },
   {
-    title: 'Jasny',
+    title: t('settings.theme.light'),
     value: THEME.LIGHT
   },
   {
-    title: 'Jak w systemie',
+    title: t('settings.theme.system'),
     value: THEME.SYSTEM
   }
-]
+])
 </script>
 
 <template>
   <div class="settings">
     <form @submit.prevent="saveForm()">
-      <InputRow title="Nazwa dziennika">
+      <InputRow :title="t('settings.fields.diaryName')">
         <InputText name="diary_name" :value="form.diary_name" @update="handleUpdate($event)" />
       </InputRow>
-      <InputRow title="Przypominaj jeśli zapomnę o napisaniu notatki">
+      <InputRow :title="t('settings.fields.reminder')">
         <InputSwitcher name="reminder" :value="form.reminder" @update="handleUpdate($event)" />
       </InputRow>
-      <InputRow title="Godzina przypomnienia">
+      <InputRow :title="t('settings.fields.remindTime')">
         <InputTime
           name="remind_time"
           :newValue="form.remind_time"
@@ -87,7 +90,7 @@ const theme_options = [
           @update="handleUpdate($event)"
         />
       </InputRow>
-      <InputRow title="Hasło do dziennika">
+      <InputRow :title="t('settings.fields.password')">
         <InputPassword
           name="password"
           :newValue="form.password"
@@ -95,7 +98,7 @@ const theme_options = [
           @update="handleUpdate($event)"
         />
       </InputRow>
-      <InputRow title="Wymagaj hasła gdy">
+      <InputRow :title="t('settings.fields.requirePassword')">
         <InputSelect
           name="require_password"
           :value="form.require_password"
@@ -103,7 +106,7 @@ const theme_options = [
           @update="handleUpdate($event)"
         />
       </InputRow>
-      <InputRow title="Motyw">
+      <InputRow :title="t('settings.fields.theme')">
         <InputSelect
           name="theme"
           :value="form.theme"
@@ -111,13 +114,13 @@ const theme_options = [
           @update="handleUpdate($event)"
         />
       </InputRow>
-      <InputRow title="Barwa motywu">
+      <InputRow :title="t('settings.fields.themeHue')">
         <InputHue name="theme_hue" :value="form.theme_hue" @update="handleUpdate($event)" />
       </InputRow>
-      <InputRow title="Czuwaj od startu systemu">
+      <InputRow :title="t('settings.fields.standby')">
         <InputSwitcher name="standby" :value="form.standby" @update="handleUpdate($event)" />
       </InputRow>
-      <InputRow title="Skrót szybkiej notatki">
+      <InputRow :title="t('settings.fields.quickNoteShortcut')">
         <InputKeybind
           name="quick_note_shortcut"
           :value="form.quick_note_shortcut"
@@ -126,8 +129,12 @@ const theme_options = [
       </InputRow>
     </form>
     <div class="options">
-      <Button icon="save" accent :disabled="!hasChangedData" @click="saveForm()">Zapisz</Button>
-      <Button v-if="hasChangedData" icon="cancel" @click="resetForm()">Anuluj zmiany</Button>
+      <Button icon="save" accent :disabled="!hasChangedData" @click="saveForm()">{{
+        t('common.actions.save')
+      }}</Button>
+      <Button v-if="hasChangedData" icon="cancel" @click="resetForm()">{{
+        t('common.actions.cancelChanges')
+      }}</Button>
     </div>
   </div>
 </template>

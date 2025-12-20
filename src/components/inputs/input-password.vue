@@ -6,6 +6,9 @@ import InputText from '@/components/inputs/input-text.vue'
 import InputRow from '@/components/inputs/input-row.vue'
 import { ref, computed } from 'vue'
 import { hashPassword } from '@/utils'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const emit = defineEmits(['update'])
 const props = defineProps({
   name: String,
@@ -36,15 +39,15 @@ function save() {
   infoTextRef.value.password2 = undefined
 
   if (form.value.password1.length < 4) {
-    infoTextRef.value.password1 = 'Hasło musi się składać z conajmniej 4 znaków.'
+    infoTextRef.value.password1 = t('inputs.password.errors.minLength')
     return
   }
   if (form.value.password1.length > 24) {
-    infoTextRef.value.password1 = 'Hasło nie może zawierać wieej niż 24 znaki.'
+    infoTextRef.value.password1 = t('inputs.password.errors.maxLength')
     return
   }
   if (form.value.password1 !== form.value.password2) {
-    infoTextRef.value.password2 = 'Podane hasła muszą być identyczne.'
+    infoTextRef.value.password2 = t('inputs.password.errors.mustMatch')
     return
   }
 
@@ -70,13 +73,14 @@ function closeModal() {
   <div class="input-password">
     <div class="button">
       <Button icon="lock" @click="modalOpen = true">
-        Zmień hasło <span class="accent-span" v-if="isNewPassword">*</span>
+        {{ t('inputs.password.changePassword') }}
+        <span class="accent-span" v-if="isNewPassword">*</span>
       </Button>
     </div>
     <InfoText v-if="infoTextRef.global">{{ infoTextRef.global }}</InfoText>
     <InputModal v-if="modalOpen" @close="closeModal()" width="480px">
       <template #content>
-        <InputRow title="Wprowadź nowe hasło">
+        <InputRow :title="t('inputs.password.enterNew')">
           <InputText
             name="password1"
             password
@@ -85,7 +89,7 @@ function closeModal() {
             @preventEnter="save()"
           />
         </InputRow>
-        <InputRow title="Powtórz hasło">
+        <InputRow :title="t('inputs.password.repeat')">
           <InputText
             name="password2"
             password
@@ -96,8 +100,8 @@ function closeModal() {
         </InputRow>
       </template>
       <template #buttons>
-        <Button icon="check" accent @click="save()">Ustaw</Button>
-        <Button icon="cancel" @click="closeModal()">Anuluj</Button>
+        <Button icon="check" accent @click="save()">{{ t('common.actions.set') }}</Button>
+        <Button icon="cancel" @click="closeModal()">{{ t('common.actions.cancel') }}</Button>
       </template>
     </InputModal>
   </div>

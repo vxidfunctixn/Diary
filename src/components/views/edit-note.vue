@@ -8,6 +8,9 @@ import InputText from '@/components/inputs/input-text.vue'
 import InputRow from '@/components/inputs/input-row.vue'
 import { htmlToMarkdown, markdownToHtml } from '@/utils'
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const appStore = useAppStore()
 const diaryStore = useDiaryStore()
@@ -891,7 +894,7 @@ const saveNote = async () => {
         </div>
       </template>
       <template #right>
-        <Button icon="save" @click="saveNote">Zapisz</Button>
+        <Button icon="save" @click="saveNote">{{ t('common.actions.save') }}</Button>
       </template>
     </OptionsBar>
     <InputContent
@@ -904,27 +907,29 @@ const saveNote = async () => {
     <InputModal v-if="showLinkModal" width="500px" @close="closeLinkModal">
       <template #content>
         <form @submit.prevent="confirmInsertLink">
-          <InputRow title="Tekst linku">
+          <InputRow :title="t('editor.link.text')">
             <InputText
               name="text"
               :value="linkForm.text"
-              placeholder="Wpisz tekst linku"
+              :placeholder="t('editor.link.textPlaceholder')"
               @update="handleLinkFormUpdate($event)"
             />
           </InputRow>
-          <InputRow title="Adres URL">
+          <InputRow :title="t('editor.link.url')">
             <InputText
               name="url"
               :value="linkForm.url"
-              placeholder="https://example.com"
+              :placeholder="t('editor.link.urlPlaceholder')"
               @update="handleLinkFormUpdate($event)"
             />
           </InputRow>
         </form>
       </template>
       <template #buttons>
-        <Button icon="check" accent @click="confirmInsertLink">Wstaw link</Button>
-        <Button icon="cancel" @click="closeLinkModal">Anuluj</Button>
+        <Button icon="check" accent @click="confirmInsertLink">{{
+          t('editor.link.insert')
+        }}</Button>
+        <Button icon="cancel" @click="closeLinkModal">{{ t('common.actions.cancel') }}</Button>
       </template>
     </InputModal>
   </div>
