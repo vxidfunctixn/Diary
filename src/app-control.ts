@@ -56,7 +56,6 @@ export class AppControl {
           symbolColor: symbolColor,
           height: 42
         })
-        console.log('TitleBar color updated:', theme, symbolColor)
       } catch (error) {
         console.error('Failed to update titleBar color:', error)
       }

@@ -19,6 +19,7 @@ const { view } = storeToRefs(appStore)
   <AppThemeProvider>
     <WindowTitleBar />
     <div id="modal"></div>
+    <!-- Kontener dla modalów teleportowanych -->
     <div class="app-wrapper">
       <Cockpit v-if="view === VIEW.HOME" />
       <Lock v-if="view === VIEW.LOCK" />

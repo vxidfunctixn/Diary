@@ -29,6 +29,11 @@
       "edit": "Edytuj",
       "delete": "Usuń",
       "addNote": "Dodaj notatkę"
+    },
+    "delete": {
+      "dialogTitle": "Czy na pewno chcesz usunąć tę notatkę?",
+      "dialogInfo": "Spowoduje to usunięcie notatki z listy lecz informacja o jej usunięciu będzie dalej uwzględniana podczas analizy.",
+      "confirmButton": "Usuń notatkę"
     }
   },
   "inputs": {

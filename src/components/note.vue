@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import Icon from '@/components/icon.vue'
 import Button from '@/components/button.vue'
+import InputModal from '@/components/inputs/input-modal.vue'
 import type { DBNote } from '@/interfaces/store-interface'
 import { formatDate, markdownToHtml } from '@/utils'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -17,14 +18,25 @@ const emit = defineEmits<{
   edit: [uuid: string]
 }>()
 
+const showDeleteModal = ref(false)
+
 const htmlContent = computed(() => {
   return props.data ? markdownToHtml(props.data.content) : ''
 })
 
 const handleDelete = () => {
+  showDeleteModal.value = true
+}
+
+const confirmDelete = () => {
   if (props.data) {
     emit('delete', props.data.uuid)
   }
+  showDeleteModal.value = false
+}
+
+const cancelDelete = () => {
+  showDeleteModal.value = false
 }
 
 const handleEdit = () => {
@@ -75,6 +87,21 @@ const handleClick = (event: MouseEvent) => {
       </div>
       <div class="note-message" v-html="htmlContent" @click="handleClick"></div>
     </div>
+
+    <InputModal v-if="showDeleteModal" width="460px" @close="cancelDelete">
+      <template #header>
+        {{ t('notes.delete.dialogTitle') }}
+      </template>
+      <template #content>
+        {{ t('notes.delete.dialogInfo') }}
+      </template>
+      <template #buttons>
+        <Button icon="delete" accent @click="confirmDelete">{{
+          t('notes.delete.confirmButton')
+        }}</Button>
+        <Button icon="cancel" @click="cancelDelete">{{ t('common.actions.cancel') }}</Button>
+      </template>
+    </InputModal>
   </div>
 </template>
 
