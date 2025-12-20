@@ -918,7 +918,7 @@ const saveNote = async () => {
         </div>
       </template>
       <template #right>
-        <Button icon="save" @click="saveNote">{{ t('common.actions.save') }}</Button>
+        <Button icon="save" accent @click="saveNote">{{ t('common.actions.save') }}</Button>
       </template>
     </OptionsBar>
     <InputContent

@@ -57,7 +57,7 @@ function handleEditNote(uuid: string) {
         <Button icon="date">{{ t('common.calendar.today') }}</Button>
       </template>
       <template #right>
-        <Button icon="add-note" @click="appStore.setView(VIEW.EDIT_NOTE)">{{
+        <Button icon="add-note" accent @click="appStore.setView(VIEW.EDIT_NOTE)">{{
           t('notes.actions.addNote')
         }}</Button>
       </template>
