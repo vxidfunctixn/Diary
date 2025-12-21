@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import Icon from '@/components/common/icon/index.vue'
 import type { Time } from '@/interfaces/calendar-interface'
 
@@ -102,14 +102,87 @@ function handleInput(event: Event): void {
   const type = target.name as TimeType
   if (type === 'hours') {
     if (value < 0) value = 23
-    if (value > 23) value = Number(target.value.slice(-1))
+    if (value > 23) value = 0
   } else if (type === 'minutes') {
     if (value < 0) value = 59
-    if (value > 59) value = Number(target.value.slice(-1))
+    if (value > 59) value = 0
   }
-  target.value = formatNumber(value)
   selectedTime.value[type] = value
   update(type, true)
+}
+
+function handleBlur(event: Event): void {
+  const target = event.target as HTMLInputElement
+  const type = target.name as TimeType
+  let value = Number(target.value)
+
+  if (type === 'hours') {
+    if (isNaN(value) || value < 0) value = 0
+    if (value > 23) value = 23
+  } else if (type === 'minutes') {
+    if (isNaN(value) || value < 0) value = 0
+    if (value > 59) value = 59
+  }
+
+  time.value[type] = value
+  selectedTime.value[type] = value
+  target.value = formatNumber(value)
+}
+
+function handleKeydown(event: KeyboardEvent): void {
+  const allowedKeys = [
+    'Backspace',
+    'Delete',
+    'Tab',
+    'Escape',
+    'Enter',
+    'ArrowLeft',
+    'ArrowRight',
+    'Home',
+    'End'
+  ]
+
+  const target = event.target as HTMLInputElement
+  const type = target.name as TimeType
+
+  if (event.key === 'ArrowUp') {
+    event.preventDefault()
+    let value = Number(target.value) + 1
+    if (type === 'hours' && value > 23) value = 0
+    if (type === 'minutes' && value > 59) value = 0
+    time.value[type] = value
+    selectedTime.value[type] = value
+    update(type, true)
+    return
+  }
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault()
+    let value = Number(target.value) - 1
+    if (type === 'hours' && value < 0) value = 23
+    if (type === 'minutes' && value < 0) value = 59
+    time.value[type] = value
+    selectedTime.value[type] = value
+    update(type, true)
+    return
+  }
+
+  // Blokada wpisywania 0 gdy wartość to już "00"
+  if (event.key === '0' && target.value === '00') {
+    event.preventDefault()
+    return
+  }
+
+  if (
+    allowedKeys.includes(event.key) ||
+    (event.key >= '0' && event.key <= '9') ||
+    event.ctrlKey ||
+    event.metaKey
+  ) {
+    return
+  }
+
+  event.preventDefault()
 }
 </script>
 
@@ -128,12 +201,12 @@ function handleInput(event: Event): void {
         <input
           class="inputDefault"
           name="hours"
-          type="number"
-          min="-1"
-          max="24"
-          step="1"
+          type="text"
+          inputmode="numeric"
           :value="formatNumber(time.hours)"
           @input="handleInput($event)"
+          @blur="handleBlur($event)"
+          @keydown="handleKeydown($event)"
           ref="inputHours"
         />
       </label>
@@ -149,12 +222,12 @@ function handleInput(event: Event): void {
         <input
           class="inputDefault"
           name="minutes"
-          type="number"
-          min="-1"
-          max="60"
-          step="1"
+          type="text"
+          inputmode="numeric"
           :value="formatNumber(time.minutes)"
           @input="handleInput($event)"
+          @blur="handleBlur($event)"
+          @keydown="handleKeydown($event)"
           ref="inputMinutes"
         />
       </label>
@@ -268,6 +341,7 @@ function handleInput(event: Event): void {
         color: inherit;
         font-size: inherit;
         text-align: inherit;
+        width: 100%;
 
         &::-webkit-outer-spin-button,
         &::-webkit-inner-spin-button {

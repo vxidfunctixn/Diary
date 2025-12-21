@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import InputModal from './input-modal.vue'
-import Button from '@/component/common/button.vue'
+import Button from '@/components/common/button.vue'
 
 const meta: Meta<typeof InputModal> = {
   title: 'Inputs/InputModal',
