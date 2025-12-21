@@ -16,11 +16,6 @@ const { themeColor } = storeToRefs(settingsStore)
 const slots = useSlots()
 
 const iconColor = computed(() => {
-  console.log(
-    props.accent || props.danger || props.negative
-      ? themeColor.value.HL3.value
-      : themeColor.value.F1.value
-  )
   return props.accent || props.danger || props.negative
     ? themeColor.value.HL3.value
     : themeColor.value.F1.value

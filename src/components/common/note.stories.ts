@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import Note from './note.vue'
 import type { DBNote } from '@/interfaces/store-interface'
 
-const meta: Meta<typeof Note> = {
+const meta = {
   title: 'Common/Note',
   component: Note,
   tags: ['autodocs'],
@@ -35,6 +35,15 @@ const meta: Meta<typeof Note> = {
         defaultValue: { summary: 'undefined' }
       }
     },
+    titleFormat: {
+      control: 'object',
+      description:
+        'Obiekt określający format wyświetlania tytułu notatki. Pola: time (boolean) - pokazuje godzinę, date (boolean) - pokazuje datę.',
+      table: {
+        type: { summary: '{ time?: boolean, date?: boolean } | undefined' },
+        defaultValue: { summary: 'undefined (domyślnie date)' }
+      }
+    },
     onDelete: {
       description: 'Event emitowany przy próbie usunięcia notatki. Zwraca uuid notatki.',
       table: {
@@ -48,7 +57,7 @@ const meta: Meta<typeof Note> = {
       }
     }
   }
-}
+} satisfies Meta<typeof Note>
 
 export default meta
 type Story = StoryObj<typeof Note>
@@ -106,7 +115,8 @@ Więcej informacji: [dokumentacja](https://example.com)`,
 
 export const Default: Story = {
   args: {
-    data: sampleNote
+    data: sampleNote,
+    titleFormat: { time: false, date: true }
   } as any,
 
   render: args => ({
@@ -155,18 +165,21 @@ export const GroupedNotes: Story = {
           @delete="handleDelete"
           @edit="handleEdit"
           stick="bottom"
+          :titleFormat="{ time: true }"
         />
         <Note
           :data="group1[1]"
           stick="both"
           @delete="handleDelete"
           @edit="handleEdit"
+          :titleFormat="{ time: true }"
         />
         <Note
           :data="group1[2]"
           stick="top"
           @delete="handleDelete"
           @edit="handleEdit"
+          :titleFormat="{ time: true }"
         />
 
         <Note

@@ -12,6 +12,10 @@ const { t } = useI18n()
 const props = defineProps<{
   data?: DBNote
   stick?: 'top' | 'bottom' | 'both'
+  titleFormat?: {
+    time?: boolean
+    date?: boolean
+  }
 }>()
 
 const emit = defineEmits<{
@@ -23,6 +27,29 @@ const showDeleteModal = ref(false)
 
 const htmlContent = computed(() => {
   return props.data ? markdownToHtml(props.data.content) : ''
+})
+
+const formattedTitle = computed(() => {
+  if (!props.data) return ''
+
+  const date = new Date(props.data.created_at)
+  const parts: string[] = []
+
+  if (props.titleFormat?.time) {
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    parts.push(`${hours}:${minutes}`)
+  }
+
+  if (props.titleFormat?.date) {
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const year = date.getFullYear()
+    parts.push(`${day}.${month}.${year}`)
+  }
+
+  console.log(props.titleFormat?.time)
+  return parts.join(' ')
 })
 
 const handleDelete = () => {
@@ -82,7 +109,7 @@ const handleClick = (event: MouseEvent) => {
           <div class="icon">
             <Icon name="note" :size="16" />
           </div>
-          {{ formatDate(new Date(data.created_at)) }}
+          {{ formattedTitle }}
         </div>
         <div class="note-options">
           <Button icon="edit-note" small @click="handleEdit">{{ t('notes.actions.edit') }}</Button>

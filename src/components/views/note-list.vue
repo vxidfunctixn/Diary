@@ -67,6 +67,19 @@ function getStickPosition(index: number): 'top' | 'bottom' | 'both' | undefined 
   if (hasSameDayAfter) return 'bottom'
   return undefined
 }
+
+function getTitleFormat(index: number): { time: boolean; date: boolean } {
+  const currentNote = notes.value[index]
+  if (!currentNote) return { time: true, date: true }
+
+  const prevNote = index > 0 ? notes.value[index - 1] : null
+  const isFirstOfDay = !prevNote || !isSameDay(currentNote.created_at, prevNote.created_at)
+
+  return {
+    date: isFirstOfDay,
+    time: true
+  }
+}
 </script>
 
 <template>
@@ -93,6 +106,7 @@ function getStickPosition(index: number): 'top' | 'bottom' | 'both' | undefined 
       :key="note.uuid"
       :data="note"
       :stick="getStickPosition(index)"
+      :titleFormat="getTitleFormat(index)"
       @delete="handleDeleteNote"
       @edit="handleEditNote"
     />
