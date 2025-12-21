@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import OptionsBar from '@/components/layout/options-bar.vue'
-import Button from '@/components/button.vue'
+import Button from '@/components/common/button.vue'
 import { useAppStore, useDiaryStore } from '@/stores'
 import InputContent from '@/components/inputs/input-content.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
@@ -468,6 +468,37 @@ const handleLinkFormUpdate = (event: any) => {
   linkForm.value[event.name as 'text' | 'url'] = event.value as string
 }
 
+const removeLink = () => {
+  if (savedSelection.value) {
+    const selection = window.getSelection()
+    if (selection) {
+      selection.removeAllRanges()
+      selection.addRange(savedSelection.value)
+    }
+  }
+
+  const selection = window.getSelection()
+  let linkElement: HTMLAnchorElement | null = null
+
+  if (selection && selection.anchorNode) {
+    let node = selection.anchorNode as Node | null
+    while (node && node !== editorRef.value?.$el) {
+      if (node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === 'A') {
+        linkElement = node as HTMLAnchorElement
+        break
+      }
+      node = node.parentNode
+    }
+  }
+
+  if (linkElement) {
+    const textNode = document.createTextNode(linkElement.textContent || '')
+    linkElement.parentNode?.replaceChild(textNode, linkElement)
+  }
+
+  closeLinkModal()
+}
+
 const confirmInsertLink = () => {
   if (savedSelection.value) {
     const selection = window.getSelection()
@@ -596,7 +627,30 @@ const clearFormat = () => {
     return marks
   }
 
+  const findLinksInRange = (range: Range): HTMLElement[] => {
+    const links: HTMLElement[] = []
+    const iterator = document.createNodeIterator(
+      editorRef.value?.$el || document.body,
+      NodeFilter.SHOW_ELEMENT,
+      {
+        acceptNode: node => {
+          if ((node as HTMLElement).tagName === 'A' && range.intersectsNode(node)) {
+            return NodeFilter.FILTER_ACCEPT
+          }
+          return NodeFilter.FILTER_REJECT
+        }
+      }
+    )
+
+    let node
+    while ((node = iterator.nextNode())) {
+      links.push(node as HTMLElement)
+    }
+    return links
+  }
+
   const existingMarks = findMarksInRange(range)
+  const existingLinks = findLinksInRange(range)
 
   if (existingMarks.length > 0) {
     existingMarks.forEach(mark => {
@@ -718,6 +772,20 @@ const clearFormat = () => {
           parent?.removeChild(mark)
         }
       }
+    })
+
+    if (editorRef.value?.$el) {
+      editorRef.value.$el.normalize()
+    }
+  }
+
+  if (existingLinks.length > 0) {
+    existingLinks.forEach(link => {
+      const parent = link.parentNode
+      while (link.firstChild) {
+        parent?.insertBefore(link.firstChild, link)
+      }
+      parent?.removeChild(link)
     })
 
     if (editorRef.value?.$el) {
@@ -872,6 +940,9 @@ const saveNote = async () => {
         <Button icon="check" accent @click="confirmInsertLink">{{
           t('editor.link.insert')
         }}</Button>
+        <Button icon="delete" danger :disabled="!linkForm.url" @click="removeLink">
+          {{ t('editor.link.delete') }}
+        </Button>
         <Button icon="cancel" @click="closeLinkModal">{{ t('common.actions.cancel') }}</Button>
       </template>
     </InputModal>

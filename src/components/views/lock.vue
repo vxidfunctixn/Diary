@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from '@/components/button.vue'
+import Button from '@/components/common/button.vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 

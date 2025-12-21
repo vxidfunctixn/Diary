@@ -14,6 +14,7 @@ export interface ButtonProps {
   monospace?: boolean
   active?: boolean
   iconButton?: boolean
+  iconPosition?: 'left' | 'right'
 }
 
 export interface IconProps {
@@ -31,3 +32,5 @@ export interface UpdateEvent {
   name: string
   value: number
 }
+
+export type InputAlign = 'left' | 'right'

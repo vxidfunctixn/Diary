@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import Icon from '@/components/icon/index.vue'
-import Button from '@/components/button.vue'
+import Icon from '@/components/common/icon/index.vue'
+import Button from '@/components/common/button.vue'
 import Navigation from '@/components/layout/breadcrumbs.vue'
 import { useSettingsStore } from '@/stores'
 import { ref, onMounted, computed } from 'vue'

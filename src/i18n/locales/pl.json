@@ -38,7 +38,8 @@
   },
   "inputs": {
     "keybind": {
-      "pressCombo": "Wciśnij kombinację"
+      "pressCombo": "Wciśnij kombinację",
+      "notSet": "Wciśnij kombinację"
     },
     "password": {
       "changePassword": "Zmień hasło",
@@ -57,7 +58,8 @@
       "textPlaceholder": "Wpisz tekst linku",
       "url": "Adres URL",
       "urlPlaceholder": "https://example.com",
-      "insert": "Wstaw link"
+      "insert": "Wstaw link",
+      "delete": "Usuń link"
     }
   },
   "views": {

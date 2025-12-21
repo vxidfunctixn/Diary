@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Section from '@/components/layout/section.vue'
 import Row from '@/components/layout/section-row.vue'
-import Button from '@/components/button.vue'
+import Button from '@/components/common/button.vue'
 import { Calendar, getMonthName } from '@/utils'
 import { useI18n } from 'vue-i18n'
 
@@ -98,11 +98,11 @@ function getTitle() {
     }
 
     &:active {
-      border-color: var(--F2);
+      border-color: var(--F3);
     }
 
     &.disabled {
-      color: var(--F2);
+      color: var(--F3);
     }
 
     &.active {

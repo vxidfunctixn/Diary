@@ -1,0 +1,24 @@
+.app-theme-provider,
+.app-wrapper {
+  height: unset !important;
+  min-height: unset !important;
+  max-height: unset !important;
+  border: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+#storybook-root {
+  height: auto;
+}
+
+body {
+  overflow: auto !important;
+}
+
+.input-modal-wrapper {
+  top: 0 !important;
+  height: 100% !important;
+  max-height: 100% !important;
+}

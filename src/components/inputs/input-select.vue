@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
-import Icon from '@/components/icon/index.vue'
+import Icon from '@/components/common/icon/index.vue'
 import { ref, watch, computed } from 'vue'
 
 interface SelectOption {
@@ -80,8 +80,7 @@ const currentTitle = computed(() => {
 
 <style lang="scss" scoped>
 .input-select {
-  display: flex;
-  justify-content: flex-end;
+  width: 100%;
 }
 
 .select-wrapper {
@@ -150,7 +149,7 @@ const currentTitle = computed(() => {
       }
 
       &:active {
-        box-shadow: inset 0 0 0 1px var(--F2);
+        box-shadow: inset 0 0 0 1px var(--F3);
       }
 
       &.selected {

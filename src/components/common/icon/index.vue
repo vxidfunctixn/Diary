@@ -17,6 +17,13 @@ watch(themeColor, () => {
   currentColor.value = props.color ? props.color : settingsStore.themeColor.F1.value
 })
 
+watch(
+  () => props.color,
+  newColor => {
+    currentColor.value = newColor ? newColor : settingsStore.themeColor.F1.value
+  }
+)
+
 const IconComponent = shallowRef()
 
 watch(

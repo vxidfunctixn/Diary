@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import Button from '@/components/button.vue'
+import Button from '@/components/common/button.vue'
 import InfoText from '@/components/inputs/info-text.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
 import Clock from '@/components/inputs/clock.vue'
 import { DateTime } from '@/utils'
-import { ref, watch, computed } from 'vue'
+import type { InputAlign } from '@/interfaces/components-interface'
+import { ref, watch, computed, type PropType } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -13,7 +14,11 @@ const props = defineProps({
   name: String,
   newValue: Number,
   oldValue: Number,
-  infoText: String
+  infoText: String,
+  inputAlign: {
+    type: String as PropType<InputAlign>,
+    default: 'left' as InputAlign
+  }
 })
 
 const modalOpen = ref(false)
@@ -44,7 +49,7 @@ const isNewTime = computed(() => {
 </script>
 
 <template>
-  <div class="input-time">
+  <div class="input-time" :class="inputAlign">
     <div class="button">
       <Button icon="clock" @click="modalOpen = true">
         {{ time.timeString }} <span class="accent-span" v-if="isNewTime">*</span>
@@ -65,12 +70,20 @@ const isNewTime = computed(() => {
 
 <style lang="scss" scoped>
 .input-time {
-  .button {
-    text-align: right;
-  }
-
   .accent-span {
     color: var(--A1);
+  }
+
+  &.left {
+    .button {
+      text-align: left;
+    }
+  }
+
+  &.right {
+    .button {
+      text-align: right;
+    }
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
-import Icon from '@/components/icon/index.vue'
+import Icon from '@/components/common/icon/index.vue'
 import { ref, watch } from 'vue'
 const emit = defineEmits(['update', 'preventEnter'])
 const props = defineProps({
@@ -14,9 +14,12 @@ const props = defineProps({
 const hideText = ref(true)
 const currentValue = ref(props.value)
 
-watch(props, newProps => {
-  currentValue.value = newProps.value
-})
+watch(
+  () => props.value,
+  newValue => {
+    currentValue.value = newValue
+  }
+)
 
 function update(event: Event) {
   currentValue.value = (event.target as HTMLInputElement).value
@@ -55,6 +58,7 @@ function update(event: Event) {
 <style lang="scss" scoped>
 .input-text {
   position: relative;
+  width: 100%;
 
   .input {
     width: 100%;
@@ -68,7 +72,7 @@ function update(event: Event) {
     color: var(--F1);
 
     &::placeholder {
-      color: var(--F2);
+      color: var(--F3);
     }
 
     &:focus {
