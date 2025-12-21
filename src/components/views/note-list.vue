@@ -41,6 +41,32 @@ async function handleDeleteNote(uuid: string) {
 function handleEditNote(uuid: string) {
   router.push({ name: 'edit_note', params: { uuid } })
 }
+
+function isSameDay(date1: number, date2: number): boolean {
+  const d1 = new Date(date1)
+  const d2 = new Date(date2)
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  )
+}
+
+function getStickPosition(index: number): 'top' | 'bottom' | 'both' | undefined {
+  const currentNote = notes.value[index]
+  if (!currentNote) return undefined
+
+  const prevNote = index > 0 ? notes.value[index - 1] : null
+  const nextNote = index < notes.value.length - 1 ? notes.value[index + 1] : null
+
+  const hasSameDayBefore = prevNote && isSameDay(currentNote.created_at, prevNote.created_at)
+  const hasSameDayAfter = nextNote && isSameDay(currentNote.created_at, nextNote.created_at)
+
+  if (hasSameDayBefore && hasSameDayAfter) return 'both'
+  if (hasSameDayBefore) return 'top'
+  if (hasSameDayAfter) return 'bottom'
+  return undefined
+}
 </script>
 
 <template>
@@ -63,9 +89,10 @@ function handleEditNote(uuid: string) {
       </template>
     </OptionsBar>
     <Note
-      v-for="note in notes"
+      v-for="(note, index) in notes"
       :key="note.uuid"
       :data="note"
+      :stick="getStickPosition(index)"
       @delete="handleDeleteNote"
       @edit="handleEditNote"
     />
