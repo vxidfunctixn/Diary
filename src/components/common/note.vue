@@ -105,7 +105,7 @@ const handleClick = (event: MouseEvent) => {
   >
     <div class="note">
       <div class="note-title-bar">
-        <div class="note-title" tabindex="0">
+        <div class="note-title">
           <div class="icon">
             <Icon name="note" :size="16" />
           </div>
@@ -182,7 +182,6 @@ const handleClick = (event: MouseEvent) => {
         padding: 11px 11px;
         line-height: 20px;
         position: relative;
-        cursor: pointer;
         border: 1px solid transparent;
         outline: none;
         min-height: 44px;
@@ -220,7 +219,9 @@ const handleClick = (event: MouseEvent) => {
         cursor: pointer;
         border-radius: 4px;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
+          outline: none;
           background-color: var(--HL2);
           outline: 1px solid var(--A4);
         }
@@ -247,8 +248,7 @@ const handleClick = (event: MouseEvent) => {
       }
     }
 
-    &:hover,
-    &:focus-within {
+    &:hover {
       .note-title-bar {
         .note-options {
           opacity: 1;
