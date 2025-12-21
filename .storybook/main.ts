@@ -22,6 +22,13 @@ const config: StorybookConfig = {
         alias: {
           '@': path.resolve(__dirname, '../src')
         }
+      },
+      css: {
+        preprocessorOptions: {
+          scss: {
+            additionalData: `@import "@/theme/global.scss"; @import "@/theme/mixins.scss";`
+          }
+        }
       }
     })
   }
