@@ -36,6 +36,8 @@ function updateTheme() {
 }
 
 onMounted(() => {
+  if (!window.electron) return
+
   setTimeout(() => {
     const theme = settingsStore.currentTheme
     window.electron.send('update-titlebar-color', theme)

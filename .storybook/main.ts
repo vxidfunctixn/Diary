@@ -10,11 +10,12 @@ const __dirname = dirname(__filename)
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: [],
+
   framework: {
     name: '@storybook/vue3-vite',
     options: {}
   },
+
   async viteFinal(config: any) {
     return mergeConfig(config, {
       plugins: [vue()],
@@ -31,6 +32,8 @@ const config: StorybookConfig = {
         }
       }
     })
-  }
+  },
+
+  addons: ['@storybook/addon-docs', '@storybook/addon-vitest']
 }
 export default config

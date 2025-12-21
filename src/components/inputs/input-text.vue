@@ -14,9 +14,12 @@ const props = defineProps({
 const hideText = ref(true)
 const currentValue = ref(props.value)
 
-watch(props, newProps => {
-  currentValue.value = newProps.value
-})
+watch(
+  () => props.value,
+  newValue => {
+    currentValue.value = newValue
+  }
+)
 
 function update(event: Event) {
   currentValue.value = (event.target as HTMLInputElement).value

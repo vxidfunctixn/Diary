@@ -5,6 +5,14 @@ const meta: Meta<typeof InputText> = {
   title: 'Inputs/InputText',
   component: InputText,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Komponent InputText służy do wprowadzania tekstu lub haseł. Wspiera walidację, placeholder oraz dodatkowy tekst informacyjny.'
+      }
+    }
+  },
   argTypes: {
     name: {
       control: 'text',
@@ -36,7 +44,16 @@ export const Default: Story = {
   args: {
     name: 'username',
     value: '',
-    placeholder: 'Wpisz tekst...'
+    placeholder: 'Wpisz tekst...',
+    password: false,
+    infoText: ''
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Podstawowy wariant komponentu z pustym polem i placeholderem.'
+      }
+    }
   }
 }
 
@@ -45,6 +62,13 @@ export const WithValue: Story = {
     name: 'username',
     value: 'Jan Kowalski',
     placeholder: 'Wpisz imię i nazwisko'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pole tekstowe z wcześniej wypełnioną wartością.'
+      }
+    }
   }
 }
 
@@ -54,6 +78,13 @@ export const WithInfoText: Story = {
     value: '',
     placeholder: 'Wpisz adres email',
     infoText: 'Adres email musi być poprawny'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pole tekstowe z dodatkowym tekstem informacyjnym wyświetlanym pod polem.'
+      }
+    }
   }
 }
 
@@ -63,6 +94,13 @@ export const Password: Story = {
     value: 'sekretnehaslo123',
     placeholder: 'Wpisz hasło',
     password: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pole hasła z ukrytymi znakami.'
+      }
+    }
   }
 }
 
@@ -73,5 +111,12 @@ export const PasswordWithInfo: Story = {
     placeholder: 'Wpisz hasło',
     password: true,
     infoText: 'Hasło musi mieć co najmniej 8 znaków'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pole hasła z tekstem informacyjnym zawierającym wymagania dotyczące hasła.'
+      }
+    }
   }
 }

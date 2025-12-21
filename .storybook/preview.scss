@@ -1,4 +1,3 @@
-// Korekty stylów dla Storybook - używaj !important aby nadpisać style komponentów
 .app-theme-provider,
 .app-wrapper {
   height: unset !important;
@@ -10,7 +9,10 @@
   background: transparent !important;
 }
 
-// Dodatkowe korekty jeśli potrzebne
 #storybook-root {
   height: auto;
+}
+
+body {
+  overflow: auto !important;
 }
