@@ -80,8 +80,7 @@ const currentTitle = computed(() => {
 
 <style lang="scss" scoped>
 .input-select {
-  display: flex;
-  justify-content: flex-end;
+  width: 100%;
 }
 
 .select-wrapper {

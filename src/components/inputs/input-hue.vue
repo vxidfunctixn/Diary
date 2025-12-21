@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
 import { ref, watch } from 'vue'
-import type { Settings } from '@/interfaces/store-interface'
 
 const emit = defineEmits<{
-  update: [event: { value: number; name: keyof Settings }]
+  update: [event: { value: number; name: string }]
   preventEnter: []
 }>()
 
 const props = defineProps<{
-  name: keyof Settings
+  name: string
   value?: number
   infoText?: string
 }>()
@@ -58,6 +57,7 @@ function update(event: Event): void {
 <style lang="scss" scoped>
 .input-hue {
   position: relative;
+  width: 100%;
 
   .input-wrapper {
     display: block;

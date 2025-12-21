@@ -40,36 +40,19 @@ export const Default: Story = {
   args: {
     name: 'language',
     value: 'pl',
+
     options: [
       { value: 'pl', title: 'Polski' },
       { value: 'en', title: 'English' },
       { value: 'de', title: 'Deutsch' }
-    ]
+    ],
+
+    infoText: ''
   },
   parameters: {
     docs: {
       description: {
         story: 'Podstawowa lista rozwijana z wyborem języka.'
-      }
-    }
-  }
-}
-
-export const ColorSelection: Story = {
-  args: {
-    name: 'color',
-    value: 'blue',
-    options: [
-      { value: 'red', title: 'Czerwony' },
-      { value: 'green', title: 'Zielony' },
-      { value: 'blue', title: 'Niebieski' },
-      { value: 'yellow', title: 'Żółty' }
-    ]
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Lista rozwijana do wyboru koloru.'
       }
     }
   }
@@ -90,50 +73,6 @@ export const WithInfoText: Story = {
     docs: {
       description: {
         story: 'Lista rozwijana z tekstem informacyjnym.'
-      }
-    }
-  }
-}
-
-export const ManyOptions: Story = {
-  args: {
-    name: 'country',
-    value: 'pl',
-    options: [
-      { value: 'pl', title: 'Polska' },
-      { value: 'de', title: 'Niemcy' },
-      { value: 'fr', title: 'Francja' },
-      { value: 'es', title: 'Hiszpania' },
-      { value: 'it', title: 'Włochy' },
-      { value: 'uk', title: 'Wielka Brytania' },
-      { value: 'us', title: 'Stany Zjednoczone' },
-      { value: 'ca', title: 'Kanada' }
-    ]
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Lista rozwijana z większą liczbą opcji.'
-      }
-    }
-  }
-}
-
-export const FontSize: Story = {
-  args: {
-    name: 'fontSize',
-    value: 'medium',
-    options: [
-      { value: 'small', title: 'Mały' },
-      { value: 'medium', title: 'Średni' },
-      { value: 'large', title: 'Duży' },
-      { value: 'xlarge', title: 'Bardzo duży' }
-    ]
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Lista rozwijana do wyboru rozmiaru czcionki.'
       }
     }
   }

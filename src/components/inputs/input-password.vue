@@ -4,7 +4,8 @@ import InfoText from '@/components/inputs/info-text.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
 import InputText from '@/components/inputs/input-text.vue'
 import InputRow from '@/components/inputs/input-row.vue'
-import { ref, computed } from 'vue'
+import type { InputAlign } from '@/interfaces/components-interface'
+import { ref, computed, type PropType } from 'vue'
 import { hashPassword } from '@/utils'
 import { useI18n } from 'vue-i18n'
 
@@ -14,7 +15,11 @@ const props = defineProps({
   name: String,
   oldValue: String,
   newValue: String,
-  infoText: String
+  infoText: String,
+  inputAlign: {
+    type: String as PropType<InputAlign>,
+    default: 'left' as InputAlign
+  }
 })
 
 const modalOpen = ref(false)
@@ -70,7 +75,7 @@ function closeModal() {
 </script>
 
 <template>
-  <div class="input-password">
+  <div class="input-password" :class="inputAlign">
     <div class="button">
       <Button icon="lock" @click="modalOpen = true">
         {{ t('inputs.password.changePassword') }}
@@ -109,12 +114,20 @@ function closeModal() {
 
 <style lang="scss" scoped>
 .input-password {
-  .button {
-    text-align: right;
-  }
-
   .accent-span {
     color: var(--A1);
+  }
+
+  &.left {
+    .button {
+      text-align: left;
+    }
+  }
+
+  &.right {
+    .button {
+      text-align: right;
+    }
   }
 }
 </style>

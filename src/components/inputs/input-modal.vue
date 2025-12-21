@@ -4,6 +4,10 @@ const props = defineProps({
   width: {
     type: String,
     default: 'auto'
+  },
+  disableTeleport: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -13,7 +17,7 @@ function close() {
 </script>
 
 <template>
-  <Teleport to="#modal">
+  <Teleport to="#modal" :disabled="disableTeleport">
     <div class="input-modal-wrapper">
       <div class="overlay" @click="close()"></div>
       <div class="input-modal-container">
@@ -24,7 +28,7 @@ function close() {
           <div class="content">
             <slot name="content"></slot>
           </div>
-          <div class="buttons">
+          <div class="buttons" v-if="$slots.buttons">
             <slot name="buttons"></slot>
           </div>
         </div>

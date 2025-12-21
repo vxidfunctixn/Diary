@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
+import type { InputAlign } from '@/interfaces/components-interface'
+import type { PropType } from 'vue'
 const emit = defineEmits(['update'])
 const props = defineProps({
   name: String,
   value: Boolean,
-  infoText: String
+  infoText: String,
+  inputAlign: {
+    type: String as PropType<InputAlign>,
+    default: 'left' as InputAlign
+  }
 })
 
 function update(event: Event) {
@@ -16,7 +22,7 @@ function update(event: Event) {
 </script>
 
 <template>
-  <div class="input-switcher">
+  <div class="input-switcher" :class="inputAlign">
     <label class="input-label">
       <input
         type="checkbox"
@@ -33,17 +39,25 @@ function update(event: Event) {
 
 <style lang="scss" scoped>
 .input-switcher {
-  display: flex;
-  min-height: 44px;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+  &.left {
+    .input-label {
+      justify-content: flex-start;
+    }
+  }
+
+  &.right {
+    .input-label {
+      justify-content: flex-end;
+    }
+  }
 
   .input-label {
-    display: block;
+    display: flex;
+    align-items: center;
     position: relative;
     cursor: pointer;
     border-radius: 16px;
+    min-height: 44px;
 
     .checkbox {
       --_background_color: var(--BG4);

@@ -25,6 +25,11 @@ const meta: Meta<typeof InputKeybind> = {
     infoText: {
       control: 'text',
       description: 'Informacyjny tekst pomocniczy'
+    },
+    inputAlign: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Wyrównanie przycisku'
     }
   }
 }
@@ -35,12 +40,31 @@ type Story = StoryObj<typeof InputKeybind>
 export const Default: Story = {
   args: {
     name: 'keybind',
-    value: undefined
+    value: [],
+    infoText: ''
   },
   parameters: {
     docs: {
       description: {
         story: 'Puste pole do przechwytywania kombinacji klawiszy.'
+      }
+    }
+  }
+}
+
+export const AlignedRight: Story = {
+  args: {
+    name: 'keybind',
+    value: [
+      { code: 17, key: 'Control' },
+      { code: 83, key: 's' }
+    ],
+    inputAlign: 'right'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pole do przechwytywania kombinacji klawiszy wyrównane do prawej.'
       }
     }
   }
@@ -55,23 +79,6 @@ export const SingleKey: Story = {
     docs: {
       description: {
         story: 'Pojedynczy klawisz F.'
-      }
-    }
-  }
-}
-
-export const CtrlS: Story = {
-  args: {
-    name: 'keybind',
-    value: [
-      { code: 17, key: 'Control' },
-      { code: 83, key: 's' }
-    ]
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Kombinacja Ctrl+S do zapisywania.'
       }
     }
   }
@@ -99,7 +106,7 @@ export const WithInfoText: Story = {
   args: {
     name: 'keybind',
     value: [
-      { code: 17, key: 'Control' },
+      { code: 18, key: 'Alt' },
       { code: 80, key: 'p' }
     ],
     infoText: 'Kliknij pole i naciśnij kombinację klawiszy'
@@ -108,23 +115,6 @@ export const WithInfoText: Story = {
     docs: {
       description: {
         story: 'Pole do przechwytywania kombinacji klawiszy z tekstem informacyjnym.'
-      }
-    }
-  }
-}
-
-export const AltF4: Story = {
-  args: {
-    name: 'keybind',
-    value: [
-      { code: 18, key: 'Alt' },
-      { code: 115, key: 'F4' }
-    ]
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Kombinacja Alt+F4.'
       }
     }
   }

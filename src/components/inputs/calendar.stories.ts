@@ -5,6 +5,11 @@ const meta: Meta<typeof Calendar> = {
   title: 'Inputs/Calendar',
   component: Calendar,
   tags: ['autodocs'],
+  decorators: [
+    () => ({
+      template: '<div style="max-width: 280px;"><story /></div>'
+    })
+  ],
   parameters: {
     docs: {
       description: {
@@ -32,6 +37,9 @@ export const Default: Story = {
     docs: {
       description: {
         story: 'Podstawowy widok kalendarza z bieżącą datą.'
+      },
+      source: {
+        code: '<Calendar :date="Date.now()" />'
       }
     }
   }
@@ -45,32 +53,6 @@ export const SpecificDate: Story = {
     docs: {
       description: {
         story: 'Kalendarz z konkretną datą (25 grudnia 2024).'
-      }
-    }
-  }
-}
-
-export const NewYearsDay: Story = {
-  args: {
-    date: new Date('2025-01-01').valueOf()
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Kalendarz ustawiony na Nowy Rok 2025.'
-      }
-    }
-  }
-}
-
-export const SummerDate: Story = {
-  args: {
-    date: new Date('2025-07-15').valueOf()
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Kalendarz z datą letnią (15 lipca 2025).'
       }
     }
   }

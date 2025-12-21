@@ -32,34 +32,6 @@ export const Default: Story = {
   }
 }
 
-export const ValidationMessage: Story = {
-  render: () => ({
-    components: { InfoText },
-    template: '<InfoText>Pole nie może być puste</InfoText>'
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Tekst informacyjny jako komunikat walidacji.'
-      }
-    }
-  }
-}
-
-export const HelpText: Story = {
-  render: () => ({
-    components: { InfoText },
-    template: '<InfoText>Wprowadź adres email w formacie: nazwa@domena.pl</InfoText>'
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Tekst pomocniczy z instrukcją.'
-      }
-    }
-  }
-}
-
 export const LongText: Story = {
   render: () => ({
     components: { InfoText },

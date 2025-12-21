@@ -31,3 +31,5 @@ export interface UpdateEvent {
   name: string
   value: number
 }
+
+export type InputAlign = 'left' | 'right'

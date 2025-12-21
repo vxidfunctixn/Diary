@@ -29,6 +29,11 @@ const meta: Meta<typeof InputPassword> = {
     infoText: {
       control: 'text',
       description: 'Informacyjny tekst pomocniczy'
+    },
+    inputAlign: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Wyrównanie przycisku'
     }
   }
 }
@@ -40,7 +45,8 @@ export const Default: Story = {
   args: {
     name: 'password',
     oldValue: '',
-    newValue: ''
+    newValue: '',
+    infoText: ''
   },
   parameters: {
     docs: {
@@ -51,16 +57,17 @@ export const Default: Story = {
   }
 }
 
-export const WithExistingPassword: Story = {
+export const AlignedRight: Story = {
   args: {
     name: 'password',
-    oldValue: 'abc123hash',
-    newValue: 'abc123hash'
+    oldValue: '',
+    newValue: '',
+    inputAlign: 'right'
   },
   parameters: {
     docs: {
       description: {
-        story: 'Komponent z już ustawionym hasłem (brak gwiazdki).'
+        story: 'Komponent do zmiany hasła wyrównany do prawej.'
       }
     }
   }
@@ -92,21 +99,6 @@ export const WithInfoText: Story = {
     docs: {
       description: {
         story: 'Komponent do zmiany hasła z tekstem informacyjnym.'
-      }
-    }
-  }
-}
-
-export const NewPasswordSet: Story = {
-  args: {
-    name: 'password',
-    oldValue: '',
-    newValue: 'newpasswordhash'
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Komponent z nowo ustawionym hasłem (gwiazdka wskazuje zmianę).'
       }
     }
   }

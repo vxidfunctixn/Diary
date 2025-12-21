@@ -21,8 +21,8 @@ const settingsStore = useSettingsStore()
 const form = ref<Settings>({ ...settingsStore.$state })
 const hasChangedData = ref(false)
 
-function handleUpdate<K extends keyof Settings>(event: InputUpdateEvent<K>) {
-  form.value[event.name] = event.value
+function handleUpdate(event: { name: string; value: unknown }) {
+  form.value = { ...form.value, [event.name]: event.value }
   hasChangedData.value = isProxyDifferent(form.value, settingsStore.$state)
 }
 
@@ -80,7 +80,12 @@ const theme_options = computed(() => [
         <InputText name="diary_name" :value="form.diary_name" @update="handleUpdate($event)" />
       </InputRow>
       <InputRow :title="t('settings.fields.reminder')">
-        <InputSwitcher name="reminder" :value="form.reminder" @update="handleUpdate($event)" />
+        <InputSwitcher
+          name="reminder"
+          :value="form.reminder"
+          @update="handleUpdate($event)"
+          inputAlign="right"
+        />
       </InputRow>
       <InputRow :title="t('settings.fields.remindTime')">
         <InputTime
@@ -88,6 +93,7 @@ const theme_options = computed(() => [
           :newValue="form.remind_time"
           :oldValue="settingsStore.remind_time"
           @update="handleUpdate($event)"
+          inputAlign="right"
         />
       </InputRow>
       <InputRow :title="t('settings.fields.password')">
@@ -96,6 +102,7 @@ const theme_options = computed(() => [
           :newValue="form.password"
           :oldValue="settingsStore.password"
           @update="handleUpdate($event)"
+          inputAlign="right"
         />
       </InputRow>
       <InputRow :title="t('settings.fields.requirePassword')">
@@ -118,13 +125,19 @@ const theme_options = computed(() => [
         <InputHue name="theme_hue" :value="form.theme_hue" @update="handleUpdate($event)" />
       </InputRow>
       <InputRow :title="t('settings.fields.standby')">
-        <InputSwitcher name="standby" :value="form.standby" @update="handleUpdate($event)" />
+        <InputSwitcher
+          name="standby"
+          :value="form.standby"
+          @update="handleUpdate($event)"
+          inputAlign="right"
+        />
       </InputRow>
       <InputRow :title="t('settings.fields.quickNoteShortcut')">
         <InputKeybind
           name="quick_note_shortcut"
           :value="form.quick_note_shortcut"
           @update="handleUpdate($event)"
+          inputAlign="right"
         />
       </InputRow>
     </form>

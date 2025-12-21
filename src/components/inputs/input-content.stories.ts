@@ -9,7 +9,7 @@ const meta: Meta<typeof InputContent> = {
     docs: {
       description: {
         component:
-          'Komponent InputContent to bogaty edytor tekstu z możliwością formatowania (pogrubienie, kursywa, podkreślenie, przekreślenie, linki, zaznaczenia). Wspiera również interakcję Alt+klik do otwierania linków.'
+          'Komponent InputContent to bogaty edytor tekstu używany w widoku edytora notatek. Wspiera formatowanie: pogrubienie, kursywa, podkreślenie, przekreślenie, linki, zaznaczenia. Dane są przechowywane w formacie Markdown i przekształcane na HTML podczas edycji. Funkcje konwersji (htmlToMarkdown, markdownToHtml) znajdują się w utils.ts. Obsługuje również Alt+klik do otwierania linków.'
       }
     }
   },
@@ -26,80 +26,97 @@ type Story = StoryObj<typeof InputContent>
 
 export const Default: Story = {
   args: {
-    modelValue: ''
+    modelValue: `
+      1. Edytor z wszystkimi opcjami formatowania:<br>
+      2. <b>pogrubiony</b><br>
+      3. <i>kursywa</i><br>
+      4. <u>podkreślenie</u><br>
+      5. <s>przekreślenie</s><br>
+      6. <a href="https://example.com">link</a><br>
+      7. <mark>zaznaczenie</mark>`
   },
   parameters: {
     docs: {
       description: {
-        story: 'Pusty edytor tekstu gotowy do wprowadzania treści.'
+        story: 'Edytor prezentujący wszystkie dostępne opcje formatowania tekstu.'
       }
     }
   }
 }
 
-export const WithPlainText: Story = {
+export const Bold: Story = {
   args: {
-    modelValue: 'To jest zwykły tekst bez formatowania.'
+    modelValue: 'Ten tekst jest <b>pogrubiony</b> aby podkreślić wagę.'
   },
   parameters: {
     docs: {
       description: {
-        story: 'Edytor z prostym tekstem bez formatowania.'
+        story: 'Przykład użycia pogrubienia tekstu.'
       }
     }
   }
 }
 
-export const WithFormattedText: Story = {
+export const Italic: Story = {
   args: {
-    modelValue:
-      'To jest <b>pogrubiony</b> tekst, a to jest <i>kursywa</i>. Można też używać <u>podkreślenia</u> i <s>przekreślenia</s>.'
+    modelValue: 'Ten tekst jest napisany <i>kursywą</i> dla wyróżnienia.'
   },
   parameters: {
     docs: {
       description: {
-        story: 'Edytor z tekstem zawierającym różne formatowania.'
+        story: 'Przykład użycia kursywy.'
       }
     }
   }
 }
 
-export const WithLink: Story = {
+export const Underline: Story = {
   args: {
-    modelValue:
-      'Sprawdź naszą stronę: <a href="https://example.com">example.com</a>. Użyj Alt+klik aby otworzyć link.'
+    modelValue: 'Ten fragment tekstu jest <u>podkreślony</u> dla uwydatnienia.'
   },
   parameters: {
     docs: {
       description: {
-        story: 'Edytor z linkiem. Alt+klik otwiera link w nowej karcie.'
+        story: 'Przykład użycia podkreślenia.'
       }
     }
   }
 }
 
-export const WithHighlight: Story = {
+export const Strikethrough: Story = {
   args: {
-    modelValue: 'To jest <mark>zaznaczony tekst</mark> w edytorze.'
+    modelValue: 'Ten tekst został <s>przekreślony</s> jako nieaktualny.'
   },
   parameters: {
     docs: {
       description: {
-        story: 'Edytor z zaznaczonym (podświetlonym) tekstem.'
+        story: 'Przykład użycia przekreślenia.'
       }
     }
   }
 }
 
-export const ComplexContent: Story = {
+export const Link: Story = {
   args: {
-    modelValue:
-      '<b>Ważne informacje:</b><br><br>1. Możesz używać <i>różnych</i> <u>stylów</u> formatowania<br>2. <mark>Podświetlaj</mark> ważne fragmenty<br>3. Dodawaj <a href="https://example.com">linki</a><br>4. <s>Przekreślaj</s> nieaktualne informacje'
+    modelValue: 'Odwiedź <a href="https://example.com">naszą stronę</a> aby dowiedzieć się więcej.'
   },
   parameters: {
     docs: {
       description: {
-        story: 'Edytor z kompleksową zawartością wykorzystującą wszystkie dostępne formatowania.'
+        story: 'Przykład dodania linku. Alt+klik otwiera link w nowej karcie.'
+      }
+    }
+  }
+}
+
+export const Mark: Story = {
+  args: {
+    modelValue: 'To jest <mark>zaznaczony tekst</mark> wymagający uwagi.'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Przykład użycia zaznaczenia (podświetlenia) tekstu.'
       }
     }
   }

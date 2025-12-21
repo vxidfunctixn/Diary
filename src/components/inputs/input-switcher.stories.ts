@@ -25,6 +25,11 @@ const meta: Meta<typeof InputSwitcher> = {
     infoText: {
       control: 'text',
       description: 'Informacyjny tekst pomocniczy'
+    },
+    inputAlign: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Wyrównanie przełącznika'
     }
   }
 }
@@ -35,12 +40,28 @@ type Story = StoryObj<typeof InputSwitcher>
 export const Default: Story = {
   args: {
     name: 'notifications',
-    value: false
+    value: false,
+    infoText: ''
   },
   parameters: {
     docs: {
       description: {
         story: 'Przełącznik w stanie wyłączonym.'
+      }
+    }
+  }
+}
+
+export const AlignedRight: Story = {
+  args: {
+    name: 'feature',
+    value: false,
+    inputAlign: 'right'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Przełącznik wyrównany do prawej.'
       }
     }
   }
@@ -70,41 +91,6 @@ export const WithInfoText: Story = {
     docs: {
       description: {
         story: 'Przełącznik z tekstem informacyjnym.'
-      }
-    }
-  }
-}
-
-export const DarkMode: Story = {
-  args: {
-    name: 'darkMode',
-    value: true,
-    infoText: 'Włącz ciemny motyw'
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Przełącznik do włączania trybu ciemnego.'
-      }
-    }
-  }
-}
-
-export const MultipleSettings: Story = {
-  render: () => ({
-    components: { InputSwitcher },
-    template: `
-      <div style="display: grid; gap: 16px;">
-        <InputSwitcher name="notifications" :value="true" infoText="Powiadomienia push" />
-        <InputSwitcher name="sounds" :value="false" infoText="Dźwięki systemowe" />
-        <InputSwitcher name="autoUpdate" :value="true" infoText="Automatyczne aktualizacje" />
-      </div>
-    `
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Wiele przełączników w grupie ustawień.'
       }
     }
   }

@@ -58,6 +58,7 @@ function update(event: Event) {
 <style lang="scss" scoped>
 .input-text {
   position: relative;
+  width: 100%;
 
   .input {
     width: 100%;

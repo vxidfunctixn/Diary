@@ -34,8 +34,9 @@ type Story = StoryObj<typeof InputHue>
 
 export const Default: Story = {
   args: {
-    name: 'theme_hue',
-    value: 0
+    name: 'hue',
+    value: 172,
+    infoText: ''
   },
   parameters: {
     docs: {
@@ -46,51 +47,9 @@ export const Default: Story = {
   }
 }
 
-export const Blue: Story = {
-  args: {
-    name: 'theme_hue',
-    value: 240
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Suwak odcienia ustawiony na wartość 240 (niebieski).'
-      }
-    }
-  }
-}
-
-export const Green: Story = {
-  args: {
-    name: 'theme_hue',
-    value: 120
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Suwak odcienia ustawiony na wartość 120 (zielony).'
-      }
-    }
-  }
-}
-
-export const Purple: Story = {
-  args: {
-    name: 'theme_hue',
-    value: 270
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Suwak odcienia ustawiony na wartość 270 (fioletowy).'
-      }
-    }
-  }
-}
-
 export const WithInfoText: Story = {
   args: {
-    name: 'theme_hue',
+    name: 'hue',
     value: 180,
     infoText: 'Wybierz kolor przewodni aplikacji'
   },
@@ -98,20 +57,6 @@ export const WithInfoText: Story = {
     docs: {
       description: {
         story: 'Suwak odcienia z tekstem informacyjnym.'
-      }
-    }
-  }
-}
-
-export const Orange: Story = {
-  args: {
-    name: 'theme_hue',
-    value: 30
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Suwak odcienia ustawiony na wartość 30 (pomarańczowy).'
       }
     }
   }

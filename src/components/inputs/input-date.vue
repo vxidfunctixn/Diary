@@ -4,23 +4,29 @@ import InfoText from '@/components/inputs/info-text.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
 import Calendar from '@/components/inputs/calendar.vue'
 import { DateTime } from '@/utils'
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, type PropType } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-import type { UpdateEvent } from '@/interfaces/components-interface'
+import type { UpdateEvent, InputAlign } from '@/interfaces/components-interface'
 
 const emit = defineEmits<{
   update: [event: UpdateEvent]
 }>()
 
-const props = defineProps<{
-  name: string
-  newValue?: number
-  oldValue?: number
-  infoText?: string
-  controls?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    name: string
+    newValue?: number
+    oldValue?: number
+    infoText?: string
+    controls?: boolean
+    inputAlign?: InputAlign
+  }>(),
+  {
+    inputAlign: 'left'
+  }
+)
 
 const modalOpen = ref(false)
 const dateTime = ref(new DateTime(props.newValue ?? Date.now()))
@@ -67,7 +73,7 @@ const isNewDate = computed(() => {
 </script>
 
 <template>
-  <div class="input-date">
+  <div class="input-date" :class="inputAlign">
     <div class="button">
       <Button v-if="controls" icon="arrow-left" stick="right" @click="handlePrev()"></Button>
       <Button
@@ -101,6 +107,18 @@ const isNewDate = computed(() => {
 
   .accent-span {
     color: var(--A1);
+  }
+
+  &.left {
+    .button {
+      justify-content: flex-start;
+    }
+  }
+
+  &.right {
+    .button {
+      justify-content: flex-end;
+    }
   }
 }
 </style>

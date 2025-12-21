@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
 import Icon from '@/components/icon/index.vue'
-import { ref, watch, toRaw } from 'vue'
+import { ref, watch, toRaw, type PropType } from 'vue'
 import type { KeyBinding } from '@/interfaces/store-interface'
+import type { InputAlign } from '@/interfaces/components-interface'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -11,7 +12,11 @@ const emit = defineEmits(['update'])
 const props = defineProps({
   name: String,
   value: Object,
-  infoText: String
+  infoText: String,
+  inputAlign: {
+    type: String as PropType<InputAlign>,
+    default: 'left' as InputAlign
+  }
 })
 
 const currentValue = ref<KeyBinding[] | undefined>(props.value as KeyBinding[] | undefined)
@@ -65,7 +70,7 @@ function handleKeyup(event: KeyboardEvent) {
 }
 
 function formatCombination(combo: KeyBinding[] | undefined) {
-  if (!combo) return ''
+  if (!combo || combo.length === 0) return t('inputs.keybind.notSet')
   let result = ''
   combo.map((el, index) => {
     if (index > 0) result += ' + '
@@ -76,26 +81,30 @@ function formatCombination(combo: KeyBinding[] | undefined) {
 </script>
 
 <template>
-  <div class="input-keybind">
-    <button
-      class="keybind-button"
-      ref="buttonRef"
-      type="button"
-      @keydown.prevent="handleKeydown"
-      @keyup.prevent="handleKeyup"
-      @focus="resetCombination()"
-    >
-      <div class="icon">
-        <Icon name="button" :size="16" />
-      </div>
-      <div class="text">{{ formatCombination(currentValue) }}</div>
-      <div class="text-record">
-        <template v-if="combination.length === 0"> {{ t('inputs.keybind.pressCombo') }} </template>
-        <template v-if="combination.length > 0">
-          {{ formatCombination(combination) }}
-        </template>
-      </div>
-    </button>
+  <div class="input-keybind" :class="inputAlign">
+    <div class="button-wrapper">
+      <button
+        class="keybind-button"
+        ref="buttonRef"
+        type="button"
+        @keydown.prevent="handleKeydown"
+        @keyup.prevent="handleKeyup"
+        @focus="resetCombination()"
+      >
+        <div class="icon">
+          <Icon name="button" :size="16" />
+        </div>
+        <div class="text">{{ formatCombination(currentValue) }}</div>
+        <div class="text-record">
+          <template v-if="combination.length === 0">
+            {{ t('inputs.keybind.pressCombo') }}
+          </template>
+          <template v-if="combination.length > 0">
+            {{ formatCombination(combination) }}
+          </template>
+        </div>
+      </button>
+    </div>
     <InfoText v-if="infoText">{{ infoText }}</InfoText>
   </div>
 </template>
@@ -103,8 +112,18 @@ function formatCombination(combo: KeyBinding[] | undefined) {
 <style lang="scss" scoped>
 .input-keybind {
   position: relative;
-  display: flex;
-  justify-content: flex-end;
+
+  &.left {
+    .button-wrapper {
+      text-align: left;
+    }
+  }
+
+  &.right {
+    .button-wrapper {
+      text-align: right;
+    }
+  }
 
   .keybind-button {
     min-height: 44px;

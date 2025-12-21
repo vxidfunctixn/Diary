@@ -29,6 +29,11 @@ const meta: Meta<typeof InputTime> = {
     infoText: {
       control: 'text',
       description: 'Informacyjny tekst pomocniczy'
+    },
+    inputAlign: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Wyrównanie przycisku'
     }
   }
 }
@@ -43,7 +48,8 @@ export const Default: Story = {
   args: {
     name: 'time',
     newValue: currentTime,
-    infoText: ''
+    infoText: '',
+    oldValue: 1766318220000
   },
   parameters: {
     docs: {
@@ -54,30 +60,16 @@ export const Default: Story = {
   }
 }
 
-export const MorningTime: Story = {
+export const AlignedRight: Story = {
   args: {
     name: 'time',
-    newValue: new Date().setHours(8, 30, 0, 0)
+    newValue: new Date().setHours(16, 15, 0, 0),
+    inputAlign: 'right'
   },
   parameters: {
     docs: {
       description: {
-        story: 'Selektor czasu ustawiony na poranną godzinę 8:30.'
-      }
-    }
-  }
-}
-
-export const WithInfoText: Story = {
-  args: {
-    name: 'time',
-    newValue: new Date().setHours(14, 0, 0, 0),
-    infoText: 'Wybierz preferowaną godzinę'
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Selektor czasu z tekstem informacyjnym.'
+        story: 'Selektor czasu wyrównany do prawej.'
       }
     }
   }
@@ -93,6 +85,21 @@ export const ModifiedValue: Story = {
     docs: {
       description: {
         story: 'Selektor czasu ze zmodyfikowaną wartością (oznaczone gwiazdką).'
+      }
+    }
+  }
+}
+
+export const WithInfoText: Story = {
+  args: {
+    name: 'time',
+    newValue: new Date().setHours(14, 0, 0, 0),
+    infoText: 'Wybierz preferowaną godzinę'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Selektor czasu z tekstem informacyjnym.'
       }
     }
   }

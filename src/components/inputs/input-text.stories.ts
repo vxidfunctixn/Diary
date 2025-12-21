@@ -103,20 +103,3 @@ export const Password: Story = {
     }
   }
 }
-
-export const PasswordWithInfo: Story = {
-  args: {
-    name: 'password',
-    value: '',
-    placeholder: 'Wpisz hasło',
-    password: true,
-    infoText: 'Hasło musi mieć co najmniej 8 znaków'
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Pole hasła z tekstem informacyjnym zawierającym wymagania dotyczące hasła.'
-      }
-    }
-  }
-}
