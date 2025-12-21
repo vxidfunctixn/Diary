@@ -2,17 +2,29 @@
 import Icon from '@/components/common/icon/index.vue'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores'
-import { useSlots } from 'vue'
+import { useSlots, computed } from 'vue'
 import type { ButtonProps } from '@/interfaces/components-interface'
 
-withDefaults(defineProps<ButtonProps>(), {
+const props = withDefaults(defineProps<ButtonProps>(), {
   width: 'auto',
-  iconButton: false
+  iconButton: false,
+  iconPosition: 'left'
 })
 
 const settingsStore = useSettingsStore()
 const { themeColor } = storeToRefs(settingsStore)
 const slots = useSlots()
+
+const iconColor = computed(() => {
+  console.log(
+    props.accent || props.danger || props.negative
+      ? themeColor.value.HL3.value
+      : themeColor.value.F1.value
+  )
+  return props.accent || props.danger || props.negative
+    ? themeColor.value.HL3.value
+    : themeColor.value.F1.value
+})
 </script>
 
 <template>
@@ -35,14 +47,10 @@ const slots = useSlots()
     :title="title"
     :style="{ width }"
   >
-    <div class="icon" v-if="icon">
-      <Icon
-        :name="icon"
-        :size="iconButton ? 24 : 16"
-        :color="accent || danger || negative ? themeColor.HL3.value : themeColor.F1.value"
-      />
+    <div class="icon" v-if="icon" :class="iconPosition">
+      <Icon :name="icon" :size="iconButton && !small ? 24 : 16" :color="iconColor" />
     </div>
-    <div v-if="slots.default" class="text" :class="{ hasIcon: icon }">
+    <div v-if="slots.default && !iconButton" class="text">
       <slot></slot>
     </div>
   </button>
@@ -64,19 +72,25 @@ const slots = useSlots()
   font-size: var(--FS4);
   -webkit-app-region: no-drag;
   min-width: 44px;
+  gap: 8px;
 
   .icon {
     width: 16px;
     height: 16px;
+
+    &.left {
+      order: 1;
+    }
+
+    &.right {
+      order: 3;
+    }
   }
 
   .text {
     text-align: left;
     line-height: 21px;
-
-    &.hasIcon {
-      margin-left: 8px;
-    }
+    order: 2;
   }
 
   &:hover,
@@ -206,9 +220,10 @@ const slots = useSlots()
 
   &:disabled {
     pointer-events: none;
+    filter: grayscale(50%) contrast(0.9) brightness(0.8);
 
     .icon,
-    .title {
+    .text {
       opacity: 0.7;
     }
   }
@@ -218,6 +233,14 @@ const slots = useSlots()
     .icon {
       width: 24px;
       height: 24px;
+    }
+  }
+
+  &.iconButton.small {
+    padding: 9px;
+    .icon {
+      width: 16px;
+      height: 16px;
     }
   }
 }

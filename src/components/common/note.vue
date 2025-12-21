@@ -11,6 +11,7 @@ const { t } = useI18n()
 
 const props = defineProps<{
   data?: DBNote
+  stick?: 'top' | 'bottom' | 'both'
 }>()
 
 const emit = defineEmits<{
@@ -67,7 +68,14 @@ const handleClick = (event: MouseEvent) => {
 </script>
 
 <template>
-  <div class="note-group" v-if="data">
+  <div
+    class="note-wrapper"
+    :class="{
+      stickTop: stick === 'top' || stick === 'both',
+      stickBottom: stick === 'bottom' || stick === 'both'
+    }"
+    v-if="data"
+  >
     <div class="note">
       <div class="note-title-bar">
         <div class="note-title" tabindex="0">
@@ -102,11 +110,34 @@ const handleClick = (event: MouseEvent) => {
 </template>
 
 <style lang="scss" scoped>
-.note-group {
+.note-wrapper {
   margin: 24px 0;
   box-shadow: 0 4px 16px -4px rgba(black, 0.25);
   border-radius: 8px;
   overflow: hidden;
+
+  &.stickTop {
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
+    .note {
+      &:nth-child(1) {
+        .note-title-bar {
+          .note-title {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+          }
+        }
+      }
+    }
+  }
+
+  &.stickBottom {
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 
   .note {
     background-color: var(--BG1);
