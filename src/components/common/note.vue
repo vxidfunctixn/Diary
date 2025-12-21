@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Icon from '@/components/icon/index.vue'
-import Button from '@/components/button.vue'
+import Icon from '@/components/common/icon/index.vue'
+import Button from '@/components/common/button.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
 import type { DBNote } from '@/interfaces/store-interface'
 import { formatDate, markdownToHtml } from '@/utils'

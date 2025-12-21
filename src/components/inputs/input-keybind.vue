@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import InfoText from '@/components/inputs/info-text.vue'
-import Icon from '@/components/icon/index.vue'
+import Icon from '@/components/common/icon/index.vue'
 import { ref, watch, toRaw, type PropType } from 'vue'
 import type { KeyBinding } from '@/interfaces/store-interface'
 import type { InputAlign } from '@/interfaces/components-interface'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from '@/components/button.vue'
+import Button from '@/components/common/button.vue'
 import InfoText from '@/components/inputs/info-text.vue'
 import InputModal from '@/components/inputs/input-modal.vue'
 import InputText from '@/components/inputs/input-text.vue'

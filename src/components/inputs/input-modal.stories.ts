@@ -62,7 +62,7 @@ export const Default: Story = {
           <script lang="ts" setup>
             import { ref } from 'vue'
             import InputModal from '@/components/inputs/input-modal.vue'
-            import Button from '@/components/button.vue'
+            import Button from '@/components/common/button.vue'
 
             const showModal = ref(false)
           </script>
@@ -128,7 +128,7 @@ export const WithoutHeader: Story = {
 <script lang="ts" setup>
   import { ref } from 'vue'
   import InputModal from '@/components/inputs/input-modal.vue'
-  import Button from '@/components/button.vue'
+  import Button from '@/components/common/button.vue'
 
   const showModal = ref(false)
 </script>

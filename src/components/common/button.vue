@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Icon from '@/components/icon/index.vue'
+import Icon from '@/components/common/icon/index.vue'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores'
 import { useSlots } from 'vue'

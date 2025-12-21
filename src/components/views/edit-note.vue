@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import OptionsBar from '@/components/layout/options-bar.vue'
-import Button from '@/components/button.vue'
+import Button from '@/components/common/button.vue'
 import { useAppStore, useDiaryStore } from '@/stores'
 import InputContent from '@/components/inputs/input-content.vue'
 import InputModal from '@/components/inputs/input-modal.vue'

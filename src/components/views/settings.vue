@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from '@/components/button.vue'
+import Button from '@/components/common/button.vue'
 import InputText from '@/components/inputs/input-text.vue'
 import InputTime from '@/components/inputs/input-time.vue'
 import InputSwitcher from '@/components/inputs/input-switcher.vue'

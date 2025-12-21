@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Icon from '@/components/icon/index.vue'
+import Icon from '@/components/common/icon/index.vue'
 const props = defineProps({
   title: String,
   icon: String,

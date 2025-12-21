@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import OptionsBar from '@/components/layout/options-bar.vue'
 import InputDate from '@/components/inputs/input-date.vue'
-import Button from '@/components/button.vue'
-import Note from '@/components/note.vue'
+import Button from '@/components/common/button.vue'
+import Note from '@/components/common/note.vue'
 import { ref, onMounted } from 'vue'
 import { useDiaryStore } from '@/stores/diaryStore'
 import { useAppStore } from '@/stores'
