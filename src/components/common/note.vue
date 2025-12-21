@@ -187,6 +187,15 @@ const handleClick = (event: MouseEvent) => {
         font-weight: 500;
         text-decoration: underline;
         cursor: pointer;
+        border-radius: 4px;
+
+        &:hover {
+          background-color: var(--HL2);
+          outline: 1px solid var(--A4);
+        }
+        &:active {
+          background-color: var(--HL1);
+        }
       }
 
       :deep(mark) {

@@ -311,6 +311,12 @@ defineExpose({
   &.alt-pressed :deep(a) {
     pointer-events: auto;
     cursor: pointer;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: var(--HL2);
+      outline: 1px solid var(--A4);
+    }
   }
 }
 </style>
