@@ -95,7 +95,7 @@ const iconColor = computed(() => {
   }
 
   &:active {
-    border-color: var(--F2);
+    border-color: var(--F3);
   }
 
   &.active {
@@ -176,7 +176,7 @@ const iconColor = computed(() => {
 
   &.negative {
     background-color: var(--F1);
-    border-color: var(--F2);
+    border-color: var(--F3);
     color: var(--HL3);
 
     @include theme-dark() {
@@ -186,8 +186,7 @@ const iconColor = computed(() => {
     &:hover,
     &:focus-visible {
       background-color: var(--F2);
-      color: var(--F1);
-      border-color: var(--F2);
+      border-color: var(--F3);
     }
 
     &:active {

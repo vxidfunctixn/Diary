@@ -112,8 +112,12 @@ const handleClick = (event: MouseEvent) => {
           {{ formattedTitle }}
         </div>
         <div class="note-options">
-          <Button icon="edit-note" small @click="handleEdit">{{ t('notes.actions.edit') }}</Button>
-          <Button icon="delete" small @click="handleDelete">{{ t('notes.actions.delete') }}</Button>
+          <Button icon="edit-note" small negative @click="handleEdit">{{
+            t('notes.actions.edit')
+          }}</Button>
+          <Button icon="delete" small negative @click="handleDelete">{{
+            t('notes.actions.delete')
+          }}</Button>
         </div>
       </div>
       <div class="note-message" v-html="htmlContent" @click="handleClick"></div>
@@ -202,7 +206,7 @@ const handleClick = (event: MouseEvent) => {
       }
 
       &:active {
-        border-color: var(--F2);
+        border-color: var(--F3);
       }
     }
 

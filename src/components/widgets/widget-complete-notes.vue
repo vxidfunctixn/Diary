@@ -98,11 +98,11 @@ function getTitle() {
     }
 
     &:active {
-      border-color: var(--F2);
+      border-color: var(--F3);
     }
 
     &.disabled {
-      color: var(--F2);
+      color: var(--F3);
     }
 
     &.active {

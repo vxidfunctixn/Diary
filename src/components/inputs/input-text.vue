@@ -72,7 +72,7 @@ function update(event: Event) {
     color: var(--F1);
 
     &::placeholder {
-      color: var(--F2);
+      color: var(--F3);
     }
 
     &:focus {

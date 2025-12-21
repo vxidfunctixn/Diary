@@ -224,11 +224,11 @@ function selectYear(date: Date): void {
       }
 
       &:active {
-        border-color: var(--F2);
+        border-color: var(--F3);
       }
 
       &.disabled {
-        color: var(--F2);
+        color: var(--F3);
       }
 
       &.active {

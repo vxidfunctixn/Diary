@@ -9,6 +9,7 @@ export interface ThemeColors {
   F1: Color
   F1T: Color
   F2: Color
+  F3: Color
   HL1: Color
   HL2: Color
   HL3: Color

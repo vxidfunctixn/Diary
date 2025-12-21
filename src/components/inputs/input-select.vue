@@ -149,7 +149,7 @@ const currentTitle = computed(() => {
       }
 
       &:active {
-        box-shadow: inset 0 0 0 1px var(--F2);
+        box-shadow: inset 0 0 0 1px var(--F3);
       }
 
       &.selected {
