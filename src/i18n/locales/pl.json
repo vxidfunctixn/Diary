@@ -58,7 +58,8 @@
       "textPlaceholder": "Wpisz tekst linku",
       "url": "Adres URL",
       "urlPlaceholder": "https://example.com",
-      "insert": "Wstaw link"
+      "insert": "Wstaw link",
+      "delete": "Usuń link"
     }
   },
   "views": {
