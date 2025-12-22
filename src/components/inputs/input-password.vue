@@ -115,7 +115,7 @@ function closeModal() {
 <style lang="scss" scoped>
 .input-password {
   .accent-span {
-    color: var(--A1);
+    color: var(--accent_300);
   }
 
   &.left {

@@ -62,21 +62,21 @@ function update(event: Event) {
 
   .input {
     width: 100%;
-    border: 1px solid var(--HL1);
-    background-color: var(--BG3);
+    border: 1px solid var(--background_100);
+    background-color: var(--background_600);
     outline: none;
     border-radius: 8px;
     font-size: var(--FS4);
     padding: 9px 12px;
     height: 44px;
-    color: var(--F1);
+    color: var(--foreground_200);
 
     &::placeholder {
-      color: var(--F3);
+      color: var(--foreground_700);
     }
 
     &:focus {
-      border-color: var(--A1);
+      border-color: var(--accent_300);
     }
 
     &.password {
@@ -90,8 +90,8 @@ function update(event: Event) {
     height: 36px;
     top: 4px;
     right: 4px;
-    background-color: var(--BG3);
-    border: 1px solid var(--BG3);
+    background-color: var(--background_600);
+    border: 1px solid var(--background_600);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -101,12 +101,12 @@ function update(event: Event) {
 
     &:hover,
     &:focus-visible {
-      background-color: var(--BG2);
-      border-color: var(--HL2);
+      background-color: var(--background_500);
+      border-color: var(--background_200);
     }
 
     &:active {
-      border-color: var(--HL1);
+      border-color: var(--background_100);
     }
   }
 }

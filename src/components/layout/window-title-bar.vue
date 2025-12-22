@@ -83,17 +83,17 @@ onMounted(() => {
     <div class="window-options">
       <!-- <button class="window-button" @click="minimize">
         <div class="icon">
-          <Icon name="minimize" :size="16" :color="themeColor.F1.value" />
+          <Icon name="minimize" :size="16" :color="themeColor.foreground_200.value" />
         </div>
       </button>
       <button class="window-button" @click="maximize">
         <div class="icon">
-          <Icon :name="maximizeIcon" :size="16" :color="themeColor.F1.value" />
+          <Icon :name="maximizeIcon" :size="16" :color="themeColor.foreground_200.value" />
         </div>
       </button>
       <button class="window-button" @click="exit">
         <div class="icon">
-          <Icon name="cancel" :size="16" :color="themeColor.F1.value" />
+          <Icon name="cancel" :size="16" :color="themeColor.foreground_200.value" />
         </div>
       </button> -->
       <div class="native-options-spacer"></div>
@@ -104,14 +104,14 @@ onMounted(() => {
 <style lang="scss" scoped>
 .window-title-bar {
   height: 41px;
-  background: var(--BG3);
+  background: var(--background_600);
   display: flex;
   min-width: 0;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   overflow: hidden;
   -webkit-app-region: drag;
-  border-bottom: 1px solid var(--HL2);
+  border-bottom: 1px solid var(--background_200);
   position: relative;
   z-index: 9999;
 
@@ -124,7 +124,7 @@ onMounted(() => {
   .separator {
     width: 1px;
     height: 100%;
-    background-color: var(--HL2);
+    background-color: var(--background_200);
     margin: 0 4px;
     min-width: 0;
   }
@@ -142,12 +142,12 @@ onMounted(() => {
       justify-content: center;
       border: none;
       cursor: pointer;
-      background-color: var(--BG3);
+      background-color: var(--background_600);
       outline: none;
 
       &:hover,
       &:focus-visible {
-        background: var(--BG1);
+        background: var(--background_400);
       }
 
       &:last-child:hover,
@@ -176,7 +176,7 @@ onMounted(() => {
 
   .window-title-bar,
   .window-options .window-button:not(:hover) {
-    background: var(--BG2);
+    background: var(--background_500);
   }
 }
 </style>

@@ -38,7 +38,7 @@ const props = defineProps({
 .section {
   border-radius: 8px;
   overflow: hidden;
-  background-color: var(--BG1);
+  background-color: var(--background_400);
 
   &.shadow {
     box-shadow: 0 4px 16px -4px rgba(black, 0.25);
@@ -55,7 +55,7 @@ const props = defineProps({
   }
 
   .title-bar {
-    background-color: var(--HL3);
+    background-color: var(--background_300);
     padding: 12px;
     position: relative;
     min-height: 44px;

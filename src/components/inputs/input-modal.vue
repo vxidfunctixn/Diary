@@ -72,8 +72,8 @@ function close() {
   }
 
   .input-modal {
-    background-color: var(--BG2);
-    border: 1px solid var(--HL1);
+    background-color: var(--background_500);
+    border: 1px solid var(--background_100);
     box-shadow: 0 4px 16px -4px rgba(black, 0.25);
     border-radius: 8px;
     position: relative;
@@ -84,7 +84,7 @@ function close() {
     .header {
       font-size: 16px;
       font-weight: 400;
-      background-color: var(--HL2);
+      background-color: var(--background_200);
       padding: 12px;
       border-top-left-radius: 7px;
       border-top-right-radius: 7px;

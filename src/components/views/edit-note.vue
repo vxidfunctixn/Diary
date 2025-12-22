@@ -954,7 +954,7 @@ const saveNote = async () => {
   padding: 60px 2px 2px 2px;
   width: 100%;
   height: 100%;
-  background-color: var(--BG1);
+  background-color: var(--background_400);
 }
 
 .app-theme-provider.maximized .edit-note {

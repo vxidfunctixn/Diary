@@ -62,8 +62,8 @@ function update(event: Event): void {
   .input-wrapper {
     display: block;
     height: 44px;
-    background-color: var(--BG3);
-    border: 1px solid var(--HL1);
+    background-color: var(--background_600);
+    border: 1px solid var(--background_100);
     border-radius: 22px;
     padding: 0px 5px;
     align-items: center;
@@ -112,14 +112,14 @@ function update(event: Event): void {
         appearance: none;
         width: 32px;
         height: 32px;
-        border: 2px solid var(--HL2);
+        border: 2px solid var(--background_200);
         background-color: hsl(var(--_selected_hue), 88%, 58%);
         border-radius: 16px;
       }
     }
 
     &:focus-within {
-      border-color: var(--A1);
+      border-color: var(--accent_300);
     }
   }
 }

@@ -130,12 +130,12 @@ function formatCombination(combo: KeyBinding[] | undefined) {
     display: inline-flex;
     align-items: center;
     padding: 9px 12px;
-    background: var(--HL3);
-    border: 1px solid var(--HL2);
+    background: var(--background_300);
+    border: 1px solid var(--background_200);
     border-radius: 8px;
     overflow: hidden;
     outline: none;
-    color: var(--F1);
+    color: var(--foreground_200);
     cursor: pointer;
     font-size: var(--FS4);
     -webkit-app-region: no-drag;
@@ -158,13 +158,13 @@ function formatCombination(combo: KeyBinding[] | undefined) {
 
     &:hover,
     &:focus-visible {
-      background: var(--HL2);
-      border-color: var(--HL1);
+      background: var(--background_200);
+      border-color: var(--background_100);
     }
 
     &:focus,
     &:active {
-      border-color: var(--A1);
+      border-color: var(--accent_300);
 
       .text {
         display: none;

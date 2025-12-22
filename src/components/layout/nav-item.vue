@@ -23,7 +23,7 @@ const hasClickEventListener = computed(() => getCurrentInstance()?.vnode.props?.
     :title="title"
   >
     <div class="icon">
-      <Icon :name="icon" :size="16" :color="themeColor.F1.value" />
+      <Icon :name="icon" :size="16" :color="themeColor.foreground_200.value" />
     </div>
     <div class="title">{{ title }}</div>
   </div>
@@ -60,7 +60,7 @@ const hasClickEventListener = computed(() => getCurrentInstance()?.vnode.props?.
       width: 100%;
       height: 100%;
       left: 0;
-      background-color: var(--A4);
+      background-color: var(--accent_600);
       clip-path: polygon(
         0% 0%,
         calc(100% - 20px) 0%,
@@ -88,11 +88,11 @@ const hasClickEventListener = computed(() => getCurrentInstance()?.vnode.props?.
     }
 
     &:active::before {
-      border-color: var(--A2);
+      border-color: var(--accent_400);
     }
 
     &:active::after {
-      background-color: var(--A2);
+      background-color: var(--accent_400);
     }
   }
 
@@ -114,7 +114,7 @@ const hasClickEventListener = computed(() => getCurrentInstance()?.vnode.props?.
 
   &.lv1 {
     padding-left: 8px;
-    background-color: var(--HL1);
+    background-color: var(--background_100);
     clip-path: polygon(calc(100% - 20px) 0%, 100% 50%, calc(100% - 20px) 100%, 0% 100%, 0% 0%);
     margin-left: 0px;
     border-top-left-radius: 6px;
@@ -142,7 +142,7 @@ const hasClickEventListener = computed(() => getCurrentInstance()?.vnode.props?.
       position: absolute;
       top: 0;
       left: 0;
-      border: 2px solid var(--A4);
+      border: 2px solid var(--accent_600);
       border-bottom: none;
       border-right: none;
       width: 32px;
@@ -153,11 +153,11 @@ const hasClickEventListener = computed(() => getCurrentInstance()?.vnode.props?.
   }
 
   &.lv2 {
-    background-color: var(--HL2);
+    background-color: var(--background_200);
   }
 
   &.lv3 {
-    background-color: var(--HL3);
+    background-color: var(--background_300);
   }
 }
 
