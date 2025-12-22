@@ -11,16 +11,18 @@ const props = withDefaults(defineProps<IconProps>(), {
 const settingsStore = useSettingsStore()
 const { themeColor } = storeToRefs(settingsStore)
 
-const currentColor: Ref<string> = ref(props.color ? props.color : settingsStore.themeColor.F1.value)
+const currentColor: Ref<string> = ref(
+  props.color ? props.color : settingsStore.themeColor.foreground_200.value
+)
 
 watch(themeColor, () => {
-  currentColor.value = props.color ? props.color : settingsStore.themeColor.F1.value
+  currentColor.value = props.color ? props.color : settingsStore.themeColor.foreground_200.value
 })
 
 watch(
   () => props.color,
   newColor => {
-    currentColor.value = newColor ? newColor : settingsStore.themeColor.F1.value
+    currentColor.value = newColor ? newColor : settingsStore.themeColor.foreground_200.value
   }
 )
 

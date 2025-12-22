@@ -181,7 +181,7 @@ function selectYear(date: Date): void {
   }
 
   .accent-span {
-    color: var(--A1);
+    color: var(--accent_300);
   }
 
   .grid {
@@ -205,7 +205,7 @@ function selectYear(date: Date): void {
     .dayName {
       text-align: center;
       line-height: 38px;
-      color: var(--A1);
+      color: var(--accent_300);
       user-select: none;
     }
 
@@ -219,42 +219,42 @@ function selectYear(date: Date): void {
       user-select: none;
 
       &:hover {
-        background-color: var(--HL2);
-        border-color: var(--HL1);
+        background-color: var(--background_200);
+        border-color: var(--background_100);
       }
 
       &:active {
-        border-color: var(--F3);
+        border-color: var(--foreground_700);
       }
 
       &.disabled {
-        color: var(--F3);
+        color: var(--foreground_700);
       }
 
       &.active {
-        border: 1px solid var(--A2);
-        background-color: var(--BG3);
+        border: 1px solid var(--accent_400);
+        background-color: var(--background_600);
 
         &:hover {
-          border-color: var(--A1);
-          background-color: var(--HL3);
+          border-color: var(--accent_300);
+          background-color: var(--background_300);
         }
 
         &:active {
-          background-color: var(--HL2);
+          background-color: var(--background_200);
         }
       }
 
       &.selected {
-        background-color: var(--A1);
-        color: var(--BG3);
-        box-shadow: inset 0 0 0 1px var(--BG3);
-        border-color: var(--A1);
+        background-color: var(--accent_300);
+        color: var(--background_600);
+        box-shadow: inset 0 0 0 1px var(--background_600);
+        border-color: var(--accent_300);
         font-weight: 500;
 
         &:hover {
-          background-color: var(--A2);
-          border-color: var(--A2);
+          background-color: var(--accent_400);
+          border-color: var(--accent_400);
         }
       }
     }

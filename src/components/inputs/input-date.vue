@@ -106,7 +106,7 @@ const isNewDate = computed(() => {
   }
 
   .accent-span {
-    color: var(--A1);
+    color: var(--accent_300);
   }
 
   &.left {

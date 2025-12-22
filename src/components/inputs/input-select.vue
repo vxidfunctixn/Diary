@@ -97,12 +97,12 @@ const currentTitle = computed(() => {
     align-items: center;
     justify-content: space-between;
     padding: 9px 12px;
-    background: var(--HL3);
-    border: 1px solid var(--HL2);
+    background: var(--background_300);
+    border: 1px solid var(--background_200);
     border-radius: 8px;
     overflow: hidden;
     outline: none;
-    color: var(--F1);
+    color: var(--foreground_200);
     cursor: pointer;
     font-size: var(--FS4);
     width: 100%;
@@ -120,15 +120,15 @@ const currentTitle = computed(() => {
 
     &:hover,
     &:focus-visible {
-      background: var(--HL2);
-      box-shadow: inset 0 0 0 1px var(--HL1);
+      background: var(--background_200);
+      box-shadow: inset 0 0 0 1px var(--background_100);
     }
   }
 
   .select-list {
     position: absolute;
     display: none;
-    border: 1px solid var(--A1);
+    border: 1px solid var(--accent_300);
     border-top: none;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -136,7 +136,7 @@ const currentTitle = computed(() => {
 
     .list-item {
       min-height: 44px;
-      background-color: var(--BG2);
+      background-color: var(--background_500);
       cursor: pointer;
       padding: 9px 12px;
       outline: none;
@@ -144,16 +144,16 @@ const currentTitle = computed(() => {
 
       &:hover,
       &:focus-visible {
-        background: var(--HL2);
-        box-shadow: inset 0 0 0 1px var(--HL1);
+        background: var(--background_200);
+        box-shadow: inset 0 0 0 1px var(--background_100);
       }
 
       &:active {
-        box-shadow: inset 0 0 0 1px var(--F3);
+        box-shadow: inset 0 0 0 1px var(--foreground_700);
       }
 
       &.selected {
-        color: var(--A1);
+        color: var(--accent_300);
       }
 
       &:last-child {
@@ -170,7 +170,7 @@ const currentTitle = computed(() => {
     .select-input {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
-      border-color: var(--A1);
+      border-color: var(--accent_300);
       border-bottom: none !important;
       position: relative;
 
@@ -185,7 +185,7 @@ const currentTitle = computed(() => {
         left: 0;
         width: 100%;
         height: 1px;
-        border-top: 1px dotted var(--HL1);
+        border-top: 1px dotted var(--background_100);
       }
     }
 
@@ -196,8 +196,8 @@ const currentTitle = computed(() => {
 
   &:focus-visible {
     .select-input {
-      background: var(--HL2);
-      box-shadow: inset 0 0 0 1px var(--HL1);
+      background: var(--background_200);
+      box-shadow: inset 0 0 0 1px var(--background_100);
     }
   }
 }

@@ -294,18 +294,18 @@ defineExpose({
   outline: none;
 
   :deep(a) {
-    color: var(--A1);
+    color: var(--accent_300);
     font-weight: 500;
     pointer-events: none;
     cursor: text;
   }
 
   :deep(mark) {
-    background-color: var(--BG2);
-    border: 1px solid var(--A4);
+    background-color: var(--background_500);
+    border: 1px solid var(--accent_600);
     padding: 2px 4px;
     border-radius: 8px;
-    color: var(--F1);
+    color: var(--foreground_200);
   }
 
   &.alt-pressed :deep(a) {
@@ -314,8 +314,8 @@ defineExpose({
     border-radius: 4px;
 
     &:hover {
-      background-color: var(--HL2);
-      outline: 1px solid var(--A4);
+      background-color: var(--background_200);
+      outline: 1px solid var(--accent_600);
     }
   }
 }

@@ -63,7 +63,7 @@ function getTitle() {
 <style lang="scss" scoped>
 .calendar-title {
   text-align: center;
-  border: 1px solid var(--HL2);
+  border: 1px solid var(--background_200);
   border-radius: 8px;
   line-height: 22px;
   padding: 6px;
@@ -75,12 +75,12 @@ function getTitle() {
   grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: 40px;
   padding: 12px;
-  border-bottom: 1px solid var(--HL2);
+  border-bottom: 1px solid var(--background_200);
 
   .dayName {
     text-align: center;
     line-height: 38px;
-    color: var(--A1);
+    color: var(--accent_300);
     user-select: none;
   }
 
@@ -93,29 +93,29 @@ function getTitle() {
     user-select: none;
 
     &:hover {
-      background-color: var(--HL2);
-      border: 1px solid var(--HL1);
+      background-color: var(--background_200);
+      border: 1px solid var(--background_100);
     }
 
     &:active {
-      border-color: var(--F3);
+      border-color: var(--foreground_700);
     }
 
     &.disabled {
-      color: var(--F3);
+      color: var(--foreground_700);
     }
 
     &.active {
-      border: 1px solid var(--A2);
-      background-color: var(--BG3);
+      border: 1px solid var(--accent_400);
+      background-color: var(--background_600);
 
       &:hover {
-        border-color: var(--A1);
-        background-color: var(--HL3);
+        border-color: var(--accent_300);
+        background-color: var(--background_300);
       }
 
       &:active {
-        background-color: var(--HL2);
+        background-color: var(--background_200);
       }
     }
   }

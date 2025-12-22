@@ -8,11 +8,11 @@
 .infoText {
   width: 100%;
   text-align: left;
-  background: var(--HL3);
+  background: var(--background_300);
   border-radius: 4px;
   padding: 4px 12px;
-  color: var(--yellow);
-  border: 1px solid var(--HL2);
+  color: var(--warning_200);
+  border: 1px solid var(--background_200);
   margin-top: 8px;
 }
 </style>

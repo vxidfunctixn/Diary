@@ -171,14 +171,14 @@ const handleClick = (event: MouseEvent) => {
   }
 
   .note {
-    background-color: var(--BG1);
+    background-color: var(--background_400);
 
     .note-title-bar {
       position: relative;
       user-select: none;
 
       .note-title {
-        background-color: var(--HL3);
+        background-color: var(--background_300);
         padding: 11px 11px;
         line-height: 20px;
         position: relative;
@@ -205,7 +205,7 @@ const handleClick = (event: MouseEvent) => {
       }
 
       &:active {
-        border-color: var(--F3);
+        border-color: var(--foreground_700);
       }
     }
 
@@ -213,7 +213,7 @@ const handleClick = (event: MouseEvent) => {
       padding: 12px;
 
       :deep(a) {
-        color: var(--A1);
+        color: var(--accent_300);
         font-weight: 500;
         text-decoration: underline;
         cursor: pointer;
@@ -222,20 +222,20 @@ const handleClick = (event: MouseEvent) => {
         &:hover,
         &:focus-visible {
           outline: none;
-          background-color: var(--HL2);
-          outline: 1px solid var(--A4);
+          background-color: var(--background_200);
+          outline: 1px solid var(--accent_600);
         }
         &:active {
-          background-color: var(--HL1);
+          background-color: var(--background_100);
         }
       }
 
       :deep(mark) {
-        background-color: var(--BG2);
-        border: 1px solid var(--A4);
+        background-color: var(--background_500);
+        border: 1px solid var(--accent_600);
         padding: 2px 4px;
         border-radius: 8px;
-        color: var(--F1);
+        color: var(--foreground_200);
       }
     }
 
