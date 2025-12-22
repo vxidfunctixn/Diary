@@ -16,9 +16,9 @@ const { themeColor } = storeToRefs(settingsStore)
 const slots = useSlots()
 
 const iconColor = computed(() => {
-  return props.accent || props.danger || props.negative
-    ? themeColor.value.HL3.value
-    : themeColor.value.F1.value
+  if (props.danger) return themeColor.value.black.value
+  else if (props.accent || props.negative) return themeColor.value.background_300.value
+  else return themeColor.value.foreground_200.value
 })
 </script>
 
@@ -57,12 +57,12 @@ const iconColor = computed(() => {
   display: inline-flex;
   align-items: center;
   padding: 9px 12px;
-  background: var(--HL3);
-  border: 1px solid var(--HL2);
+  background: var(--background_300);
+  border: 1px solid var(--background_200);
   border-radius: 8px;
   overflow: hidden;
   outline: none;
-  color: var(--F1);
+  color: var(--foreground_200);
   cursor: pointer;
   font-size: var(--FS4);
   -webkit-app-region: no-drag;
@@ -90,25 +90,25 @@ const iconColor = computed(() => {
 
   &:hover,
   &:focus-visible {
-    background: var(--HL2);
-    border-color: var(--HL1);
+    background: var(--background_200);
+    border-color: var(--background_100);
   }
 
   &:active {
-    border-color: var(--F3);
+    border-color: var(--foreground_700);
   }
 
   &.active {
-    border-color: var(--A1);
+    border-color: var(--accent_300);
 
     &:hover,
     &:focus-visible {
-      background: var(--HL2);
-      border-color: var(--A2);
+      background: var(--background_200);
+      border-color: var(--accent_400);
     }
 
     &:active {
-      border-color: var(--A3);
+      border-color: var(--accent_500);
     }
   }
 
@@ -123,9 +123,9 @@ const iconColor = computed(() => {
   }
 
   &.accent {
-    background-color: var(--A1);
-    border-color: var(--A4);
-    color: var(--HL3);
+    background-color: var(--accent_300);
+    border-color: var(--accent_600);
+    color: var(--background_300);
 
     @include theme-dark() {
       font-weight: 500;
@@ -133,33 +133,30 @@ const iconColor = computed(() => {
 
     &:hover,
     &:focus-visible {
-      background-color: var(--A2);
-      border-color: var(--A3);
+      background-color: var(--accent_400);
+      border-color: var(--accent_500);
     }
 
     &:active {
-      border-color: var(--A1);
+      border-color: var(--accent_300);
     }
   }
 
   &.danger {
-    background-color: var(--D1);
-    border-color: var(--D2);
-    color: var(--HL4);
+    background-color: var(--danger_200);
+    border-color: var(--danger_300);
+    color: var(--black);
     position: relative;
-
-    @include theme-dark() {
-      font-weight: 500;
-    }
+    font-weight: 500;
 
     &:hover,
     &:focus-visible {
-      background-color: var(--D2);
-      border-color: var(--D3);
+      background-color: var(--danger_300);
+      border-color: var(--danger_300);
     }
 
     &:active {
-      border-color: var(--D1);
+      border-color: var(--danger_100);
     }
 
     &::before {
@@ -169,15 +166,15 @@ const iconColor = computed(() => {
       left: 1px;
       width: calc(100% - 2px);
       height: calc(100% - 2px);
-      border: 2px solid var(--HL4);
+      border: 2px solid var(--black);
       border-radius: 6px;
     }
   }
 
   &.negative {
-    background-color: var(--F1);
-    border-color: var(--F3);
-    color: var(--HL3);
+    background-color: var(--foreground_200);
+    border-color: var(--foreground_700);
+    color: var(--background_300);
 
     @include theme-dark() {
       font-weight: 500;
@@ -185,12 +182,12 @@ const iconColor = computed(() => {
 
     &:hover,
     &:focus-visible {
-      background-color: var(--F2);
-      border-color: var(--F3);
+      background-color: var(--foreground_300);
+      border-color: var(--foreground_700);
     }
 
     &:active {
-      border-color: var(--F1);
+      border-color: var(--foreground_100);
     }
   }
 
@@ -214,12 +211,7 @@ const iconColor = computed(() => {
 
   &:disabled {
     pointer-events: none;
-    filter: grayscale(50%) contrast(0.9) brightness(0.8);
-
-    .icon,
-    .text {
-      opacity: 0.7;
-    }
+    filter: saturate(0.65) contrast(0.65) brightness(0.75);
   }
 
   &.iconButton {

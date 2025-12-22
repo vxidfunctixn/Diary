@@ -71,7 +71,7 @@ const isNewTime = computed(() => {
 <style lang="scss" scoped>
 .input-time {
   .accent-span {
-    color: var(--A1);
+    color: var(--accent_300);
   }
 
   &.left {

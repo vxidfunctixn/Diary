@@ -12,7 +12,7 @@
   padding: 6px 12px;
 
   &:not(:last-child) {
-    border-bottom: 1px solid var(--HL2);
+    border-bottom: 1px solid var(--background_200);
   }
 }
 </style>

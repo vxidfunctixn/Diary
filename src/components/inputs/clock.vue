@@ -292,17 +292,17 @@ function handleKeydown(event: KeyboardEvent): void {
 
     .input {
       width: 50%;
-      background-color: var(--HL3);
-      border: 1px solid var(--HL2);
+      background-color: var(--background_300);
+      border: 1px solid var(--background_200);
       outline: none;
-      color: var(--F1);
+      color: var(--foreground_200);
       padding: 8px;
       position: relative;
       cursor: n-resize;
 
       &:hover {
-        background-color: var(--HL2);
-        border-color: var(--HL1);
+        background-color: var(--background_200);
+        border-color: var(--background_100);
       }
 
       .icon {
@@ -350,8 +350,8 @@ function handleKeydown(event: KeyboardEvent): void {
       }
 
       &:focus-within {
-        border-color: var(--A1);
-        background: var(--BG3);
+        border-color: var(--accent_300);
+        background: var(--background_600);
       }
     }
   }
@@ -362,7 +362,7 @@ function handleKeydown(event: KeyboardEvent): void {
     width: 264px;
     height: 264px;
     border-radius: 50%;
-    border: 1px solid var(--HL1);
+    border: 1px solid var(--background_100);
 
     .hours-circle {
       position: absolute;
@@ -388,8 +388,8 @@ function handleKeydown(event: KeyboardEvent): void {
 
         .index {
           transform: rotate(calc(var(--_rotate) * -1));
-          background-color: var(--HL3);
-          border: 1px solid var(--HL2);
+          background-color: var(--background_300);
+          border: 1px solid var(--background_200);
           width: 28px;
           display: flex;
           align-items: center;
@@ -400,14 +400,14 @@ function handleKeydown(event: KeyboardEvent): void {
         }
 
         &.active .index {
-          background-color: var(--BG4);
-          border-color: var(--A1);
+          background-color: var(--background_700);
+          border-color: var(--accent_300);
         }
       }
 
       &:hover {
         .hour.selected .index {
-          border-color: var(--F1);
+          border-color: var(--foreground_200);
         }
       }
     }
@@ -441,17 +441,17 @@ function handleKeydown(event: KeyboardEvent): void {
           width: 100%;
           aspect-ratio: 1 / 1;
           border-radius: 50%;
-          background-color: var(--HL2);
+          background-color: var(--background_200);
         }
 
         &.active::before {
-          background-color: var(--A1);
+          background-color: var(--accent_300);
         }
       }
 
       &:hover {
         .dot.selected::before {
-          background-color: var(--F1);
+          background-color: var(--foreground_200);
         }
       }
     }
@@ -466,18 +466,18 @@ function handleKeydown(event: KeyboardEvent): void {
       border-radius: 4px;
       transform: translateX(-50%) rotate(var(--_rotate));
       transform-origin: top;
-      border: 2px solid var(--BG2);
+      border: 2px solid var(--background_500);
       pointer-events: none;
     }
 
     .minute-hand {
       height: 64px;
-      background-color: var(--F1);
+      background-color: var(--foreground_200);
     }
 
     .hour-hand {
       height: 36px;
-      background-color: var(--A1);
+      background-color: var(--accent_300);
     }
 
     .center {
@@ -487,8 +487,8 @@ function handleKeydown(event: KeyboardEvent): void {
       transform: translate(-50%, -50%);
       width: 16px;
       height: 16px;
-      background-color: var(--F1);
-      border: 2px solid var(--BG2);
+      background-color: var(--foreground_200);
+      border: 2px solid var(--background_500);
       border-radius: 50%;
       pointer-events: none;
     }
