@@ -1,5 +1,4 @@
-import type { Preview } from '@storybook/vue3-vite'
-import { setup } from '@storybook/vue3-vite'
+import { setup, type Preview } from '@storybook/vue3-vite'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import i18n from '../src/i18n'

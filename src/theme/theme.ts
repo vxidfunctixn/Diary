@@ -6,15 +6,13 @@ export class Color {
   l: string
   hsl: string
   hsla: string
-  value: string
 
   constructor(h: number, s: string, l: string, a: string = '100%') {
     this.h = h
     this.s = s
     this.l = l
     this.hsl = `hsl(${h}, ${s}, ${l})`
-    ;((this.hsla = `hsla(${h}, ${s}, ${l}, ${a})`),
-      (this.value = a === '100%' ? `hsl(${h}, ${s}, ${l})` : `hsla(${h}, ${s}, ${l}, ${a})`))
+    this.hsla = `hsla(${h}, ${s}, ${l}, ${a})`
   }
 }
 

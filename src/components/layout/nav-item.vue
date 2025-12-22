@@ -23,7 +23,7 @@ const hasClickEventListener = computed(() => getCurrentInstance()?.vnode.props?.
     :title="title"
   >
     <div class="icon">
-      <Icon :name="icon" :size="16" :color="themeColor.foreground_200.value" />
+      <Icon :name="icon" :size="16" :color="themeColor.foreground_200.hsla" />
     </div>
     <div class="title">{{ title }}</div>
   </div>
