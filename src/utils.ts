@@ -176,6 +176,7 @@ function sanitizeUrl(url: string): string {
 export function htmlToMarkdown(html: string): string {
   let markdown = html
 
+  // Links
   markdown = markdown.replace(
     /<a\s+(?:[^>]*?\s+)?href="([^"]*)"[^>]*>(.*?)<\/a>/gi,
     (match, url, text) => {
@@ -185,38 +186,43 @@ export function htmlToMarkdown(html: string): string {
     }
   )
 
-  markdown = markdown.replace(/<mark[^>]*>(.*?)<\/mark>/gi, (match, content) => {
-    return '`' + sanitizeContent(content) + '`'
-  })
+  // Code/Mark: <mark> - PROCESS FIRST
+  markdown = markdown.replace(/<mark>(.*?)<\/mark>/gi, '`$1`')
 
-  markdown = markdown.replace(/<(strong|b)>(.*?)<\/\1>/gi, (match, tag, content) => {
-    return '**' + sanitizeContent(content) + '**'
-  })
+  // Bold: <strong> or <b>
+  markdown = markdown.replace(/<strong>(.*?)<\/strong>/gi, '**$1**')
+  markdown = markdown.replace(/<b>(.*?)<\/b>/gi, '**$1**')
 
-  markdown = markdown.replace(/<(em|i)>(.*?)<\/\1>/gi, (match, tag, content) => {
-    return '*' + sanitizeContent(content) + '*'
-  })
+  // Italic: <em> or <i>
+  markdown = markdown.replace(/<em>(.*?)<\/em>/gi, '_$1_')
+  markdown = markdown.replace(/<i>(.*?)<\/i>/gi, '_$1_')
 
-  markdown = markdown.replace(/<(strike|s|del)>(.*?)<\/\1>/gi, (match, tag, content) => {
-    return '~~' + sanitizeContent(content) + '~~'
-  })
+  // Strikethrough: <strike>, <s> or <del>
+  markdown = markdown.replace(/<strike>(.*?)<\/strike>/gi, '~~$1~~')
+  markdown = markdown.replace(/<s>(.*?)<\/s>/gi, '~~$1~~')
+  markdown = markdown.replace(/<del>(.*?)<\/del>/gi, '~~$1~~')
 
-  markdown = markdown.replace(/<u>(.*?)<\/u>/gi, (match, content) => {
-    return sanitizeContent(content)
-  })
+  // Underline: <u>
+  markdown = markdown.replace(/<u>(.*?)<\/u>/gi, '++$1++')
 
+  // Line breaks
   markdown = markdown.replace(/<br\s*\/?>/gi, '\n')
 
+  // Remove dangerous tags
   markdown = markdown.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
   markdown = markdown.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
   markdown = markdown.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
   markdown = markdown.replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
   markdown = markdown.replace(/<embed[^>]*>/gi, '')
+
+  // Remove all remaining HTML tags
   markdown = markdown.replace(/<[^>]+>/g, '')
 
+  // Remove event handlers
   markdown = markdown.replace(/on\w+\s*=\s*"[^"]*"/gi, '')
   markdown = markdown.replace(/on\w+\s*=\s*'[^']*'/gi, '')
 
+  // Decode HTML entities
   markdown = markdown
     .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&')
@@ -225,6 +231,7 @@ export function htmlToMarkdown(html: string): string {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
 
+  // Clean up excessive newlines
   markdown = markdown.replace(/\n{3,}/g, '\n\n')
 
   return markdown.trim()
@@ -233,6 +240,7 @@ export function htmlToMarkdown(html: string): string {
 export function markdownToHtml(markdown: string): string {
   let html = markdown
 
+  // Escape HTML entities first
   html = html
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -240,6 +248,7 @@ export function markdownToHtml(markdown: string): string {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;')
 
+  // Links
   html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
     const sanitizedUrl = sanitizeUrl(url)
     const decodedText = text
@@ -251,14 +260,22 @@ export function markdownToHtml(markdown: string): string {
     return sanitizedUrl ? `<a href="${sanitizedUrl}">${decodedText}</a>` : decodedText
   })
 
-  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+  // Bold: **text**
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
 
-  html = html.replace(/(?<!\*)\*(?!\*)([^*]+)\*(?!\*)/g, '<em>$1</em>')
+  // Italic: _text_
+  html = html.replace(/_(.+?)_/g, '<em>$1</em>')
 
-  html = html.replace(/~~([^~]+)~~/g, '<del>$1</del>')
+  // Strikethrough: ~~text~~
+  html = html.replace(/~~(.+?)~~/g, '<del>$1</del>')
 
-  html = html.replace(/`([^`]+)`/g, '<mark>$1</mark>')
+  // Underline: ++text++
+  html = html.replace(/\+\+(.+?)\+\+/g, '<u>$1</u>')
 
+  // Code/Mark: `text`
+  html = html.replace(/`(.+?)`/g, '<mark>$1</mark>')
+
+  // Line breaks
   html = html.replace(/\n/g, '<br>')
 
   return html

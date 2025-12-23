@@ -177,6 +177,11 @@ const handlePaste = (event: ClipboardEvent) => {
               const href = newElement.getAttribute('href') || ''
               newElement.textContent = href
             }
+
+            const wrapper = document.createDocumentFragment()
+            wrapper.appendChild(newElement)
+            wrapper.appendChild(document.createTextNode(' '))
+            return wrapper
           }
 
           return newElement
@@ -250,6 +255,33 @@ const handlePaste = (event: ClipboardEvent) => {
       }
     }
 
+    const addSpaceBeforeLinks = (parent: Node) => {
+      const children = Array.from(parent.childNodes)
+
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i]
+
+        if (child.nodeType === Node.ELEMENT_NODE && (child as HTMLElement).tagName === 'A') {
+          const prevSibling = child.previousSibling
+
+          if (prevSibling) {
+            const needsSpace =
+              prevSibling.nodeType === Node.TEXT_NODE
+                ? !prevSibling.textContent?.endsWith(' ')
+                : (prevSibling as HTMLElement).tagName !== 'BR'
+
+            if (needsSpace) {
+              parent.insertBefore(document.createTextNode(' '), child)
+            }
+          }
+        }
+
+        if (child.childNodes.length > 0) {
+          addSpaceBeforeLinks(child)
+        }
+      }
+    }
+
     const selection = window.getSelection()
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0)
@@ -263,6 +295,7 @@ const handlePaste = (event: ClipboardEvent) => {
       // Usuń nadmiarowe <br> w całym edytorze
       if (editorElement.value) {
         removeDuplicateBr(editorElement.value)
+        addSpaceBeforeLinks(editorElement.value)
       }
     }
   } else if (textData) {

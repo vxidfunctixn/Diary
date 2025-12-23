@@ -220,6 +220,7 @@ const insertMark = () => {
       if (editorRef.value) {
         const event = new Event('input', { bubbles: true })
         editorRef.value.$el.dispatchEvent(event)
+        content.value = editorRef.value.$el.innerHTML
       }
 
       return
@@ -334,6 +335,7 @@ const insertMark = () => {
     if (editorRef.value) {
       const event = new Event('input', { bubbles: true })
       editorRef.value.$el.dispatchEvent(event)
+      content.value = editorRef.value.$el.innerHTML
     }
 
     return
@@ -420,6 +422,8 @@ const insertMark = () => {
   if (editorRef.value) {
     const event = new Event('input', { bubbles: true })
     editorRef.value.$el.dispatchEvent(event)
+    // Bezpośrednia aktualizacja content
+    content.value = editorRef.value.$el.innerHTML
   }
 
   setTimeout(() => {
@@ -911,7 +915,10 @@ const saveNote = async () => {
       v-model="content"
       @update:active-styles="updateActiveStyles"
       @update:model-value="
-        isEditingExisting ? appStore.setEditedContent($event) : appStore.setDraft($event)
+        value => {
+          content = value
+          isEditingExisting ? appStore.setEditedContent(value) : appStore.setDraft(value)
+        }
       "
     />
 
