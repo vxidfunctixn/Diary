@@ -186,8 +186,8 @@ export function htmlToMarkdown(html: string): string {
     }
   )
 
-  // Code/Mark: <mark> - PROCESS FIRST
-  markdown = markdown.replace(/<mark>(.*?)<\/mark>/gi, '`$1`')
+  // Code/Mark: <mark> - PROCESS FIRST (also handle TipTap's highlight-mark class)
+  markdown = markdown.replace(/<mark[^>]*>(.*?)<\/mark>/gi, '`$1`')
 
   // Bold: <strong> or <b>
   markdown = markdown.replace(/<strong>(.*?)<\/strong>/gi, '**$1**')
@@ -205,8 +205,11 @@ export function htmlToMarkdown(html: string): string {
   // Underline: <u>
   markdown = markdown.replace(/<u>(.*?)<\/u>/gi, '++$1++')
 
-  // Line breaks
+  // Line breaks (handle both <br> and TipTap paragraphs)
   markdown = markdown.replace(/<br\s*\/?>/gi, '\n')
+  // Convert closing paragraph tags to line breaks, but remove opening ones
+  markdown = markdown.replace(/<\/p>/gi, '\n\n')
+  markdown = markdown.replace(/<p[^>]*>/gi, '')
 
   // Remove dangerous tags
   markdown = markdown.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
@@ -267,16 +270,22 @@ export function markdownToHtml(markdown: string): string {
   html = html.replace(/_(.+?)_/g, '<em>$1</em>')
 
   // Strikethrough: ~~text~~
-  html = html.replace(/~~(.+?)~~/g, '<del>$1</del>')
+  html = html.replace(/~~(.+?)~~/g, '<s>$1</s>')
 
   // Underline: ++text++
   html = html.replace(/\+\+(.+?)\+\+/g, '<u>$1</u>')
 
-  // Code/Mark: `text`
-  html = html.replace(/`(.+?)`/g, '<mark>$1</mark>')
+  // Code/Mark: `text` - convert to TipTap's highlight format
+  html = html.replace(/`(.+?)`/g, '<mark class="highlight-mark">$1</mark>')
 
-  // Line breaks
+  // Line breaks - preserve double newlines as paragraph breaks for TipTap
+  html = html.replace(/\n\n/g, '</p><p>')
   html = html.replace(/\n/g, '<br>')
+
+  // Wrap in paragraphs if not already wrapped
+  if (!html.startsWith('<p>')) {
+    html = '<p>' + html + '</p>'
+  }
 
   return html
 }
