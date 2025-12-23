@@ -13,9 +13,9 @@
 
 <style lang="scss" scoped>
 .options-bar {
-  position: fixed;
-  width: 100%;
-  background-color: var(--background_500);
+  position: sticky;
+  background-color: color-mix(in srgb, var(--background_500) 70%, transparent);
+  width: calc(100% - 4px);
   box-shadow: 0px 4px 16px -4px rgba(black, 0.65);
   padding: 8px 12px;
   display: flex;
@@ -23,10 +23,13 @@
   align-items: center;
   backdrop-filter: blur(16px);
   z-index: 5;
-  top: 43px;
   left: 2px;
-  width: calc(100% - 4px);
+  top: 0;
   overflow-x: auto;
+
+  @container scroll-state(scrollable: inline) {
+    width: calc(100% - 12px);
+  }
 
   .right {
     margin-left: 8px;
@@ -43,7 +46,7 @@
 
 .app-theme-provider.maximized {
   .options-bar {
-    top: 41px;
+    top: 0;
     left: 0;
     width: 100%;
   }

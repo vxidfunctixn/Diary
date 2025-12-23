@@ -31,6 +31,8 @@ body {
   height: calc(100vh - 41px - 2px);
   width: 100%;
   overflow: auto;
+  container-type: scroll-state;
+  contain: style layout;
 }
 
 input,

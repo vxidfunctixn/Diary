@@ -13,8 +13,7 @@ export class Color {
     this.s = s
     this.l = l
     this.hsl = `hsl(${h}, ${s}, ${l})`
-    ;((this.hsla = `hsla(${h}, ${s}, ${l}, ${a})`),
-      (this.value = a === '100%' ? `hsl(${h}, ${s}, ${l})` : `hsla(${h}, ${s}, ${l}, ${a})`))
+    ;((this.hsla = `hsla(${h}, ${s}, ${l}, ${a})`), (this.value = this.hsl))
   }
 }
 
@@ -99,10 +98,10 @@ export class Theme {
       black: new Color(0, '0%', '0%'),
 
       foreground_100: new Color(this.hue, '40%', '8%'), //  hsl(143, 40%, 8%)
-      foreground_200: new Color(this.hue, '35%', '12%'), //  hsl(143, 35%, 12%)
-      foreground_300: new Color(this.hue, '30%', '18%'), //  hsl(143, 30%, 18%)
-      foreground_400: new Color(this.hue, '25%', '24%'), //  hsl(143, 25%, 24%)
-      foreground_500: new Color(this.hue, '20%', '30%'), //  hsl(143, 20%, 30%)
+      foreground_200: new Color(this.hue, '35%', '12%'), // hsl(143, 35%, 12%)
+      foreground_300: new Color(this.hue, '30%', '18%'), // hsl(143, 30%, 18%)
+      foreground_400: new Color(this.hue, '25%', '24%'), // hsl(143, 25%, 24%)
+      foreground_500: new Color(this.hue, '20%', '30%'), // hsl(143, 20%, 30%)
       foreground_600: new Color(this.hue, '18%', '38%'), // hsl(143, 18%, 38%)
       foreground_700: new Color(this.hue, '15%', '45%'), // hsl(143, 15%, 45%)
       foreground_800: new Color(this.hue, '12%', '52%'), // hsl(143, 12%, 52%)
@@ -118,27 +117,27 @@ export class Theme {
       accent_800: new Color(this.hue, '92%', '75%'), // hsl(143, 92%, 75%)
       accent_900: new Color(this.hue, '94%', '82%'), // hsl(143, 94%, 82%)
 
-      background_100: new Color(this.hue, '10%', '75%'), //  hsl(143, 10%, 75%)
-      background_200: new Color(this.hue, '12%', '80%'), //  hsl(143, 12%, 80%)
-      background_300: new Color(this.hue, '15%', '85%'), //  hsl(143, 15%, 85%)
-      background_400: new Color(this.hue, '18%', '88%'), //  hsl(143, 18%, 88%)
-      background_500: new Color(this.hue, '20%', '91%'), //  hsl(143, 20%, 91%)
+      background_100: new Color(this.hue, '10%', '75%'), // hsl(143, 10%, 75%)
+      background_200: new Color(this.hue, '12%', '80%'), // hsl(143, 12%, 80%)
+      background_300: new Color(this.hue, '15%', '85%'), // hsl(143, 15%, 85%)
+      background_400: new Color(this.hue, '18%', '88%'), // hsl(143, 18%, 88%)
+      background_500: new Color(this.hue, '20%', '91%'), // hsl(143, 20%, 91%)
       background_600: new Color(this.hue, '22%', '94%'), // hsl(143, 22%, 94%)
-      background_700: new Color(this.hue, '25%', '96%'), //  hsl(143, 25%, 96%)
+      background_700: new Color(this.hue, '25%', '96%'), // hsl(143, 25%, 96%)
       background_800: new Color(this.hue, '28%', '98%'), // hsl(143, 28%, 98%)
       background_900: new Color(this.hue, '30%', '99%'), // hsl(143, 30%, 99%)
 
-      danger_100: new Color(dangerHue, '80%', '40%'), //  hsl(0, 80%, 40%)
+      danger_100: new Color(dangerHue, '80%', '40%'), // hsl(0, 80%, 40%)
       danger_200: new Color(dangerHue, '85%', '50%'), // hsl(0, 85%, 50%)
-      danger_300: new Color(dangerHue, '90%', '65%'), //  hsl(0, 90%, 65%)
+      danger_300: new Color(dangerHue, '90%', '65%'), // hsl(0, 90%, 65%)
 
       warning_100: new Color(53, '95%', '45%'), // hsl(53, 95%, 45%)
       warning_200: new Color(53, '95%', '55%'), // hsl(53, 95%, 55%)
-      warning_300: new Color(53, '90%', '70%'), //  hsl(53, 90%, 70%)
+      warning_300: new Color(53, '90%', '70%'), // hsl(53, 90%, 70%)
 
-      success_100: new Color(92, '95%', '40%'), //  hsl(92, 95%, 40%)
+      success_100: new Color(92, '95%', '40%'), // hsl(92, 95%, 40%)
       success_200: new Color(92, '95%', '55%'), // hsl(92, 95%, 55%)
-      success_300: new Color(92, '90%', '70%') //   hsl(92, 90%, 70%)
+      success_300: new Color(92, '90%', '70%') //  hsl(92, 90%, 70%)
     }
   }
 }

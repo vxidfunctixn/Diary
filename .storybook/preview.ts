@@ -1,5 +1,5 @@
-import type { Preview } from '@storybook/vue3-vite'
-import { setup } from '@storybook/vue3-vite'
+import { setup, type Preview } from '@storybook/vue3-vite'
+import type { App } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import i18n from '../src/i18n'
@@ -14,7 +14,7 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 const THEME_HUE = 144
 
-setup(app => {
+setup((app: App) => {
   app.use(pinia)
   app.use(i18n)
 
@@ -46,7 +46,7 @@ const preview: Preview = {
     backgrounds: { value: 'dark' }
   },
   decorators: [
-    story => ({
+    (story: any) => ({
       components: { story, AppThemeProvider },
       template: `
       <AppThemeProvider>

@@ -853,59 +853,59 @@ const saveNote = async () => {
 </script>
 
 <template>
+  <OptionsBar>
+    <template #left>
+      <div class="options-group">
+        <Button
+          icon="bold"
+          stick="right"
+          :iconButton="true"
+          :active="activeStyles.bold"
+          @click="applyFormat('bold')"
+        />
+        <Button
+          icon="italic"
+          stick="both"
+          :iconButton="true"
+          :active="activeStyles.italic"
+          @click="applyFormat('italic')"
+        />
+        <Button
+          icon="underline"
+          stick="both"
+          :iconButton="true"
+          :active="activeStyles.underline"
+          @click="applyFormat('underline')"
+        />
+        <Button
+          icon="strikethrough"
+          stick="both"
+          :iconButton="true"
+          :active="activeStyles.strikethrough"
+          @click="applyFormat('strikeThrough')"
+        />
+        <Button
+          icon="link"
+          stick="both"
+          :active="activeStyles.link"
+          :iconButton="true"
+          @click="insertLink"
+        />
+        <Button
+          icon="mark"
+          stick="both"
+          :active="activeStyles.mark"
+          :iconButton="true"
+          @click="insertMark"
+        />
+        <Button icon="clear-format" stick="left" :iconButton="true" @click="clearFormat" />
+      </div>
+    </template>
+    <template #right>
+      <Button icon="save" accent @click="saveNote">{{ t('common.actions.save') }}</Button>
+    </template>
+  </OptionsBar>
   <div class="edit-note">
-    <OptionsBar>
-      <template #left>
-        <div class="options-group">
-          <Button
-            icon="bold"
-            stick="right"
-            :iconButton="true"
-            :active="activeStyles.bold"
-            @click="applyFormat('bold')"
-          />
-          <Button
-            icon="italic"
-            stick="both"
-            :iconButton="true"
-            :active="activeStyles.italic"
-            @click="applyFormat('italic')"
-          />
-          <Button
-            icon="underline"
-            stick="both"
-            :iconButton="true"
-            :active="activeStyles.underline"
-            @click="applyFormat('underline')"
-          />
-          <Button
-            icon="strikethrough"
-            stick="both"
-            :iconButton="true"
-            :active="activeStyles.strikethrough"
-            @click="applyFormat('strikeThrough')"
-          />
-          <Button
-            icon="link"
-            stick="both"
-            :active="activeStyles.link"
-            :iconButton="true"
-            @click="insertLink"
-          />
-          <Button
-            icon="mark"
-            stick="both"
-            :active="activeStyles.mark"
-            :iconButton="true"
-            @click="insertMark"
-          />
-          <Button icon="clear-format" stick="left" :iconButton="true" @click="clearFormat" />
-        </div>
-      </template>
-      <template #right>
-        <Button icon="save" accent @click="saveNote">{{ t('common.actions.save') }}</Button>
-      </template>
-    </OptionsBar>
     <InputContent
       ref="editorRef"
       v-model="content"
@@ -953,8 +953,10 @@ const saveNote = async () => {
 .edit-note {
   padding: 60px 2px 2px 2px;
   width: 100%;
-  height: 100%;
+  height: auto;
   background-color: var(--background_400);
+  overflow: visible;
+  margin-top: -60px;
 }
 
 .app-theme-provider.maximized .edit-note {

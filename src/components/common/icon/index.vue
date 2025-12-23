@@ -12,17 +12,17 @@ const settingsStore = useSettingsStore()
 const { themeColor } = storeToRefs(settingsStore)
 
 const currentColor: Ref<string> = ref(
-  props.color ? props.color : settingsStore.themeColor.foreground_200.value
+  props.color ? props.color : settingsStore.themeColor.foreground_200.hsla
 )
 
 watch(themeColor, () => {
-  currentColor.value = props.color ? props.color : settingsStore.themeColor.foreground_200.value
+  currentColor.value = props.color ? props.color : settingsStore.themeColor.foreground_200.hsla
 })
 
 watch(
   () => props.color,
   newColor => {
-    currentColor.value = newColor ? newColor : settingsStore.themeColor.foreground_200.value
+    currentColor.value = newColor ? newColor : settingsStore.themeColor.foreground_200.hsla
   }
 )
 

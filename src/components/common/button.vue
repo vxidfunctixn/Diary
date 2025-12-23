@@ -16,9 +16,9 @@ const { themeColor } = storeToRefs(settingsStore)
 const slots = useSlots()
 
 const iconColor = computed(() => {
-  if (props.danger) return themeColor.value.black.value
-  else if (props.accent || props.negative) return themeColor.value.background_300.value
-  else return themeColor.value.foreground_200.value
+  if (props.danger) return themeColor.value.black.hsla
+  else if (props.accent || props.negative) return themeColor.value.background_300.hsla
+  else return themeColor.value.foreground_200.hsla
 })
 </script>
 
