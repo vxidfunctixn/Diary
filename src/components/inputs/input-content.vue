@@ -10,16 +10,6 @@ const emit = defineEmits(['update:modelValue', 'update:activeStyles'])
 const editorElement = ref<HTMLDivElement | null>(null)
 const isAltPressed = ref(false)
 
-const hasParentTag = (node: Node | null, tagName: string): boolean => {
-  while (node && node !== editorElement.value) {
-    if (node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === tagName) {
-      return true
-    }
-    node = node.parentNode
-  }
-  return false
-}
-
 const checkActiveStyles = () => {
   const selection = window.getSelection()
   let isLink = false
@@ -150,6 +140,8 @@ const handlePaste = (event: ClipboardEvent) => {
           mark: 'mark'
         }
 
+        const blockTags = ['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'blockquote']
+
         if (allowedTags[tagName]) {
           const newElement = document.createElement(allowedTags[tagName])
 
@@ -165,7 +157,54 @@ const handlePaste = (event: ClipboardEvent) => {
             }
           }
 
+          if (tagName === 'a') {
+            while (
+              newElement.firstChild &&
+              newElement.firstChild.nodeType === Node.ELEMENT_NODE &&
+              (newElement.firstChild as HTMLElement).tagName === 'BR'
+            ) {
+              newElement.removeChild(newElement.firstChild)
+            }
+            while (
+              newElement.lastChild &&
+              newElement.lastChild.nodeType === Node.ELEMENT_NODE &&
+              (newElement.lastChild as HTMLElement).tagName === 'BR'
+            ) {
+              newElement.removeChild(newElement.lastChild)
+            }
+
+            if (newElement.textContent?.trim() === '') {
+              const href = newElement.getAttribute('href') || ''
+              newElement.textContent = href
+            }
+          }
+
           return newElement
+        } else if (tagName === 'li') {
+          const fragment = document.createDocumentFragment()
+          for (const child of Array.from(node.childNodes)) {
+            const cleanedChild = cleanNode(child)
+            if (cleanedChild) {
+              fragment.appendChild(cleanedChild)
+            }
+          }
+
+          fragment.appendChild(document.createElement('br'))
+
+          return fragment
+        } else if (blockTags.includes(tagName)) {
+          const fragment = document.createDocumentFragment()
+          for (const child of Array.from(node.childNodes)) {
+            const cleanedChild = cleanNode(child)
+            if (cleanedChild) {
+              fragment.appendChild(cleanedChild)
+            }
+          }
+
+          fragment.appendChild(document.createElement('br'))
+          fragment.appendChild(document.createElement('br'))
+
+          return fragment
         } else {
           const fragment = document.createDocumentFragment()
           for (const child of Array.from(node.childNodes)) {
@@ -189,6 +228,28 @@ const handlePaste = (event: ClipboardEvent) => {
       }
     }
 
+    // Usuń nadmiarowe <br> (więcej niż 2 pod rząd)
+    const removeDuplicateBr = (parent: Node) => {
+      const children = Array.from(parent.childNodes)
+      let consecutiveBrCount = 0
+
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i]
+
+        if (child.nodeType === Node.ELEMENT_NODE && (child as HTMLElement).tagName === 'BR') {
+          consecutiveBrCount++
+          if (consecutiveBrCount > 2) {
+            child.parentNode?.removeChild(child)
+          }
+        } else {
+          consecutiveBrCount = 0
+          if (child.childNodes.length > 0) {
+            removeDuplicateBr(child)
+          }
+        }
+      }
+    }
+
     const selection = window.getSelection()
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0)
@@ -198,6 +259,11 @@ const handlePaste = (event: ClipboardEvent) => {
       range.collapse(false)
       selection.removeAllRanges()
       selection.addRange(range)
+
+      // Usuń nadmiarowe <br> w całym edytorze
+      if (editorElement.value) {
+        removeDuplicateBr(editorElement.value)
+      }
     }
   } else if (textData) {
     const selection = window.getSelection()
@@ -266,6 +332,10 @@ const execCommand = (command: string, value?: string) => {
   }, 0)
 }
 
+const handleLabelClick = () => {
+  editorElement.value?.focus()
+}
+
 defineExpose({
   execCommand,
   checkActiveStyles
@@ -273,49 +343,59 @@ defineExpose({
 </script>
 
 <template>
-  <div
-    ref="editorElement"
-    class="wrapper"
-    :class="{ 'alt-pressed': isAltPressed }"
-    contenteditable
-    spellcheck="false"
-    @input="handleInput"
-    @paste="handlePaste"
-    @click="handleClick"
-  />
+  <div class="content-wrapper" @click="handleLabelClick">
+    <div
+      ref="editorElement"
+      class="content"
+      :class="{ 'alt-pressed': isAltPressed }"
+      contenteditable
+      spellcheck="false"
+      @input="handleInput"
+      @paste="handlePaste"
+      @click="handleClick"
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.wrapper {
-  width: 100%;
-  padding: 12px;
+.content-wrapper {
+  display: block;
   height: 100%;
-  overflow: auto;
-  outline: none;
+  min-height: calc(100vh - 106px);
 
-  :deep(a) {
-    color: var(--accent_300);
-    font-weight: 500;
-    pointer-events: none;
-    cursor: text;
-  }
+  .content {
+    width: 100%;
+    padding: 12px;
+    height: 100%;
+    overflow: auto;
+    outline: none;
+    max-width: 600px;
+    margin: 0 auto;
 
-  :deep(mark) {
-    background-color: var(--background_500);
-    border: 1px solid var(--accent_600);
-    padding: 2px 4px;
-    border-radius: 8px;
-    color: var(--foreground_200);
-  }
+    :deep(a) {
+      color: var(--accent_300);
+      font-weight: 500;
+      pointer-events: none;
+      cursor: text;
+    }
 
-  &.alt-pressed :deep(a) {
-    pointer-events: auto;
-    cursor: pointer;
-    border-radius: 4px;
+    :deep(mark) {
+      background-color: var(--background_500);
+      border: 1px solid var(--accent_600);
+      padding: 2px 4px;
+      border-radius: 8px;
+      color: var(--foreground_200);
+    }
 
-    &:hover {
-      background-color: var(--background_200);
-      outline: 1px solid var(--accent_600);
+    &.alt-pressed :deep(a) {
+      pointer-events: auto;
+      cursor: pointer;
+      border-radius: 4px;
+
+      &:hover {
+        background-color: var(--background_200);
+        outline: 1px solid var(--accent_600);
+      }
     }
   }
 }

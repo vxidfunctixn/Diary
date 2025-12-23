@@ -48,7 +48,6 @@ const formattedTitle = computed(() => {
     parts.push(`${day}.${month}.${year}`)
   }
 
-  console.log(props.titleFormat?.time)
   return parts.join(' ')
 })
 

@@ -83,24 +83,25 @@ function getTitleFormat(index: number): { time: boolean; date: boolean } {
 </script>
 
 <template>
+  <OptionsBar>
+    <template #left>
+      <InputDate
+        name="selected_day"
+        :newValue="selectedDate"
+        controls
+        @update="onDateUpdate($event)"
+      />
+      <Button icon="date">{{ t('common.calendar.month') }}</Button>
+      <Button icon="date">{{ t('common.calendar.today') }}</Button>
+    </template>
+    <template #right>
+      <Button icon="add-note" accent @click="router.push({ name: 'add_note' })">
+        {{ t('notes.actions.addNote') }}
+      </Button>
+    </template>
+  </OptionsBar>
+
   <div class="note-list">
-    <OptionsBar>
-      <template #left>
-        <InputDate
-          name="selected_day"
-          :newValue="selectedDate"
-          controls
-          @update="onDateUpdate($event)"
-        />
-        <Button icon="date">{{ t('common.calendar.month') }}</Button>
-        <Button icon="date">{{ t('common.calendar.today') }}</Button>
-      </template>
-      <template #right>
-        <Button icon="add-note" accent @click="router.push({ name: 'add_note' })">
-          {{ t('notes.actions.addNote') }}
-        </Button>
-      </template>
-    </OptionsBar>
     <Note
       v-for="(note, index) in notes"
       :key="note.uuid"
@@ -115,7 +116,7 @@ function getTitleFormat(index: number): { time: boolean; date: boolean } {
 
 <style lang="scss" scoped>
 .note-list {
-  padding: 60px 24px 2px 24px;
+  padding: 2px 24px 2px 24px;
   max-width: var(--CW);
   margin: 0 auto;
 }
