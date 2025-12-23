@@ -236,6 +236,17 @@ const handleClick = (event: MouseEvent) => {
         border-radius: 8px;
         color: var(--foreground_200);
       }
+
+      :deep(p) {
+        margin: 16px 0;
+
+        &:first-child {
+          margin-top: 0;
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
 
     &:nth-child(1) {

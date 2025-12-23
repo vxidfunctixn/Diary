@@ -33,6 +33,8 @@ body {
   overflow: auto;
   container-type: scroll-state;
   contain: style layout;
+  scroll-padding-bottom: 16px;
+  scroll-padding-top: 76px;
 }
 
 input,
